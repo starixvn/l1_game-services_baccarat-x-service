@@ -1,0 +1,50 @@
+{
+    "name": "treasure-island-service",
+    "version": "1.0.0",
+    "description": "",
+    "main": "./src/app.js",
+    "scripts": {
+        "test": "jest --testPathPattern=unit-tests",
+        "test-coverage": "jest --collect-coverage --testPathPattern=unit-tests",
+        "dev": "nodemon --es-module-specifier-resolution=node --watch ./src ./src/app.js",
+        "debug": "nodemon --es-module-specifier-resolution=node --watch ./ --inspect ./src/app.js",
+        "prod": "node --max-old-space-size=8192 --es-module-specifier-resolution=node ./src/app.js",
+        "reg": "npm set registry http://npm.lumigame.com",
+        "integration-test": "jest --config ./jest.integration-test.config.cjs --testPathPattern=tests/integration-tests/ --ci --forceExit --runInBand"
+    },
+    "jestSonar": {
+        "reportPath": "reports",
+        "reportFile": "test-reporter.xml",
+        "indent": 4
+    },
+    "author": "pentagon",
+    "license": "ISC",
+    "type": "module",
+    "dependencies": {
+        "sc-multiple-games-base": "1.9.1-beta.2"
+    },
+
+    "devDependencies": {
+        "@babel/preset-env": "^7.24.4",
+        "@commitlint/cli": "^19.2.2",
+        "@commitlint/config-conventional": "^19.2.2",
+        "@types/jest": "^29.5.12",
+        "babel-jest": "^29.7.0",
+        "babel-plugin-rewire": "^1.2.0",
+        "husky": "^4.2.5",
+        "install": "^0.13.0",
+        "jest": "^29.7.0",
+        "jest-extended": "^4.0.2",
+        "jest-html-reporters": "^3.1.7",
+        "jest-junit": "^16.0.0",
+        "jest-micro-auto-stub": "1.0.9",
+        "jest-sonar-reporter": "^2.0.0",
+        "nodemon": "^3.1.0",
+        "sc-game-service-integration-utils": "2.1.0"
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+        }
+    }
+}
