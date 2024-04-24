@@ -1,6 +1,7 @@
-import { getBetModel,getBetLogModel } from "./unbalanced-bigsmall-bets";
-import getRoundModel from "./unbalanced-bigsmall-rounds";
-import getResultModel from "./unbalanced-bigsmall-results";
+import { getBetModel, getBetLogModel } from "./baccaratx-bets";
+import getRoundModel from "./baccaratx-rounds";
+import getResultModel from "./baccaratx-results";
 import allGamesHistoriesModel from "./all-games-histories";
+import baccratxCutCardPf from "./baccratx-cut-card-pf";
 
-export { getBetModel, getBetLogModel, getRoundModel, getResultModel, allGamesHistoriesModel };
+export { getBetModel, getBetLogModel, getRoundModel, getResultModel, allGamesHistoriesModel, baccratxCutCardPf };
