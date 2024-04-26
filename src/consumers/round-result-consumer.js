@@ -1,37 +1,29 @@
-import Chance from "chance";
 import { Consumers } from "sc-card-game-base";
-import { Core } from "sc-game-base";
 export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
-    constructor(gameData, definition, roundResultPublisher, resultsRepository, logService, provablyFairConsumer) {
+    constructor(gameData, definition, roundResultPublisher, resultsRepository, logService, cutCardConsumer) {
         super(gameData, definition, roundResultPublisher, resultsRepository, logService);
-        this.provablyFairConsumer = provablyFairConsumer;
+        this.cutCardConsumer = cutCardConsumer;
     }
 
-    async generateServerSeedAndPublishHash() {
-        const serverSeed = this.generateServerSeed();
-        const serverSeedHash = Core.Helpers.SeedHelper.getSHA256Hash(serverSeed);
+    async createResultRecord() {
+        const { randomMode } = this.gameData.gameConfigs;
+        const { cardsFromAdmin, cutCardIndexFromAdmin } = this.getResultFromAdmin();
+        const cardChain = generateChain(this.definition.numberOfDecks, cardsFromAdmin, randomMode);
+        const burnedCards = this.calculateBurnedCards(cardChain.chain);
 
-        this.provablyFairConsumer.setServerSeed(serverSeed);
-        this.provablyFairConsumer.setServerSeedHash(serverSeedHash);
+        const isCutCardIndexValid = cutCardIndexFromAdmin > 0 && cutCardIndexFromAdmin < cardChain.chain.length - this.definition.maxCardsPerRound;
+        const cutCardIndex = isCutCardIndexValid ? cutCardIndexFromAdmin : await this.cutCardConsumer.calculateCutCardIndex();
 
-        await this.createResultRecord(serverSeed, serverSeedHash);
+        const record = {
+            isAvailable: true,
+            currentIndex: burnedCards, // directly use burnedCards for currentIndex
+            cutCardIndex: cutCardIndex,
+            burnedCards: burnedCards,
+            remainingCards: 0,
+            chain: cardChain.chain,
+            firstRoundId: this.gameData.roundId,
+        };
 
-        this.roundResultPublisher.publishServerSeedHash();
-    }
-
-    generateServerSeed() {
-        const chance = new Chance();
-        const { minCutCardIndex, maxCutCardIndex } = this.definition;
-
-        return chance.integer({ min: minCutCardIndex, max: maxCutCardIndex });
-    }
-
-    async createResultRecord(serverSeed, serverSeedHash) {
-        await this.resultsRepository.create({
-            roundId: this.gameData.roundId,
-            serverSeedHash: serverSeedHash,
-            serverSeed: serverSeed,
-            time: new Date(),
-        });
+        return this.resultsRepository.create(record);
     }
 }
