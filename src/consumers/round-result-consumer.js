@@ -11,12 +11,13 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         const cardChain = generateChain(this.definition.numberOfDecks, cardsFromAdmin, randomMode);
         const burnedCards = this.calculateBurnedCards(cardChain.chain);
 
-        const isCutCardIndexValid = cutCardIndexFromAdmin > 0 && cutCardIndexFromAdmin < cardChain.chain.length - this.definition.maxCardsPerRound;
+        const isCutCardIndexValid =
+            cutCardIndexFromAdmin > 0 && cutCardIndexFromAdmin < cardChain.chain.length - this.definition.maxCardsPerRound;
         const cutCardIndex = isCutCardIndexValid ? cutCardIndexFromAdmin : await this.cutCardConsumer.calculateCutCardIndex();
 
         const record = {
             isAvailable: true,
-            currentIndex: burnedCards, // directly use burnedCards for currentIndex
+            currentIndex: burnedCards,
             cutCardIndex: cutCardIndex,
             burnedCards: burnedCards,
             remainingCards: 0,
