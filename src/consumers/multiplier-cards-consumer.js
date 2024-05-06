@@ -13,7 +13,7 @@ export default class MultiplierCardsConsumer {
         const cards = deck.slice(0, this.chance.integer({ min: oddsMultiplier.items.min, max: oddsMultiplier.items.max }));
 
         for (let card of cards) {
-            card.multiplier = this.chance.pickone(oddsMultiplier.values);
+            card.value = this.chance.pickone(oddsMultiplier.values);
         }
 
         return cards;

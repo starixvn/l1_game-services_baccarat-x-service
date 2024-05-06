@@ -41,8 +41,6 @@ class BaccaratGame {
             player: score.player > score.banker,
             banker: score.player < score.banker,
             tie: score.player === score.banker,
-            big: numberOfCards === 5 || numberOfCards === 6,
-            small: numberOfCards === 4,
             playerPair: this.player.hasPair(),
             bankerPair: this.banker.hasPair(),
             natural: numberOfCards === 4 && (score.player >= 8 || score.banker >= 8),

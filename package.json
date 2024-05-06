@@ -4,8 +4,8 @@
     "description": "",
     "main": "./src/app.js",
     "scripts": {
-        "test": "jest --testPathPattern=unit-tests",
-        "test-coverage": "jest --collect-coverage --testPathPattern=unit-tests",
+        "test": "jest --testPathPattern=tests/unit-tests",
+        "test-coverage": "jest --collect-coverage --testPathPattern=tests/unit-tests",
         "dev": "nodemon --es-module-specifier-resolution=node --watch ./src ./src/app.js",
         "debug": "nodemon --es-module-specifier-resolution=node --watch ./ --inspect ./src/app.js",
         "prod": "node --max-old-space-size=8192 --es-module-specifier-resolution=node ./src/app.js",
@@ -21,7 +21,7 @@
     "license": "ISC",
     "type": "module",
     "dependencies": {
-        "sc-card-game-base": "1.2.1-beta.1",
+        "sc-card-game-base": "1.2.1-beta.2",
         "sc-multiple-games-base": "1.9.1-beta.3"
     },
     "resolutions": {

@@ -31,20 +31,8 @@ const settlementRuleEntries = Object.entries({
         const bankerScore = getTotalScore(banker);
         return playerScore === bankerScore;
     },
-    big: ({ player, banker }) => {
-        const numberOfCards = getNumberOfCards(player) + getNumberOfCards(banker);
-        return numberOfCards > 4;
-    },
-    small: ({ player, banker }) => {
-        const numberOfCards = getNumberOfCards(player) + getNumberOfCards(banker);
-        return numberOfCards === 4;
-    },
     playerPair: ({ player, banker }) => hasPair(player),
     bankerPair: ({ player, banker }) => hasPair(banker),
-    natural: ({ player, banker }) => {
-        const numberOfCards = getNumberOfCards(player) + getNumberOfCards(banker);
-        return numberOfCards === 4 && (getTotalScore(player) >= 8 || getTotalScore(banker) >= 8);
-    },
 });
 
 const getTotalScore = (handResult) => {

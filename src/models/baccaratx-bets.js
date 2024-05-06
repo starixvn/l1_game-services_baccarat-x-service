@@ -4,8 +4,11 @@ const bet = {
     uid: { type: String, required: true },
     name: { type: String, required: true },
 
-    big: { type: Number, default: 0 },
-    small: { type: Number, default: 0 },
+    player: { type: Number, default: 0 },
+    banker: { type: Number, default: 0 },
+    tie: { type: Number, default: 0 },
+    playerPair: { type: Number, default: 0 },
+    bankerPair: { type: Number, default: 0 },
     totalAmount: { type: Number, default: 0 },
 
     betwin: { type: Number, default: 0 },
