@@ -13,7 +13,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         resultsRepository,
         multiplierCardsConsumer,
     }) {
-        console.log(gameManagementApiClientFactory)
+        console.log(gameManagementApiClientFactory);
         super({
             definition,
             gameData,
@@ -33,8 +33,8 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         const result = this.generateResult();
         const settlementResult = this.definition.settle(result);
         const { roundId, exchangeRates } = this.gameData;
-        const oddsMultipliers = this.getOddsMultipliers();
-        const appliedMultipliers = this.getAppliedMultipliers(oddsMultipliers, result, settlementResult);
+        const oddsMultipliers = this.generateOddsMultipliers();
+        const appliedMultipliers = this.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
 
         const newRound = await this.roundsRepository.create({
             id: roundId,
@@ -70,32 +70,37 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         }
     }
 
-    getOddsMultipliers() {
+    generateOddsMultipliers() {
         const { applyMultiplier } = this.gameData.gameConfigs;
         return applyMultiplier ? this.multiplierCardsConsumer.withdrawCards() : undefined;
     }
 
-    getAppliedMultipliers(oddsMultipliers, result, settlementResult) {
-        const { applyMultiplier } = this.gameData.gameConfigs;
-        return applyMultiplier ? this.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult) : undefined;
-    }
-
     settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult) {
-        const appliedMultipliers = [];
+        const { applyMultiplier } = this.gameData.gameConfigs;
+
+        if (!applyMultiplier) {
+            return undefined;
+        }
+
+        const appliedMultiplierCards = [];
         const playerCards = Object.values(result.player);
         const bankerCards = Object.values(result.banker);
 
         const filterCards = (cards) => oddsMultipliers.filter((om) => cards.some((card) => card.rank === om.rank && card.suit === om.suit));
 
-        if (settlementResult.tie || settlementResult.player || settlementResult.playerPair) {
-            appliedMultipliers.push(filterCards(playerCards));
+        if (settlementResult.tie) {
+            appliedMultiplierCards.push(...filterCards([...playerCards, ...bankerCards]));
+        } else {
+            if (settlementResult.player || settlementResult.playerPair) {
+                appliedMultiplierCards.push(...filterCards(playerCards));
+            }
+
+            if (settlementResult.banker || settlementResult.bankerPair) {
+                appliedMultiplierCards.push(...filterCards(bankerCards));
+            }
         }
 
-        if (settlementResult.tie || settlementResult.banker || settlementResult.bankerPair) {
-            appliedMultipliers.push(filterCards(bankerCards));
-        }
-
-        return appliedMultipliers;
+        return appliedMultiplierCards;
     }
 
     settleOdds(result, settlementResult, appliedMultipliers) {
@@ -105,33 +110,28 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
             const filterCards = (cards) =>
                 appliedMultipliers.filter((om) => cards.some((card) => card.rank === om.rank && card.suit === om.suit));
 
-            const appliedPlayerCards = filterCards(result.player);
-            const appliedBankerCards = filterCards(result.banker);
+            const appliedPlayerCards = filterCards(Object.values(result.player));
+            const appliedBankerCards = filterCards(Object.values(result.banker));
 
-            if (settlementResult.tie) {
-                finalOdds.tie *= this.calculateMultiplierCards(appliedMultipliers);
-            } else {
-                if (settlementResult.player) {
-                    finalOdds.player *= this.calculateMultiplierCards(appliedPlayerCards);
+            const appliedCardsPerChoice = {
+                player: appliedPlayerCards,
+                banker: appliedBankerCards,
+                tie: appliedMultipliers,
+                playerPair: appliedPlayerCards,
+                bankerPair: appliedBankerCards,
+            };
+
+            Object.entries(settlementResult).forEach(([choice, win]) => {
+                if (win) {
+                    finalOdds[choice] *= this.calculateOdds(appliedCardsPerChoice[choice]);
                 }
-                if (settlementResult.banker) {
-                    finalOdds.banker *= this.calculateMultiplierCards(appliedBankerCards);
-                }
-            }
-
-            if (settlementResult.playerPair) {
-                finalOdds.playerPair *= this.calculateMultiplierCards(appliedPlayerCards);
-            }
-
-            if (settlementResult.bankerPair) {
-                finalOdds.bankerPair *= this.calculateMultiplierCards(appliedBankerCards);
-            }
+            });
         }
 
         return finalOdds;
     }
 
-    calculateMultiplierCards(cards) {
+    calculateOdds(cards) {
         return cards.reduce((acc, curr) => acc * curr.value, 1);
     }
 
@@ -164,6 +164,9 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         if (settlementResult.tie) {
             betResult.totalWin += bet.player + bet.banker;
         }
+
+        const { gameConfigs } = this.gameData;
+        betResult.totalWin = Math.min(betResult.totalWin, gameConfigs.maxWinPerRound);
 
         return betResult;
     }
