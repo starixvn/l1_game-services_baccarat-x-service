@@ -10,6 +10,8 @@ const bet = {
     playerPair: { type: Number, default: 0 },
     bankerPair: { type: Number, default: 0 },
     totalAmount: { type: Number, default: 0 },
+    fee: { type: Number, default: 0 },
+    multiplieres: { type: Array, default: 0 },
 
     betwin: { type: Number, default: 0 },
     time: { type: Date },
