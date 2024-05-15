@@ -26,6 +26,8 @@ const Schema = new mongoose.Schema({
     time: { type: Date, default: new Date() },
     exchangeRateId: { type: Number, required: true },
     extraFeeRatio: { type: Number, required: false },
+    playerCards: { type: [Number] },
+    bankerCards: { type: [Number] },
 });
 
 export default (modelName) => {

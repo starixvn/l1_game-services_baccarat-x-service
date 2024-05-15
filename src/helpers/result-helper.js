@@ -2,7 +2,8 @@ import BaccaratGame from "./baccarat-game";
 import { getCardValue } from "./card-helper";
 
 const generateResult = (shoe) => {
-    const cards = [];
+    const { currentIndex } = shoe;
+    const cards = shoe.cards.slice(currentIndex, currentIndex + 6);
     const baccaratGame = new BaccaratGame([...cards]);
     let action = "";
 
@@ -31,8 +32,8 @@ const settlementRuleEntries = Object.entries({
         const bankerScore = getTotalScore(banker);
         return playerScore === bankerScore;
     },
-    playerPair: ({ player, banker }) => hasPair(player),
-    bankerPair: ({ player, banker }) => hasPair(banker),
+    playerPair: ({ player }) => hasPair(player),
+    bankerPair: ({ banker }) => hasPair(banker),
 });
 
 const getTotalScore = (handResult) => {
@@ -41,10 +42,6 @@ const getTotalScore = (handResult) => {
 
         return (result + cardValue) % 10;
     }, 0);
-};
-
-const getNumberOfCards = (handResult) => {
-    return Object.values(handResult).filter((card) => !!card).length;
 };
 
 const hasPair = (handResult) => {
@@ -62,4 +59,3 @@ const getSettlementResult = (roundResult) => {
 };
 
 export { generateResult, getSettlementResult };
-

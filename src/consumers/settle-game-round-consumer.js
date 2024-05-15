@@ -30,7 +30,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
     }
 
     async settleRound() {
-        const result = this.generateResult();
+        const result = this.generateResult(this.gameData.shoe);
         const settlementResult = this.definition.settle(result);
         const { roundId, exchangeRates } = this.gameData;
         const oddsMultipliers = this.generateOddsMultipliers();
