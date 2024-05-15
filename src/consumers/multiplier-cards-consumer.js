@@ -9,17 +9,13 @@ export default class MultiplierCardsConsumer {
 
     withdrawCards() {
         const { randomMode, oddsMultiplier } = this.gameData.gameConfigs;
-        const deck = this.shuffle(Helpers.CardChain.generateCards(1, randomMode));
+        const deck = Helpers.CardChain.generateCards(1, randomMode);
         const cards = deck.slice(0, this.chance.integer({ min: oddsMultiplier.items.min, max: oddsMultiplier.items.max }));
 
-        for (let card of cards) {
+        for (const card of cards) {
             card.value = this.chance.pickone(oddsMultiplier.values);
         }
 
         return cards;
-    }
-
-    shuffle(deck) {
-        return this.chance.shuffle(this.chance.shuffle(this.chance.shuffle(deck)));
     }
 }

@@ -24,6 +24,7 @@ const gameConfigs = {
         bankerPair: 12,
     },
     applyMultiplier: true,
+    maxWinPerRound: 3000,
 };
 gameData.gameConfigs = { ...gameConfigs };
 
@@ -531,14 +532,65 @@ describe("SettleGameRoundConsumer", () => {
                 },
             ],
         ])("should update odds of choices", (result, oddsMultipliers, expectedOdds) => {
-            //Act
+            //Arrange
             const settlementResult = getSettlementResult(result);
             const appliedMultipliers = consumer.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
+            const appliedCardsPerChoice = consumer.settleAppliedCardsPerChoice(result, appliedMultipliers);
 
-            const odds = consumer.settleOdds(result, settlementResult, appliedMultipliers);
+            //Act
+            const odds = consumer.settleOdds(settlementResult, appliedCardsPerChoice);
 
             //Assert
             expect(odds).toEqual(expectedOdds);
+        });
+    });
+
+    describe("calculateBetResult", () => {
+        //Arrange
+        const settlementResult = {
+            player: true,
+            banker: false,
+            tie: false,
+            playerPair: false,
+            bankerPair: false,
+        };
+
+        const bet = {
+            player: 2,
+            banker: 0,
+            tie: 0,
+            playerPair: 2,
+            bankerPair: 0,
+            fee: 0.8,
+            totalAmount: 4.8,
+        };
+
+        const appliedCardsPerChoice = {
+            player: [{ suit: 1, rank: 1, value: 2 }],
+        };
+
+        it("should calculate betResult.totalAmount", () => {
+            //Act
+            const betResult = consumer.calculateBetResult(settlementResult, bet, gameConfigs.odds, appliedCardsPerChoice);
+
+            //Assert
+            expect(betResult.totalBetAmount).toEqual(bet.totalAmount);
+        });
+
+        it("should calculate betResult.multipliers", () => {
+            //Act
+            const betResult = consumer.calculateBetResult(settlementResult, bet, gameConfigs.odds, appliedCardsPerChoice);
+
+            //Assert
+            expect(betResult.multipliers).toEqual({ player: [2] });
+        });
+
+        it("should calculate betResult.totalWin", () => {
+            //Act
+            const betResult = consumer.calculateBetResult(settlementResult, bet, gameConfigs.odds, appliedCardsPerChoice);
+
+            //Assert
+            expect(betResult.totalWin).toEqual(bet.player * gameConfigs.odds.player);
         });
     });
 });

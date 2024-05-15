@@ -23,6 +23,8 @@ const Schema = new mongoose.Schema({
     id: { type: Number, required: true },
     settlementResult: settlementResultSchema,
     result: resultSchema,
+    oddsMultipliers: { type: Array },
+    appliedMultipliers: { type: Array },
     time: { type: Date, default: new Date() },
     exchangeRateId: { type: Number, required: true },
     extraFeeRatio: { type: Number, required: false },
