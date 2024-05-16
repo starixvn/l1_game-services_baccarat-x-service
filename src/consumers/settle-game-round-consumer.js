@@ -28,6 +28,23 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         this.multiplierCardsConsumer = multiplierCardsConsumer;
     }
 
+    async generateResult() {
+        const { result, usedCardsCount } = this.definition.generateResult(this.gameData.shoe);
+        this.gameData.blockchain.currentIndex = this.gameData.blockchain.currentIndex + usedCardsCount;
+        this.gameData.blockchain.remainingCards = this.definition.maxCardsPerRound - usedCardsCount;
+        await this.resultsRepository.update(
+            { _id: this.gameData.blockchain._id },
+            {
+                $set: {
+                    currentIndex: this.gameData.blockchain.currentIndex,
+                    remainingCards: this.gameData.blockchain.remainingCards,
+                },
+            }
+        );
+
+        return result;
+    }
+
     async settleRound() {
         const result = this.generateResult(this.gameData.shoe);
         const settlementResult = this.definition.settle(result);

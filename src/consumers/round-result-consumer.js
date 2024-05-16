@@ -1,9 +1,30 @@
 import { Consumers } from "sc-card-game-base";
-import { generateShoe } from "../helpers";
+import { Helpers } from "sc-card-game-base";
+
 export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
     constructor(gameData, definition, roundResultPublisher, resultsRepository, logService, cutCardConsumer) {
         super(gameData, definition, roundResultPublisher, resultsRepository, logService);
         this.cutCardConsumer = cutCardConsumer;
+    }
+
+    generateShoe(cardsFromAdmin, randomMode) {
+        const { CardChain, CryptoHelper } = Helpers;
+        const cards = CardChain.updateCards(CardChain.generateCards(8, randomMode), cardsFromAdmin);
+
+        const shoeString = cards.map((card) => `${card.rank}${card.suit}`).toString();
+
+        const rawValue = `${shoeString}_${CryptoHelper.randomString()}`;
+        const hashValue = CryptoHelper.createHashSHA256(rawValue);
+        const encryptedShoe = CryptoHelper.encrypt(rawValue);
+        const encryptedShoeHash = CryptoHelper.encrypt(hashValue);
+
+        return {
+            cards,
+            rawValue,
+            hashValue,
+            encryptedShoe,
+            encryptedShoeHash,
+        };
     }
 
     async generateAndPublishHash() {
