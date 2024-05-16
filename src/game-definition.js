@@ -1,6 +1,6 @@
 import { GameDefinition } from "sc-card-game-base";
 
-export default class GameDefinition extends GameDefinition {
+export default class BaccaratGameDefinition extends GameDefinition {
     constructor(
         {
             id = 0,
