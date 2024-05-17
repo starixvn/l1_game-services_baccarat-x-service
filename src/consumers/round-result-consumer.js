@@ -2,29 +2,10 @@ import { Consumers } from "sc-card-game-base";
 import { Helpers } from "sc-card-game-base";
 
 export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
-    constructor(gameData, definition, roundResultPublisher, resultsRepository, logService, cutCardConsumer) {
+    constructor(gameData, definition, roundResultPublisher, resultsRepository, logService, cutCardConsumer, shoeConsumer) {
         super(gameData, definition, roundResultPublisher, resultsRepository, logService);
         this.cutCardConsumer = cutCardConsumer;
-    }
-
-    generateShoe(cardsFromAdmin, randomMode) {
-        const { CardChain, CryptoHelper } = Helpers;
-        const cards = CardChain.updateCards(CardChain.generateCards(8, randomMode), cardsFromAdmin);
-
-        const shoeString = cards.map((card) => `${card.rank}${card.suit}`).toString();
-
-        const rawValue = `${shoeString}_${CryptoHelper.randomString()}`;
-        const hashValue = CryptoHelper.createHashSHA256(rawValue);
-        const encryptedShoe = CryptoHelper.encrypt(rawValue);
-        const encryptedShoeHash = CryptoHelper.encrypt(hashValue);
-
-        return {
-            cards,
-            rawValue,
-            hashValue,
-            encryptedShoe,
-            encryptedShoeHash,
-        };
+        this.shoeConsumer = shoeConsumer;
     }
 
     async generateAndPublishHash() {
@@ -37,17 +18,24 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         }
     }
 
+    async setUnavailable() {
+        await this.resultsRepository.update(
+            { isAvailable: true },
+            { $set: { isAvailable: false, lastRoundId: this.gameData.roundId - 1 } }
+            //{ multi: true }
+        );
+    }
+
     async createResultRecord() {
         const { randomMode } = this.gameData.gameConfigs;
         const { cardsFromAdmin } = this.getResultFromAdmin();
-        const shoe = generateShoe(cardsFromAdmin, randomMode);
+        const shoe = this.shoeConsumer.generateShoe(cardsFromAdmin, randomMode);
         const { encryptedShoe, encryptedShoeHash, cards } = shoe;
         const burnedCards = this.calculateBurnedCards(cardChain.chain);
 
         const record = {
             isAvailable: true,
             currentIndex: burnedCards,
-            cutCardIndex: undefined,
             burnedCards: burnedCards,
             remainingCards: 0,
             shoe: { encryptedShoe, encryptedShoeHash },

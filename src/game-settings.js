@@ -1,4 +1,4 @@
-import { generateRawResultForHash, generateResult, getSettlementResult as settle } from "./helpers/result-helper";
+import { generateResult, getSettlementResult as settle } from "./helpers/result-helper";
 import { allGamesHistoriesModel, getBetLogModel, getBetModel, getResultModel, getRoundModel } from "./models";
 
 const choicesMapper = { player: 1, banker: 2, tie: 3, playerPair: 4, bankerPair: 5 };
@@ -27,7 +27,6 @@ export default [
         choicesMapper,
         generateResult,
         settle,
-        generateRawResultForHash,
         repositories: {
             roundsRepository: getRoundModel("baccaratx_round"),
             betsRepository: getBetModel("baccaratx_bet"),

@@ -1,4 +1,6 @@
+import { asClass, asValue } from "awilix";
 import { MultipleTableGamesContainerRegistry } from "sc-multiple-games-base";
+import { ShoeConsumer, CutCardConsumer, MultiplierCardsConsumer, RoundResultConsumer, SettleGameRoundConsumer } from "./consumers";
 
 export default class ContainerRegistry extends MultipleTableGamesContainerRegistry {
     register(appConfigs, definition, gameData) {
@@ -7,6 +9,18 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
         this.registerRepositories(definition.repositories);
 
         return this.container;
+    }
+
+    registerConsumers() {
+        super.registerConsumers();
+
+        this.container.register({
+            shoeConsumer: asClass(ShoeConsumer).singleton(),
+            cutCardConsumer: asClass(CutCardConsumer).singleton(),
+            multiplierCardsConsumer: asClass(MultiplierCardsConsumer).singleton(),
+            roundResultConsumer: asClass(RoundResultConsumer).singleton(),
+            settleGameRoundConsumer: asClass(SettleGameRoundConsumer).singleton(),
+        });
     }
 
     registerRepositories(repositories) {

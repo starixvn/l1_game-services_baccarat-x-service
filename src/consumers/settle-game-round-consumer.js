@@ -30,23 +30,24 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
 
     async generateResult() {
         const { result, usedCardsCount } = this.definition.generateResult(this.gameData.shoe);
-        this.gameData.blockchain.currentIndex = this.gameData.blockchain.currentIndex + usedCardsCount;
-        this.gameData.blockchain.remainingCards = this.definition.maxCardsPerRound - usedCardsCount;
+        const usedCardIndexes = Array.from({ length: usedCardsCount }, (_, i) => usedCardsCount + i);
+        this.gameData.shoe.currentIndex = this.gameData.shoe.currentIndex + usedCardsCount;
+        this.gameData.shoe.remainingCards = this.definition.maxCardsPerRound - usedCardsCount;
         await this.resultsRepository.update(
-            { _id: this.gameData.blockchain._id },
+            { _id: this.gameData.shoe._id },
             {
                 $set: {
-                    currentIndex: this.gameData.blockchain.currentIndex,
-                    remainingCards: this.gameData.blockchain.remainingCards,
+                    currentIndex: this.gameData.shoe.currentIndex,
+                    remainingCards: this.gameData.shoe.remainingCards,
                 },
             }
         );
 
-        return result;
+        return { result, usedCardIndexes };
     }
 
     async settleRound() {
-        const result = this.generateResult(this.gameData.shoe);
+        const { result, usedCardIndexes } = this.generateResult(this.gameData.shoe);
         const settlementResult = this.definition.settle(result);
         const { roundId, exchangeRates } = this.gameData;
         const oddsMultipliers = this.generateOddsMultipliers();
@@ -60,6 +61,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
             exchangeRateId: exchangeRates.exId,
             oddsMultipliers,
             appliedMultipliers,
+            usedCardIndexes,
         });
 
         if (newRound) {

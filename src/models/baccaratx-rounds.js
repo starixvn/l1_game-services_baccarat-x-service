@@ -30,6 +30,7 @@ const Schema = new mongoose.Schema({
     extraFeeRatio: { type: Number, required: false },
     playerCards: { type: [Number] },
     bankerCards: { type: [Number] },
+    usedCardIndexes: { type: [Number] },
 });
 
 export default (modelName) => {

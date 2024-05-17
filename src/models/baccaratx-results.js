@@ -8,6 +8,7 @@ const resultSchema = new mongoose.Schema({
     remainingCards: { type: Number, required: true },
     shoe: { type: Object, required: true },
     firstRoundId: { type: Number, required: true },
+    lastRoundId: { type: Number },
     time: { type: Date, default: Date.now },
 });
 

@@ -2,6 +2,6 @@ import { getBetModel, getBetLogModel } from "./baccaratx-bets";
 import getRoundModel from "./baccaratx-rounds";
 import getResultModel from "./baccaratx-results";
 import allGamesHistoriesModel from "./all-games-histories";
-import baccratxCutCardPf from "./baccratx-cut-card-pf";
+import bacaratxCutCardPf from "./bacacratx-cut-card-pf";
 
-export { getBetModel, getBetLogModel, getRoundModel, getResultModel, allGamesHistoriesModel, baccratxCutCardPf };
+export { getBetModel, getBetLogModel, getRoundModel, getResultModel, allGamesHistoriesModel, bacaratxCutCardPf };
