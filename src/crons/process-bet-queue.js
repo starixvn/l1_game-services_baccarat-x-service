@@ -1,13 +1,25 @@
 import { Crons } from "sc-card-game-base";
 
 export default class ProcessBetQueue extends Crons.TableProcessBetQueue {
-    formatApiBetInfo(payload) {
-        const betInfo = super.formatApiBetInfo(payload);
+    async proceedBet(player, payload) {
+        payload.fee = this.setExtraFee(payload);
+
+        return super.proceedBet(player, payload);
+    }
+
+    setExtraFee(payload) {
         const { gameConfigs } = this.gameData;
 
         if (gameConfigs.applyMultiplier) {
-            betInfo.amount += payload.amount * gameConfigs.oddsMultipliers.extraFeeRatio;
+            return payload.amount * gameConfigs.oddsMultipliers.extraFeeRatio;
         }
+
+        return 0;
+    }
+
+    formatApiBetInfo(payload) {
+        const betInfo = super.formatApiBetInfo(payload);
+        betInfo.amount += payload.fee;
 
         return betInfo;
     }
@@ -30,10 +42,8 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueue {
         };
 
         if (configs.applyMultiplier) {
-            const { oddsMultipliers } = configs;
-            const extraFee = bet.amount * oddsMultipliers.extraFeeRatio;
-            existingBetIncrement.fee = extraFee;
-            existingBetIncrement.totalAmount += extraFee;
+            existingBetIncrement.fee = bet.fee;
+            existingBetIncrement.totalAmount += bet.fee;
         }
 
         if (player.session) {
@@ -52,5 +62,40 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueue {
         );
 
         return newBet.time;
+    }
+
+    async insertBetLog(player, roundId, bet, rate) {
+        const newBetLog = {
+            uid: player.UID,
+            name: player.profile.name,
+            time: new Date(),
+            choice: bet.betChoice,
+            amount: bet.amount,
+            freeBet: bet.freeBet,
+            clientSentTime: bet.clientSentTime,
+            receivedTime: bet.receivedTime,
+            roundId,
+            fee: bet.fee,
+        };
+
+        if (player.session) {
+            newBetLog.siteId = player.session.siteId;
+            newBetLog.currency = player.session.currencyName;
+            newBetLog.rate = rate;
+
+            newBetLog.operatorId = player.session.operatorId;
+            newBetLog.playerId = player.session.playerId;
+        }
+
+        await this.betLogsRepository.create(newBetLog);
+    }
+
+    adjustOwnBets(playerName, bet) {
+        super.adjustOwnBets(playerName, bet);
+
+        if (this.gameData.ingame?.[playerName]) {
+            const playerInGame = this.gameData.ingame[playerName];
+            playerInGame.ownBets.fee = (playerInGame.ownBets.fee ?? 0) + bet.fee;
+        }
     }
 }

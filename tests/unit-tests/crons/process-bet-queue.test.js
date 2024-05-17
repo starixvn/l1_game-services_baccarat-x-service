@@ -1,3 +1,5 @@
+import { stubMongoose } from "jest-micro-auto-stub";
+import mongoose from "mongoose";
 import { TableGameData } from "sc-card-game-base";
 import ProcessBetQueue from "../../../src/crons/process-bet-queue";
 import BaccaratGameDefinition from "../../../src/game-definition";
@@ -22,17 +24,37 @@ const gameManagementApiClientFactory = {
     instance: jest.fn(),
 };
 
+const betsRepository = stubMongoose(mongoose.Model);
+const betLogsRepository = stubMongoose(mongoose.Model);
+
 let processBetQueue;
 
 beforeEach(() => {
     gameData.gameConfigs = { ...gameConfigs };
-    processBetQueue = new ProcessBetQueue({ definition, gameData, gameManagementApiClientFactory });
+    processBetQueue = new ProcessBetQueue({ definition, gameData, gameManagementApiClientFactory, betsRepository, betLogsRepository });
 });
 
 describe("ProcessBetQueue", () => {
     describe("formatApiBetInfo", () => {
+        it("should add fee to amount", () => {
+            //Arrange
+            const payload = {
+                amount: 100,
+                betChoice: "player",
+                fee: 20,
+            };
+
+            //Act
+            const result = processBetQueue.formatApiBetInfo(payload);
+
+            //Assert
+            expect(result.amount).toEqual(payload.amount + payload.fee);
+        });
+    });
+
+    describe("setExtraFee", () => {
         describe("when gameConfigs.applyMultiplier is true", () => {
-            it("should add fee to amount", () => {
+            it("Fee should be greater than 0", () => {
                 //Arrange
                 const payload = {
                     amount: 100,
@@ -40,27 +62,93 @@ describe("ProcessBetQueue", () => {
                 };
 
                 //Act
-                const result = processBetQueue.formatApiBetInfo(payload);
+                const result = processBetQueue.setExtraFee(payload);
 
                 //Assert
-                expect(result.amount).toEqual(payload.amount + payload.amount * gameConfigs.oddsMultipliers.extraFeeRatio);
+                expect(result).toEqual(payload.amount * gameConfigs.oddsMultipliers.extraFeeRatio);
             });
         });
+
         describe("when gameConfigs.applyMultiplier is false", () => {
-            it("shouldnt add fee to amount", () => {
-                //Arrange
+            it("Fee should be  0", () => {
                 gameData.gameConfigs.applyMultiplier = false;
+                //Arrange
                 const payload = {
                     amount: 100,
                     betChoice: "player",
                 };
 
                 //Act
-                const result = processBetQueue.formatApiBetInfo(payload);
+                const result = processBetQueue.setExtraFee(payload);
 
                 //Assert
-                expect(result.amount).toEqual(payload.amount);
+                expect(result).toEqual(0);
             });
+        });
+    });
+    describe("upsertBet", () => {
+        const player = {
+            session: {},
+            profile: {
+                name: "player01",
+            },
+        };
+        describe("when gameConfigs.applyMultiplier is true", () => {
+            it("Should update fee & tototal amount", async () => {
+                //Arrange
+                const bet = {
+                    amount: 100,
+                    betChoice: "player",
+                    fee: 20,
+                };
+
+                //Act
+                await processBetQueue.upsertBet(player, 1, bet, 1);
+
+                //Assert
+                expect(betsRepository.updateOne.mock.calls[0][1].$inc).toEqual({ fee: 20, player: 100, totalAmount: 120 });
+            });
+        });
+    });
+
+    describe("insertBetLog", () => {
+        const player = {
+            session: {},
+            profile: {
+                name: "player01",
+            },
+        };
+
+        it("Should set fee equal to bet.fee", async () => {
+            //Arrange
+            const bet = {
+                amount: 100,
+                betChoice: "player",
+                fee: 20,
+            };
+
+            //Act
+            await processBetQueue.insertBetLog(player, 1, bet, 1);
+
+            //Assert
+            expect(betLogsRepository.create.mock.calls[0][0].fee).toEqual(bet.fee);
+        });
+    });
+
+    describe("adjustOwnBets", () => {
+        it("should update fee in ownbets", () => {
+            //Arrange
+            const playerName = "player01";
+            gameData.ingame[playerName] = {};
+            const bet = {
+                amount: 100,
+                betChoice: "player",
+                fee: 20,
+            };
+            //Act
+            processBetQueue.adjustOwnBets(playerName, bet);
+
+            expect(gameData.ingame[playerName].ownBets.fee).toEqual(bet.fee);
         });
     });
 });
