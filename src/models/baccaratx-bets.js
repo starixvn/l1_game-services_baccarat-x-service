@@ -35,6 +35,7 @@ const betLog = {
 
     choice: { type: String, required: true },
     amount: { type: Number, default: 0, required: true },
+    fee: { type: Number, default: 0 },
 
     time: { type: Date },
 
