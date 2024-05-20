@@ -9,7 +9,7 @@ const allGamesBetsRepository = allGamesHistoriesModel("megabigsmall_histories");
 
 export default [
     {
-        id: 50,
+        id: 81,
         name: "BaccaratX",
         configName: "baccaratx",
         durations: {
