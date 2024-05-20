@@ -4,6 +4,7 @@ import { allGamesHistoriesModel, getBetLogModel, getBetModel, getResultModel, ge
 const choicesMapper = { player: 1, banker: 2, tie: 3, playerPair: 4, bankerPair: 5 };
 const choices = ["player", "banker", "tie", "playerPair", "bankerPair"];
 const hedgeBetGroups = [["player", "banker"]];
+const commonChoices = ["player", "banker", "tie"];
 
 const allGamesBetsRepository = allGamesHistoriesModel("megabigsmall_histories");
 
@@ -23,6 +24,7 @@ export default [
             generatingCutCardIndex: 50,
         },
         choices,
+        commonChoices,
         hedgeBetGroups,
         choicesMapper,
         generateResult,
