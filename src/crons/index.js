@@ -1,6 +1,5 @@
-import Bot from "./baccaratx-bot";
 import BaccaratXGameCron from "./baccaratx-game-cron";
+import BaccaratXBot from "./baccaratx-bot";
 import ProcessBetQueue from "./process-bet-queue";
 
-export { BaccaratXGameCron, Bot, ProcessBetQueue };
-
+export { BaccaratXBot, BaccaratXGameCron, ProcessBetQueue };

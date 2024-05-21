@@ -3,7 +3,7 @@ import { Table } from "sc-game-base";
 
 import constants from "../constants";
 
-export default class Bot extends Table.Crons.TableGameBot {
+export default class BaccaratXBot extends Table.Crons.TableGameBot {
     constructor(definition, gameData, publisher, gameManagementApiClientFactory, tempBetsRepository, cutCardConsumer) {
         super(definition, gameData, publisher, gameManagementApiClientFactory, tempBetsRepository);
         this.cutCardConsumer = cutCardConsumer;

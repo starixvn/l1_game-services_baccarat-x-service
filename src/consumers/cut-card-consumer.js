@@ -7,6 +7,7 @@ export default class CutCardConsumer {
         this.publisher = publisher;
         this.cutCardPFRepository = cutCardPFRepository;
         this.logService = logService;
+        this.chance = new Chance();
     }
 
     validatePlayerCutCard(cutCard) {
@@ -22,7 +23,7 @@ export default class CutCardConsumer {
     async consume(player, payload) {
         try {
             const { cutCardIndex } = payload;
-            if (validatePlayerCutCard(payload)) {
+            if (this.validatePlayerCutCard(payload)) {
                 await this.insertPlayerCutCard(player.profile.name, cutCardIndex);
 
                 this.publisher.publishToUser(player.UID, { cutCard: { successful: true, cutCardIndex } });
@@ -30,7 +31,7 @@ export default class CutCardConsumer {
                 return;
             }
         } catch (err) {
-            this.logService.logError(error);
+            this.logService.logError(err);
         }
 
         this.publisher.publishToUser(player.UID, { cutCard: { successful: false, errorCode: "SB19xx" } });
@@ -48,9 +49,9 @@ export default class CutCardConsumer {
     }
 
     async generateServerCutCardIndex() {
+        const { roundId } = this.gameData;
         const { minCutCardIndex, maxCutCardIndex } = this.definition;
-        const chance = new Chance();
-        const serverCutCardIndex = chance.integer({ min: minCutCardIndex, max: maxCutCardIndex });
+        const serverCutCardIndex = this.chance.integer({ min: minCutCardIndex, max: maxCutCardIndex });
 
         await this.cutCardPFRepository.create({ roundId, serverCutCardIndex, time: new Date(), playerCutCards: [] });
 
@@ -61,7 +62,8 @@ export default class CutCardConsumer {
         const { roundId } = this.gameData;
         const { serverCutCardIndex, playerCutCards } = await this.cutCardPFRepository.findOne({ roundId }).lean().exec();
 
-        const averageCutIndex = playerCutCards.reduce((total, cur) => total + cur, serverCutCardIndex) / (playerCutCards.length + 1);
+        const averageCutIndex =
+            playerCutCards.reduce((total, cur) => total + cur.cutIndex, serverCutCardIndex) / (playerCutCards.length + 1);
 
         return Math.floor(averageCutIndex);
     }

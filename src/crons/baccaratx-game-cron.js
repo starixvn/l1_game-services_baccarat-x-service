@@ -1,6 +1,28 @@
 import { GameCron } from "sc-card-game-base/src/crons";
+import BaccaratGameDefinition from "../baccarat-game-definition";
+import { GameData } from "sc-card-game-base";
+import { BaccaratXBot } from "./";
+import { CutCardConsumer, RoundResultConsumer, SettleGameRoundConsumer } from "../consumers";
 
 export default class BaccaratXGameCron extends GameCron {
+    /**
+     *
+     * @param {Object} dependencies
+     * @param {BaccaratGameDefinition} dependencies.definition
+     * @param {GameData} dependencies.gameData
+     * @param {BaccaratXBot} dependencies.bot
+     * @param {SettleGameRoundConsumer} dependencies.settleGameRoundConsumer
+     * @param {GameStatusPublisher} dependencies.gameStatusPublisher
+     * @param {RunningRoundInfoPublisher} dependencies.runningRoundInfoPublisher
+     * @param {logger} dependencies.logService
+     * @param {RoundResultConsumer} dependencies.roundResultConsumer
+     * @param {mongoose.Model} dependencies.resultsRepository
+     * @param {GameManagementApiClientFactory} dependencies.gameManagementApiClientFactory
+     * @param {RoundIdConsumer} dependencies.roundIdConsumer
+     * @param {ProvablyFairConsumer} dependencies.provablyFairConsumer
+     * @param {UnsettledRoundConsumer} dependencies.unsettledRoundConsumer
+     * @param {CutCardConsumer} dependencies.cutCardConsumer
+     */
     constructor({
         definition,
         gameData,
@@ -85,6 +107,24 @@ export default class BaccaratXGameCron extends GameCron {
         } else if (this.gameData.remainingTime < durations.placingBets) {
             this.bot && (await this.bot.run());
             this.runningRoundInfoPublisher.publish();
+        }
+    }
+
+    async generateAndPublishShoe() {
+        if (!this.isGeneratingResult) {
+            try {
+                this.isGeneratingResult = true;
+                await this.roundResultConsumer.generateAndPublishHash();
+            } catch (e) {
+                this.logService.logError(e);
+            } finally {
+                this.isGeneratingResult = false;
+            }
+
+            const { isSufficient } = await this.roundResultConsumer.checkSufficientChain();
+            return isSufficient;
+        } else {
+            return false;
         }
     }
 }

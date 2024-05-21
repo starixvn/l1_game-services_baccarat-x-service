@@ -1,5 +1,4 @@
 import { Consumers } from "sc-card-game-base";
-import { Helpers } from "sc-card-game-base";
 
 export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
     constructor(gameData, definition, roundResultPublisher, resultsRepository, logService, cutCardConsumer, shoeConsumer) {
