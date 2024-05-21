@@ -8,14 +8,17 @@ export default class MultiplierCardsConsumer {
     }
 
     withdrawCards() {
-        const { randomMode, oddsMultiplier } = this.gameData.gameConfigs;
+        const { randomMode, oddsMultipliers } = this.gameData.gameConfigs;
         const deck = Helpers.CardChain.generateCards(1, randomMode);
-        const cards = deck.slice(0, this.chance.integer({ min: oddsMultiplier.cardNumber.min, max: oddsMultiplier.cardNumber.max }));
+        const cards = deck.slice(
+            0,
+            this.chance.integer({ min: oddsMultipliers.numberOfCardsRange.min, max: oddsMultipliers.numberOfCardsRange.max })
+        );
 
         for (const card of cards) {
             card.value = this.chance.weighted(
-                oddsMultiplier.values.map((x) => x.number),
-                oddsMultiplier.values.map((x) => x.ratio)
+                oddsMultipliers.values.map((x) => x.number),
+                oddsMultipliers.values.map((x) => x.ratio)
             );
         }
 
