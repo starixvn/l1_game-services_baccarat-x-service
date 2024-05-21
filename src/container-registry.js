@@ -20,7 +20,7 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
             cutCardConsumer: asClass(CutCardConsumer).singleton(),
             multiplierCardsConsumer: asClass(MultiplierCardsConsumer).singleton(),
             roundResultConsumer: asClass(RoundResultConsumer).singleton(),
-            settleGameRoundConsumer: asClass(SettleGameRoundConsumer).singleton(),
+            settleGameRoundConsumer: asClass(SettleGameRoundConsumer).singleton().proxy(),
         });
     }
 
