@@ -1,7 +1,8 @@
 import { asClass, asValue } from "awilix";
 import { MultipleTableGamesContainerRegistry } from "sc-multiple-games-base";
 import { CutCardConsumer, MultiplierCardsConsumer, RoundResultConsumer, SettleGameRoundConsumer, ShoeConsumer } from "./consumers";
-import { BaccaratXGameCron, Bot, ProcessBetQueue } from "./crons";
+import { BaccaratXGameCron, BaccaratXBot, ProcessBetQueue } from "./crons";
+import RoundResultPublisher from "./publishers/round-result-publisher";
 
 export default class ContainerRegistry extends MultipleTableGamesContainerRegistry {
     register(appConfigs, definition, gameData) {
@@ -10,6 +11,14 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
         this.registerRepositories(definition.repositories);
 
         return this.container;
+    }
+
+    registerPublishers() {
+        super.registerPublishers();
+
+        this.container.register({
+            roundResultPublisher: asClass(RoundResultPublisher).singleton(),
+        });
     }
 
     registerConsumers() {
@@ -40,7 +49,7 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
 
         this.container.register({
             gameCron: asClass(BaccaratXGameCron).singleton().proxy(),
-            bot: asClass(Bot).singleton(),
+            bot: asClass(BaccaratXBot).singleton(),
             processBetQueue: asClass(ProcessBetQueue).singleton().proxy(),
         });
     }

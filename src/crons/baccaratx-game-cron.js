@@ -65,7 +65,9 @@ export default class BaccaratXGameCron extends GameCron {
 
         if (this.gameData.isNewRound) {
             await this.checkGameStatus();
-
+            //Test
+            this.gameData.disabled = false;
+            //Test
             if (!this.gameData.disabled) {
                 this.gameData.isNewRound = false;
             }
@@ -78,7 +80,7 @@ export default class BaccaratXGameCron extends GameCron {
         if (!this.gameData.disabled && this.gameData.remainingTime === durations.generatingShoe) {
             await this.resetForNewRoundWhenChangingShoe();
 
-            const isHavingSufficientChain = await this.generateAndPublishBlockchain();
+            const isHavingSufficientChain = await this.generateAndPublishShoe();
             if (isHavingSufficientChain) {
                 this.gameData.remainingTime--;
             }

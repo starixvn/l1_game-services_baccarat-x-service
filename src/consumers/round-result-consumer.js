@@ -29,8 +29,8 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         const { randomMode } = this.gameData.gameConfigs;
         const { cardsFromAdmin } = this.getResultFromAdmin();
         const shoe = this.shoeConsumer.generateShoe(cardsFromAdmin, randomMode);
-        const { encryptedShoe, encryptedShoeHash, cards } = shoe;
-        const burnedCards = this.calculateBurnedCards(cardChain.chain);
+        const { encryptedShoe, encryptedShoeHash, cards, rawValue, hashValue } = shoe;
+        const burnedCards = this.calculateBurnedCards(shoe.cards);
 
         const record = {
             isAvailable: true,
@@ -43,6 +43,30 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
 
         await this.resultsRepository.create(record);
 
-        return { encryptedShoe, encryptedShoeHash, cards, currentIndex: burnedCards };
+        return { encryptedShoe, encryptedShoeHash, cards, currentIndex: burnedCards, rawValue, hashValue };
+    }
+
+    calculateBurnedCards(cards) {
+        const firstCard = cards[0];
+        const cardValue = firstCard.rank >= 10 ? 10 : firstCard.rank + 1;
+        return cardValue + 1;
+    }
+
+    async checkSufficientChain() {
+        let isSufficient = false;
+        const shoe = await this.resultsRepository
+            .findOne({ isAvailable: true }, null, { sort: { time: -1 } })
+            .lean()
+            .exec();
+
+        if (
+            !this.hasResultFromAdmin() &&
+            shoe &&
+            (shoe.currentIndex < shoe.cutCardIndex || (shoe.currentIndex === shoe.cutCardIndex && shoe.remainingCards !== 0))
+        ) {
+            isSufficient = true;
+        }
+
+        return { shoe, isSufficient };
     }
 }
