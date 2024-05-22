@@ -90,9 +90,7 @@ export default class BaccaratXGameCron extends GameCron {
 
         if (this.gameData.isNewRound) {
             await this.checkGameStatus();
-            //Test
-            this.gameData.disabled = false;
-            //Test
+
             if (!this.gameData.disabled) {
                 this.gameData.isNewRound = false;
             }
