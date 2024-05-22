@@ -1,6 +1,6 @@
 import { Consumers } from "sc-card-game-base";
 
-export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRoundConsumer {
+export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundConsumer {
     constructor({
         definition,
         gameData,
@@ -34,7 +34,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         this.gameData.shoe.currentIndex = this.gameData.shoe.currentIndex + usedCardsCount;
         this.gameData.shoe.remainingCards = this.definition.maxCardsPerRound - usedCardsCount;
         await this.resultsRepository.update(
-            { _id: this.gameData.shoe._id },
+            { isAvailable: true },
             {
                 $set: {
                     currentIndex: this.gameData.shoe.currentIndex,
@@ -47,7 +47,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
     }
 
     async settleRound() {
-        const { result, usedCardIndexes } = this.generateResult(this.gameData.shoe);
+        const { result, usedCardIndexes } = await this.generateResult(this.gameData.shoe);
         const settlementResult = this.definition.settle(result);
         const { roundId, exchangeRates } = this.gameData;
         const oddsMultipliers = this.generateOddsMultipliers();

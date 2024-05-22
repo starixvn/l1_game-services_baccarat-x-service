@@ -11,4 +11,16 @@ export default class RoundResultPublisher extends Core.BaseEventPublishers.BaseE
             this.publishToAllAdmins(payload);
         }
     }
+
+    publishFinalCutCardIndex() {
+        const cutCardIndex = this.gameData.shoe?.cutCardIndex;
+        if (cutCardIndex) {
+            const payload = {
+                cutCardIndex,
+            };
+
+            this.publishToAllUsers(payload);
+            this.publishToAllAdmins(payload);
+        }
+    }
 }

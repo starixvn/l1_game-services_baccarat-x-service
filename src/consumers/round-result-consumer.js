@@ -1,3 +1,4 @@
+import Chance from "chance";
 import { Consumers } from "sc-card-game-base";
 
 export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
@@ -5,6 +6,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         super(gameData, definition, roundResultPublisher, resultsRepository, logService);
         this.cutCardConsumer = cutCardConsumer;
         this.shoeConsumer = shoeConsumer;
+        this.chance = new Chance();
     }
 
     async generateAndPublishHash() {
@@ -31,6 +33,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         const shoe = this.shoeConsumer.generateShoe(cardsFromAdmin, randomMode);
         const { encryptedShoe, encryptedShoeHash, cards, rawValue, hashValue } = shoe;
         const burnedCards = this.calculateBurnedCards(shoe.cards);
+        const serverCutCardIndex = await this.cutCardConsumer.generateServerCutCardIndex();
 
         const record = {
             isAvailable: true,
@@ -39,6 +42,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
             remainingCards: 0,
             shoe: { encryptedShoe, encryptedShoeHash },
             firstRoundId: this.gameData.roundId,
+            cutCardIndex: serverCutCardIndex,
         };
 
         await this.resultsRepository.create(record);
@@ -68,5 +72,14 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         }
 
         return { shoe, isSufficient };
+    }
+
+    async updateAndPublishFinalCutCardIndex() {
+        const cutCardIndex = await this.cutCardConsumer.calculateCutCardIndex();
+        this.gameData.shoe.cutCardIndex = cutCardIndex;
+
+        this.roundResultPublisher.publishFinalCutCardIndex();
+
+        await this.resultsRepository.update({ firstRoundId: this.gameData.roundId, isAvailable: true }, { cutCardIndex });
     }
 }

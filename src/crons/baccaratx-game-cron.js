@@ -39,6 +39,7 @@ export default class BaccaratXGameCron extends GameCron {
         provablyFairConsumer,
         unsettledRoundConsumer,
         cutCardConsumer,
+        shoeConsumer,
     }) {
         super({
             definition,
@@ -58,6 +59,30 @@ export default class BaccaratXGameCron extends GameCron {
         });
 
         this.cutCardConsumer = cutCardConsumer;
+        this.shoeConsumer = shoeConsumer;
+    }
+
+    async start() {
+        await this.roundIdConsumer.initRoundId();
+        await this.queryLastResult();
+        await this.getSettingForNewRound();
+        await this.updateExchangeRates();
+
+        await this.initShoe();
+        await this.initNewRound();
+        this.startCron();
+    }
+
+    async initShoe() {
+        if (this.resultsRepository) {
+            const results = await this.resultsRepository
+                .findOne({ isAvailable: true }, null, { sort: { time: -1 } })
+                .lean()
+                .exec();
+            const decryptShoe = this.shoeConsumer.decryptShoe(results.shoe);
+
+            this.gameData.shoe = { ...results, ...decryptShoe };
+        }
     }
 
     async proceed() {
@@ -73,10 +98,6 @@ export default class BaccaratXGameCron extends GameCron {
             }
         }
 
-        if (this.gameData.remainingTime === durations.generatingCutCardIndex) {
-            await this.cutCardConsumer.generateServerCutCardIndex();
-        }
-
         if (!this.gameData.disabled && this.gameData.remainingTime === durations.generatingShoe) {
             await this.resetForNewRoundWhenChangingShoe();
 
@@ -86,6 +107,10 @@ export default class BaccaratXGameCron extends GameCron {
             }
         } else if (!this.gameData.disabled) {
             this.gameData.remainingTime--;
+        }
+
+        if (this.gameData.remainingTime === durations.generatingCutCardIndex) {
+            await this.roundIdConsumer.updateAndPublishFinalCutCardIndex();
         }
 
         if (this.isStartingTime(this.gameData.remainingTime, durations)) {

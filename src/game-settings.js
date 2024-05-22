@@ -1,5 +1,5 @@
 import { generateResult, getSettlementResult as settle } from "./helpers/result-helper";
-import { allGamesHistoriesModel, getBetLogModel, getBetModel, getResultModel, getRoundModel } from "./models";
+import { allGamesHistoriesModel, getBetLogModel, getBetModel, getCutCardPfModel, getResultModel, getRoundModel } from "./models";
 
 const choicesMapper = { player: 1, banker: 2, tie: 3, playerPair: 4, bankerPair: 5 };
 const choices = ["player", "banker", "tie", "playerPair", "bankerPair"];
@@ -34,7 +34,7 @@ export default [
             betsRepository: getBetModel("baccaratx_bet"),
             betLogsRepository: getBetLogModel("baccaratx_betlog"),
             resultsRepository: getResultModel("baccaratx_result"),
-            cutCardPFRepository: getResultModel("baccaratx_cut_card_pf"),
+            cutCardPFRepository: getCutCardPfModel("baccaratx_cut_card_pf"),
             allGamesBetsRepository,
         },
         numberOfRoundHistory: 100,
