@@ -24,6 +24,9 @@ export default {
         requestTimeout: 10000,
         useAuthenticate: true,
     },
+    gameManagementApiSettings: {
+        BASE: "https://l1-proxy.lumigame.com/game-management-service",
+    },
     socketOptions: {
         pingInterval: 60 * 1000,
         pingTimeout: 60 * 1000,
@@ -32,7 +35,7 @@ export default {
     },
     enabledLogs: true,
     database: {
-        url: "mongodb://127.0.0.1:27017",
+        url: "mongodb://lmn_backend:LmnBackend@10.10.50.12:39100,10.10.50.13:39100,10.10.50.14:39100/?replicaSet=L1Local&appName=baccaratx",
         options: {
             dbName: "minigame",
             useNewUrlParser: true,
@@ -46,6 +49,11 @@ export default {
         env: "LOCAL",
     },
     authenticateSettings: {
+        url: "https://auth.lumigame.com",
+        id: "game-services",
+        secret: "gameservices@20luminet&",
+        requestTimeout: 10000,
+        useAuthenticate: false,
         audiences: ["api", "admin-api"],
     },
     adminSecretKey: "asWDEerfOIdgsdqRTFabvmgh",

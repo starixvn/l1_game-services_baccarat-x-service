@@ -79,9 +79,11 @@ export default class BaccaratXGameCron extends GameCron {
                 .findOne({ isAvailable: true }, null, { sort: { time: -1 } })
                 .lean()
                 .exec();
-            const decryptShoe = this.shoeConsumer.decryptShoe(results.shoe);
+            if (results?.shoe) {
+                const decryptShoe = this.shoeConsumer.decryptShoe(results.shoe);
 
-            this.gameData.shoe = { ...results, ...decryptShoe };
+                this.gameData.shoe = { ...results, ...decryptShoe };
+            }
         }
     }
 

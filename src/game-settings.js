@@ -11,8 +11,8 @@ const allGamesBetsRepository = allGamesHistoriesModel("megabigsmall_histories");
 export default [
     {
         id: 81,
-        name: "BaccaratX",
-        configName: "baccaratx",
+        name: "bac81",
+        configName: "bac81",
         durations: {
             wholeRound: 48,
             placingBets: 30,
