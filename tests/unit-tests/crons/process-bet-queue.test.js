@@ -1,8 +1,8 @@
 import { stubMongoose } from "jest-micro-auto-stub";
 import mongoose from "mongoose";
 import { TableGameData } from "sc-card-game-base";
+import BaccaratGameDefinition from "../../../src/baccarat-game-definition";
 import ProcessBetQueue from "../../../src/crons/process-bet-queue";
-import BaccaratGameDefinition from "../../../src/game-definition";
 
 const definition = new BaccaratGameDefinition({});
 const gameData = new TableGameData();

@@ -4,6 +4,7 @@ import { GameDefinition, Publishers, TableGameData } from "sc-card-game-base";
 import { Core } from "sc-game-base";
 import MultiplierCardsConsumer from "../../../src/consumers/multiplier-cards-consumer";
 import SettleGameRoundConsumer from "../../../src/consumers/settle-game-round-consumer";
+import BaccaratPlayer from "../../../src/helpers/baccarat-player";
 import { getSettlementResult } from "../../../src/helpers/result-helper";
 
 const roundResultPublisher = stub(Publishers.RoundResultPublisher);
@@ -31,6 +32,16 @@ gameData.gameConfigs = { ...gameConfigs };
 const gameManagementApiClientFactory = {
     instance: jest.fn(),
 };
+
+class TestBaccaratPlayer extends BaccaratPlayer {
+    constructor(card1, card2, card3) {
+        super();
+
+        this.card1 = card1;
+        this.card2 = card2;
+        this.card3 = card3;
+    }
+}
 
 describe("SettleGameRoundConsumer", () => {
     let consumer;
@@ -98,30 +109,30 @@ describe("SettleGameRoundConsumer", () => {
                     //Arrange
                     gameData.gameConfigs.applyMultiplier = true;
                     const roundResult = {
-                        player: {
-                            card1: {
+                        player: new TestBaccaratPlayer(
+                            {
                                 rank: 2,
                                 suit: 3,
                             },
-                            card2: {
+                            {
                                 rank: 3,
                                 suit: 1,
-                            },
-                        },
-                        banker: {
-                            card1: {
+                            }
+                        ),
+                        banker: new TestBaccaratPlayer(
+                            {
                                 rank: 11,
                                 suit: 3,
                             },
-                            card2: {
+                            {
                                 rank: 3,
                                 suit: 0,
                             },
-                            card3: {
+                            {
                                 rank: 8,
                                 suit: 1,
-                            },
-                        },
+                            }
+                        ),
                     };
 
                     const settlementResult = {
@@ -168,26 +179,26 @@ describe("SettleGameRoundConsumer", () => {
                     //Arrange
                     gameData.gameConfigs.applyMultiplier = true;
                     const roundResult = {
-                        player: {
-                            card1: {
+                        player: new TestBaccaratPlayer(
+                            {
                                 rank: 0,
                                 suit: 0,
                             },
-                            card2: {
+                            {
                                 rank: 12,
                                 suit: 2,
-                            },
-                        },
-                        banker: {
-                            card1: {
+                            }
+                        ),
+                        banker: new TestBaccaratPlayer(
+                            {
                                 rank: 7,
                                 suit: 2,
                             },
-                            card2: {
+                            {
                                 rank: 0,
                                 suit: 2,
-                            },
-                        },
+                            }
+                        ),
                     };
 
                     const settlementResult = {
@@ -224,30 +235,30 @@ describe("SettleGameRoundConsumer", () => {
                     //Arrange
                     gameData.gameConfigs.applyMultiplier = true;
                     const roundResult = {
-                        player: {
-                            card1: {
+                        player: new TestBaccaratPlayer(
+                            {
                                 rank: 4,
                                 suit: 2,
                             },
-                            card2: {
+                            {
                                 rank: 11,
                                 suit: 3,
                             },
-                            card3: {
+                            {
                                 rank: 7,
                                 suit: 2,
-                            },
-                        },
-                        banker: {
-                            card1: {
+                            }
+                        ),
+                        banker: new TestBaccaratPlayer(
+                            {
                                 rank: 8,
                                 suit: 2,
                             },
-                            card2: {
+                            {
                                 rank: 3,
                                 suit: 0,
-                            },
-                        },
+                            }
+                        ),
                     };
 
                     const settlementResult = {
@@ -299,34 +310,34 @@ describe("SettleGameRoundConsumer", () => {
                     //Arrange
                     gameData.gameConfigs.applyMultiplier = true;
                     const roundResult = {
-                        player: {
-                            card1: {
+                        player: new TestBaccaratPlayer(
+                            {
                                 rank: 5,
                                 suit: 2,
                             },
-                            card2: {
+                            {
                                 rank: 5,
                                 suit: 1,
                             },
-                            card3: {
+                            {
                                 rank: 2,
                                 suit: 2,
-                            },
-                        },
-                        banker: {
-                            card1: {
+                            }
+                        ),
+                        banker: new TestBaccaratPlayer(
+                            {
                                 rank: 9,
                                 suit: 0,
                             },
-                            card2: {
+                            {
                                 rank: 2,
                                 suit: 0,
                             },
-                            card3: {
+                            {
                                 rank: 4,
                                 suit: 0,
-                            },
-                        },
+                            }
+                        ),
                     };
 
                     const settlementResult = {
@@ -373,26 +384,26 @@ describe("SettleGameRoundConsumer", () => {
                     //Arrange
                     gameData.gameConfigs.applyMultiplier = true;
                     const roundResult = {
-                        player: {
-                            card1: {
+                        player: new TestBaccaratPlayer(
+                            {
                                 rank: 11,
                                 suit: 3,
                             },
-                            card2: {
+                            {
                                 rank: 7,
                                 suit: 1,
-                            },
-                        },
-                        banker: {
-                            card1: {
+                            }
+                        ),
+                        banker: new TestBaccaratPlayer(
+                            {
                                 rank: 6,
                                 suit: 2,
                             },
-                            card2: {
+                            {
                                 rank: 6,
                                 suit: 3,
-                            },
-                        },
+                            }
+                        ),
                     };
 
                     const settlementResult = {
@@ -440,30 +451,30 @@ describe("SettleGameRoundConsumer", () => {
         it.each([
             [
                 {
-                    player: {
-                        card1: {
+                    player: new TestBaccaratPlayer(
+                        {
                             rank: 4,
                             suit: 2,
                         },
-                        card2: {
+                        {
                             rank: 11,
                             suit: 3,
                         },
-                        card3: {
+                        {
                             rank: 7,
                             suit: 2,
-                        },
-                    },
-                    banker: {
-                        card1: {
+                        }
+                    ),
+                    banker: new TestBaccaratPlayer(
+                        {
                             rank: 8,
                             suit: 2,
                         },
-                        card2: {
+                        {
                             rank: 3,
                             suit: 0,
-                        },
-                    },
+                        }
+                    ),
                 },
                 [
                     {
@@ -484,30 +495,30 @@ describe("SettleGameRoundConsumer", () => {
             ],
             [
                 {
-                    player: {
-                        card1: {
+                    player: new TestBaccaratPlayer(
+                        {
                             rank: 2,
                             suit: 3,
                         },
-                        card2: {
+                        {
                             rank: 3,
                             suit: 1,
-                        },
-                    },
-                    banker: {
-                        card1: {
+                        }
+                    ),
+                    banker: new TestBaccaratPlayer(
+                        {
                             rank: 11,
                             suit: 3,
                         },
-                        card2: {
+                        {
                             rank: 3,
                             suit: 0,
                         },
-                        card3: {
+                        {
                             rank: 8,
                             suit: 1,
-                        },
-                    },
+                        }
+                    ),
                 },
                 [
                     {

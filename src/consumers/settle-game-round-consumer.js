@@ -101,8 +101,8 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         }
 
         const appliedMultiplierCards = [];
-        const playerCards = Object.values(result.player);
-        const bankerCards = Object.values(result.banker);
+        const playerCards = result.player.getCards();
+        const bankerCards = result.banker.getCards();
 
         const filterCards = (cards) => oddsMultipliers.filter((om) => cards.some((card) => card.rank === om.rank && card.suit === om.suit));
 
@@ -141,8 +141,8 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         const filterCards = (cards) =>
             appliedMultipliers.filter((om) => cards.some((card) => card.rank === om.rank && card.suit === om.suit));
 
-        const appliedPlayerCards = filterCards(Object.values(result.player));
-        const appliedBankerCards = filterCards(Object.values(result.banker));
+        const appliedPlayerCards = filterCards(result.player.getCards());
+        const appliedBankerCards = filterCards(result.banker.getCards());
 
         return {
             player: appliedPlayerCards,
