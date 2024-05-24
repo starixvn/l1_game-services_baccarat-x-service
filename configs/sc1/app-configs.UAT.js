@@ -48,7 +48,6 @@ export default {
         url: "http://l1_user_service_uat:5000",
     },
     adminSecretKey: "asWDEerfOIdgsdqRTFabvmgh",
-    enableMsgpackParser: true,
     metrics: {
         enable: true,
         secretKey: "6c1f0f28-70f2-46ae-b031-22624a6cd8df",

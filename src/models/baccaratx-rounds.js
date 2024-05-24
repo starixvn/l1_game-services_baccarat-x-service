@@ -1,5 +1,16 @@
 import mongoose from "mongoose";
 
+const card = {
+    value: Number,
+    type: Number,
+};
+
+const hand = {
+    card1: card,
+    card2: card,
+    card3: card,
+};
+
 const settlementResultSchema = new mongoose.Schema(
     {
         player: { type: Boolean, default: false },
@@ -13,8 +24,8 @@ const settlementResultSchema = new mongoose.Schema(
 
 const resultSchema = new mongoose.Schema(
     {
-        player: { type: Object, required: true },
-        banker: { type: Object, required: true },
+        player: { type: hand },
+        banker: { type: hand },
     },
     { _id: false }
 );

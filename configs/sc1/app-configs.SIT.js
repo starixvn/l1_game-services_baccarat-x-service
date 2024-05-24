@@ -47,11 +47,19 @@ export default {
         url: "http://l1_user_service_sit:5000",
     },
     adminSecretKey: "asWDEerfOIdgsdqRTFabvmgh",
-    enableMsgpackParser: true,
     metrics: {
         enable: true,
         secretKey: "6c1f0f28-70f2-46ae-b031-22624a6cd8df",
     },  gameManagementApiSettings: {
+        BASE: "http://l1_game_management_service_sit:5000",
+    },
+    otel: {
+        system: "SG",
+        enabled: true,
+        endpoint: "http://10.2.190.51:4318/v1/traces",
+    },
+    enableMsgpackParser: true,
+    gameManagementApiSettings: {
         BASE: "http://l1_game_management_service_sit:5000",
     },
     otel: {
