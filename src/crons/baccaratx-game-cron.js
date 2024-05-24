@@ -1,8 +1,8 @@
+import { GameData } from "sc-card-game-base";
 import { GameCron } from "sc-card-game-base/src/crons";
 import BaccaratGameDefinition from "../baccarat-game-definition";
-import { GameData } from "sc-card-game-base";
-import { BaccaratXBot } from "./";
 import { CutCardConsumer, RoundResultConsumer, SettleGameRoundConsumer } from "../consumers";
+import { BaccaratXBot } from "./";
 
 export default class BaccaratXGameCron extends GameCron {
     /**
@@ -70,6 +70,7 @@ export default class BaccaratXGameCron extends GameCron {
 
         await this.initShoe();
         await this.initNewRound();
+        await this.unsettledRoundConsumer.proceed();
         this.startCron();
     }
 

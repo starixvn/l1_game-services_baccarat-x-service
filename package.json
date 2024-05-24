@@ -21,7 +21,7 @@
     "license": "ISC",
     "type": "module",
     "dependencies": {
-        "sc-card-game-base": "1.2.1-beta.3",
+        "sc-card-game-base": "1.2.1-beta.4",
         "sc-multiple-games-base": "1.9.1-beta.4"
     },
     "devDependencies": {
