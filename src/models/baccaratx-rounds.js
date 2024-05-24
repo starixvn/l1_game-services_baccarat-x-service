@@ -13,8 +13,8 @@ const settlementResultSchema = new mongoose.Schema(
 
 const resultSchema = new mongoose.Schema(
     {
-        player: { type: Number, required: true },
-        banker: { type: Number, required: true },
+        player: { type: Object, required: true },
+        banker: { type: Object, required: true },
     },
     { _id: false }
 );
