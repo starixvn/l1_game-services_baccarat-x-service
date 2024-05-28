@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
 
 const card = {
-    value: Number,
-    type: Number,
+    rank: Number,
+    suit: Number,
 };
 
 const hand = {
     card1: card,
     card2: card,
     card3: card,
+    score: Number
 };
 
 const settlementResultSchema = new mongoose.Schema(

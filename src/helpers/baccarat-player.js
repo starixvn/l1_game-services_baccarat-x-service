@@ -5,6 +5,7 @@ export default class BaccaratPlayer {
         this.card1 = null;
         this.card2 = null;
         this.card3 = null;
+        this.score = 0;
     }
 
     getTotalScore() {

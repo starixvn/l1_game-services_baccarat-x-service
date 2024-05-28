@@ -35,6 +35,9 @@ class BaccaratGame {
 
     finalComparison() {
         const score = this.getTotalScore();
+        this.player.score = score.player;
+        this.banker.score = score.banker;
+        
         const numberOfCards = this.player.getNumberOfCards() + this.banker.getNumberOfCards();
 
         return {
