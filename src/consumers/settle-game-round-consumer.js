@@ -62,6 +62,7 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
             oddsMultipliers,
             appliedMultipliers,
             usedCardIndexes,
+            extraFeeRatio: this.gameData.gameConfigs.oddsMultipliers?.extraFeeRatio
         });
 
         if (newRound) {
