@@ -1,6 +1,6 @@
 import { MultipleGamesSocketRouter } from "sc-multiple-games-base";
 
-export class SocketRouter extends MultipleGamesSocketRouter {
+export default class SocketRouter extends MultipleGamesSocketRouter {
     constructor({
         definition,
         gameData,

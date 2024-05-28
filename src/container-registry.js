@@ -4,7 +4,7 @@ import { MultipleTableGamesContainerRegistry } from "sc-multiple-games-base";
 import { CutCardConsumer, MultiplierCardsConsumer, RoundResultConsumer, SettleGameRoundConsumer, ShoeConsumer } from "./consumers";
 import { BaccaratXBot, BaccaratXGameCron, ProcessBetQueue } from "./crons";
 import RoundResultPublisher from "./publishers/round-result-publisher";
-import { SocketRouter } from "./routers/socket-router";
+import { HttpRouter, SocketRouter } from "./routers";
 
 export default class ContainerRegistry extends MultipleTableGamesContainerRegistry {
     register(appConfigs, definition, gameData) {
@@ -62,6 +62,7 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
 
         this.container.register({
             socketRouter: asClass(SocketRouter).proxy(),
+            httpRouter: asClass(HttpRouter),
         });
     }
 }
