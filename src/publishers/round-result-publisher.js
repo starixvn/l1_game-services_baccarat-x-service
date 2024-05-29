@@ -34,4 +34,15 @@ export default class RoundResultPublisher extends Core.BaseEventPublishers.BaseE
             this.publishToAllAdmins(payload);
         }
     }
+
+    publishWinners(roundId, winningPlayers) {
+        const payload = {
+            roundId,
+            winningPlayers,
+        };
+
+        this.publishToAllUsers({
+            winners: payload,
+        });
+    }
 }

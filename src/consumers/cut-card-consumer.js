@@ -34,7 +34,7 @@ export default class CutCardConsumer {
             this.logService.logError(err);
         }
 
-        this.publisher.publishToUser(player.UID, { cutCard: { successful: false, errorCode: "SB19xx" } });
+        this.publisher.publishToUser(player.UID, { cutCard: { successful: false } });
     }
 
     async insertPlayerCutCard(name, cutIndex) {
