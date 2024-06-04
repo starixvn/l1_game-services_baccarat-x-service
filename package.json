@@ -10,7 +10,7 @@
         "debug": "nodemon --es-module-specifier-resolution=node --watch ./ --inspect ./src/app.js",
         "prod": "node --max-old-space-size=8192 --es-module-specifier-resolution=node ./src/app.js",
         "reg": "npm set registry http://npm.lumigame.com",
-        "integration-test": "jest --config ./jest.integration-test.config.cjs --testPathPattern=tests/integration-tests/ --ci --forceExit --runInBand"
+        "integration-test": "jest tests/integration-tests/index.test.js --ci --reporters=default --reporters=jest-junit --forceExit"
     },
     "jestSonar": {
         "reportPath": "reports",
@@ -41,6 +41,9 @@
         "jest-sonar-reporter": "^2.0.0",
         "nodemon": "^3.1.0",
         "sc-game-service-integration-utils": "2.2.0"
+    },
+    "resolutions": {
+        "sc-base-database": "2.2.1-beta.0"
     },
     "husky": {
         "hooks": {

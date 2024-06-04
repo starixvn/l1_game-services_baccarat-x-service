@@ -1,5 +1,5 @@
 export default {
-    hostingPort: 5000,
+    hostingPort: 5002,
     apiSettings: {
         enabledApi: true,
         apiUrl: "http://api.lumigame.com",
@@ -60,5 +60,8 @@ export default {
     metrics: {
         enable: true,
         secretKey: "6c1f0f28-70f2-46ae-b031-22624a6cd8df",
+    },
+    userServiceSettings: {
+        url: "http://127.0.0.1:5000",
     },
 };
