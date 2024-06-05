@@ -1,10 +1,11 @@
 import { Helpers } from "sc-card-game-base";
 
 export default class ShoeConsumer {
-    constructor(gameData, resultsRepository, roundsRepository) {
+    constructor(gameData, resultsRepository, roundsRepository, cutCardPFRepository) {
         this.gameData = gameData;
         this.resultsRepository = resultsRepository;
         this.roundsRepository = roundsRepository;
+        this.cutCardPFRepository = cutCardPFRepository;
     }
 
     async getShoeVerification(roundId) {
@@ -13,12 +14,17 @@ export default class ShoeConsumer {
             .findOne({ firstRoundId: { $lte: roundId }, lastRoundId: { $gte: roundId }, isAvailable: false }, { _id: false })
             .lean()
             .exec();
+        const cutCardPF = await cutCardPFRepository
+            .findOnd({ roundId: roundResult.firstRoundId }, { _id: false, time: false })
+            .lean()
+            .exec();
 
         if (round && roundResult) {
+            const { burnedCards, cutCardIndex } = roundResult;
             const { cards, rawValue, hashValue } = this.decryptShoe(roundResult.shoe);
             const { usedCardIndexes } = round;
 
-            return { cards, rawValue, hashValue, usedCardIndexes };
+            return { cards, rawValue, hashValue, usedCardIndexes, burnedCards, cutCardIndex, cutCardPF };
         }
 
         return {};

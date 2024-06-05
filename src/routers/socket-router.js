@@ -14,6 +14,7 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
         playGamePermissionValidator,
         allGamesHistoryQuery,
         cutCardConsumer,
+        shoeConsumer,
     }) {
         super({
             definition,
@@ -30,11 +31,13 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
         });
 
         this.cutCardConsumer = cutCardConsumer;
+        this.shoeConsumer = shoeConsumer;
     }
     init(socketClient) {
         super.init(socketClient);
 
         this.socketClient.on("cutCard", this.handleCutCard.bind(this));
+        this.socketClient.on("shoeVerification", this.handleShoeVerification.bind(this));
     }
 
     handleCutCard(payload) {
@@ -46,6 +49,23 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
             this.cutCardConsumer.consume(this.gameData.realPlayers[this.socketClient.id], payload);
         } catch (error) {
             this.logService.logError(error);
+        }
+    }
+
+    async handleShoeVerification(payload) {
+        try {
+            const { roundId } = payload;
+
+            if (!roundId) {
+                res.send({ error: true });
+                return;
+            }
+
+            const result = await this.shoeConsumer.getShoeVerification(roundId);
+
+            res.send(result);
+        } catch (err) {
+            this.logService.logError(err);
         }
     }
 }
