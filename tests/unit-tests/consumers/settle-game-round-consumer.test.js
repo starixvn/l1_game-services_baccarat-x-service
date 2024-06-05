@@ -92,17 +92,6 @@ describe("SettleGameRoundConsumer", () => {
     });
 
     describe("settleAppliedMultiplierCards", () => {
-        describe("when applyMultiplier is false", () => {
-            it("should return undefined", () => {
-                //Arrange
-                gameData.gameConfigs.applyMultiplier = false;
-                //Act
-                const result = consumer.settleAppliedMultiplierCards([], {}, {});
-                //Assert
-                expect(result).toBeUndefined();
-            });
-        });
-
         describe("when applyMultiplier is true", () => {
             describe("when player wins", () => {
                 it("should return player cards exist in oddsMultiplier", () => {
@@ -164,13 +153,16 @@ describe("SettleGameRoundConsumer", () => {
                     const result = consumer.settleAppliedMultiplierCards(oddsMultipliers, roundResult, settlementResult);
 
                     //Assert
-                    expect(result).toEqual([
-                        {
-                            rank: 2,
-                            suit: 3,
-                            value: 2,
-                        },
-                    ]);
+                    expect(result).toEqual({
+                        player: [
+                            {
+                                rank: 2,
+                                suit: 3,
+                                value: 2,
+                            },
+                        ],
+                        banker: [],
+                    });
                 });
             });
 
@@ -220,13 +212,16 @@ describe("SettleGameRoundConsumer", () => {
                     const result = consumer.settleAppliedMultiplierCards(oddsMultipliers, roundResult, settlementResult);
 
                     //Assert
-                    expect(result).toEqual([
-                        {
-                            rank: 7,
-                            suit: 2,
-                            value: 2,
-                        },
-                    ]);
+                    expect(result).toEqual({
+                        banker: [
+                            {
+                                rank: 7,
+                                suit: 2,
+                                value: 2,
+                            },
+                        ],
+                        player: [],
+                    });
                 });
             });
 
@@ -290,18 +285,22 @@ describe("SettleGameRoundConsumer", () => {
                     const result = consumer.settleAppliedMultiplierCards(oddsMultipliers, roundResult, settlementResult);
 
                     //Assert
-                    expect(result).toEqual([
-                        {
-                            rank: 11,
-                            suit: 3,
-                            value: 2,
-                        },
-                        {
-                            rank: 8,
-                            suit: 2,
-                            value: 5,
-                        },
-                    ]);
+                    expect(result).toEqual({
+                        banker: [
+                            {
+                                rank: 8,
+                                suit: 2,
+                                value: 5,
+                            },
+                        ],
+                        player: [
+                            {
+                                rank: 11,
+                                suit: 3,
+                                value: 2,
+                            },
+                        ],
+                    });
                 });
             });
 
@@ -369,13 +368,16 @@ describe("SettleGameRoundConsumer", () => {
                     const result = consumer.settleAppliedMultiplierCards(oddsMultipliers, roundResult, settlementResult);
 
                     //Assert
-                    expect(result).toEqual([
-                        {
-                            rank: 5,
-                            suit: 2,
-                            value: 2,
-                        },
-                    ]);
+                    expect(result).toEqual({
+                        player: [
+                            {
+                                rank: 5,
+                                suit: 2,
+                                value: 2,
+                            },
+                        ],
+                        banker: [],
+                    });
                 });
             });
 
@@ -435,13 +437,16 @@ describe("SettleGameRoundConsumer", () => {
                     const result = consumer.settleAppliedMultiplierCards(oddsMultipliers, roundResult, settlementResult);
 
                     //Assert
-                    expect(result).toEqual([
-                        {
-                            rank: 6,
-                            suit: 2,
-                            value: 2,
-                        },
-                    ]);
+                    expect(result).toEqual({
+                        player: [],
+                        banker: [
+                            {
+                                rank: 6,
+                                suit: 2,
+                                value: 2,
+                            },
+                        ],
+                    });
                 });
             });
         });
@@ -490,7 +495,7 @@ describe("SettleGameRoundConsumer", () => {
                 ],
                 {
                     ...gameData.gameConfigs.odds,
-                    tie: gameData.gameConfigs.odds.tie * 2 * 5,
+                    tie: (gameData.gameConfigs.odds.tie - 1) * 2 * 5,
                 },
             ],
             [
@@ -539,14 +544,14 @@ describe("SettleGameRoundConsumer", () => {
                 ],
                 {
                     ...gameData.gameConfigs.odds,
-                    player: gameData.gameConfigs.odds.player * 2,
+                    player: (gameData.gameConfigs.odds.player - 1) * 2,
                 },
             ],
         ])("should update odds of choices", (result, oddsMultipliers, expectedOdds) => {
             //Arrange
             const settlementResult = getSettlementResult(result);
             const appliedMultipliers = consumer.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
-            const appliedCardsPerChoice = consumer.settleAppliedCardsPerChoice(result, appliedMultipliers);
+            const appliedCardsPerChoice = consumer.settleAppliedCardsPerChoice(appliedMultipliers);
 
             //Act
             const odds = consumer.settleOdds(settlementResult, appliedCardsPerChoice);

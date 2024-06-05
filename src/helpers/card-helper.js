@@ -1,5 +1,5 @@
 export const getCardValue = (card) => {
-    if (card == null) {
+    if (!card) {
         return 0;
     }
 

@@ -36,7 +36,7 @@ const Schema = new mongoose.Schema({
     settlementResult: settlementResultSchema,
     result: resultSchema,
     oddsMultipliers: { type: Array },
-    appliedMultipliers: { type: Array },
+    appliedMultipliers: { type: Object },
     time: { type: Date, default: new Date() },
     exchangeRateId: { type: Number, required: true },
     extraFeeRatio: { type: Number, required: false },

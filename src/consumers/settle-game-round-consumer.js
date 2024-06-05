@@ -49,9 +49,18 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
     async settleRound() {
         const { result, usedCardIndexes } = await this.generateResult(this.gameData.shoe);
         const settlementResult = this.definition.settle(result);
-        const { roundId, exchangeRates } = this.gameData;
-        const oddsMultipliers = this.generateOddsMultipliers();
-        const appliedMultipliers = this.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
+        const { roundId, exchangeRates, gameConfigs } = this.gameData;
+
+        let finalOdds = gameConfigs.odds;
+        let appliedCardsPerChoice, oddsMultipliers, appliedMultipliers;
+
+        if (gameConfigs.applyMultiplier) {
+            oddsMultipliers = this.generateOddsMultipliers();
+            appliedMultipliers = this.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
+
+            appliedCardsPerChoice = this.settleAppliedCardsPerChoice(appliedMultipliers);
+            finalOdds = this.settleOdds(settlementResult, appliedCardsPerChoice);
+        }
 
         const newRound = await this.roundsRepository.create({
             id: roundId,
@@ -62,7 +71,7 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
             oddsMultipliers,
             appliedMultipliers,
             usedCardIndexes,
-            extraFeeRatio: this.gameData.gameConfigs.oddsMultipliers?.extraFeeRatio
+            extraFeeRatio: this.gameData.gameConfigs.oddsMultipliers?.extraFeeRatio,
         });
 
         if (newRound) {
@@ -70,6 +79,7 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
                 ...this.collectRoundResult(result, settlementResult, roundId),
                 oddsMultipliers,
                 appliedMultipliers,
+                finalOdds,
             });
 
             const finish = {
@@ -79,6 +89,8 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
                 time: newRound.time,
                 oddsMultipliers,
                 appliedMultipliers,
+                finalOdds,
+                appliedCardsPerChoice,
             };
 
             this.gameData.roundId = finish.roundId + 1;
@@ -95,27 +107,25 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
     }
 
     settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult) {
-        const { applyMultiplier } = this.gameData.gameConfigs;
-
-        if (!applyMultiplier) {
-            return;
-        }
-
-        const appliedMultiplierCards = [];
+        const appliedMultiplierCards = {
+            player: [],
+            banker: [],
+        };
         const playerCards = result.player.getCards();
         const bankerCards = result.banker.getCards();
 
         const filterCards = (cards) => oddsMultipliers.filter((om) => cards.some((card) => card.rank === om.rank && card.suit === om.suit));
 
         if (settlementResult.tie) {
-            appliedMultiplierCards.push(...filterCards([...playerCards, ...bankerCards]));
+            appliedMultiplierCards.player.push(...filterCards(playerCards));
+            appliedMultiplierCards.banker.push(...filterCards(bankerCards));
         } else {
             if (settlementResult.player || settlementResult.playerPair) {
-                appliedMultiplierCards.push(...filterCards(playerCards));
+                appliedMultiplierCards.player.push(...filterCards(playerCards));
             }
 
             if (settlementResult.banker || settlementResult.bankerPair) {
-                appliedMultiplierCards.push(...filterCards(bankerCards));
+                appliedMultiplierCards.banker.push(...filterCards(bankerCards));
             }
         }
 
@@ -125,11 +135,11 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
     settleOdds(settlementResult, appliedCardsPerChoice) {
         const finalOdds = { ...this.gameData.gameConfigs.odds };
 
-        Object.entries(settlementResult).forEach(([choice, win]) => {
+        for (const [choice, win] of Object.entries(settlementResult)) {
             if (win) {
-                finalOdds[choice] *= this.calculateCardMultipliers(appliedCardsPerChoice[choice]);
+                finalOdds[choice] = (finalOdds[choice] - 1) * this.calculateCardMultipliers(appliedCardsPerChoice[choice]);
             }
-        });
+        }
 
         return finalOdds;
     }
@@ -138,38 +148,26 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         return cards.reduce((acc, curr) => acc * curr.value, 1);
     }
 
-    settleAppliedCardsPerChoice(result, appliedMultipliers) {
-        const filterCards = (cards) =>
-            appliedMultipliers.filter((om) => cards.some((card) => card.rank === om.rank && card.suit === om.suit));
-
-        const appliedPlayerCards = filterCards(result.player.getCards());
-        const appliedBankerCards = filterCards(result.banker.getCards());
-
+    settleAppliedCardsPerChoice(appliedMultipliers) {
         return {
-            player: appliedPlayerCards,
-            banker: appliedBankerCards,
-            tie: appliedMultipliers,
-            playerPair: appliedPlayerCards,
-            bankerPair: appliedBankerCards,
+            player: appliedMultipliers.player,
+            banker: appliedMultipliers.banker,
+            tie: [
+                ...appliedMultipliers.player,
+                ...appliedMultipliers.banker.filter((b) => !appliedMultipliers.player.some((p) => p.rank === b.rank && p.suit === b.suit)),
+            ],
+            playerPair: appliedMultipliers.player,
+            bankerPair: appliedMultipliers.banker,
         };
     }
 
-    async settleBets({ result, settlementResult, roundId, time, appliedMultipliers }) {
+    async settleBets({ settlementResult, roundId, time, appliedCardsPerChoice, finalOdds }) {
         const bets = await this.queryBets(roundId);
-        const { gameConfigs } = this.gameData;
 
         if (bets && bets.length) {
-            let odds = gameConfigs.odds;
-            let appliedCardsPerChoice = {};
-
-            if (gameConfigs.applyMultiplier) {
-                appliedCardsPerChoice = this.settleAppliedCardsPerChoice(result, appliedMultipliers);
-                odds = this.settleOdds(settlementResult, appliedCardsPerChoice);
-            }
-
             await Promise.all(
                 bets.map(async (bet) => {
-                    const betResult = this.calculateBetResult(settlementResult, bet, odds, appliedCardsPerChoice);
+                    const betResult = this.calculateBetResult(settlementResult, bet, finalOdds, appliedCardsPerChoice);
 
                     bet.betwin = betResult.totalWin;
                     bet.multipliers = betResult.multipliers;
@@ -216,7 +214,7 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
                 netWin: 0,
                 totalLost: 0,
                 winningByChoices: {},
-                multipliers: {},
+                multipliers: gameConfigs.applyMultiplier ? {} : undefined,
             }
         );
 

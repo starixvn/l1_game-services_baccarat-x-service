@@ -59,3 +59,4 @@ const getSettlementResult = (roundResult) => {
 };
 
 export { generateResult, getSettlementResult };
+
