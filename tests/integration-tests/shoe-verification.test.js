@@ -15,7 +15,7 @@ export const shoeVerificationTest = () => {
             client.emit("shoeVerification", { roundId: 1 });
 
             // Assert
-            const betResult = await client.handleGameEvent((data) => data.rawValue);
+            const betResult = await client.handleGameEvent((data) => data.shoeVerification);
             expect(betResult).toStrictEqual({
                 betChoice: "player",
                 freeBet: false,

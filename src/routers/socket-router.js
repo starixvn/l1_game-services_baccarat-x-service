@@ -57,13 +57,13 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
             const { roundId } = payload;
 
             if (!roundId) {
-                res.send({ error: true });
+                this.socketClient.emit(this.definition.name, { shoeVerification: { error: true } });
                 return;
             }
 
             const result = await this.shoeConsumer.getShoeVerification(roundId);
 
-            res.send(result);
+            this.socketClient.emit(this.definition.name, result);
         } catch (err) {
             this.logService.logError(err);
         }

@@ -15,7 +15,7 @@ export default class ShoeConsumer {
             .lean()
             .exec();
         const cutCardPF = await this.cutCardPFRepository
-            .findOne({ roundId: roundResult.firstRoundId }, { _id: false, time: false })
+            .findOne({ roundId: roundResult?.firstRoundId }, { _id: false, time: false })
             .lean()
             .exec();
 

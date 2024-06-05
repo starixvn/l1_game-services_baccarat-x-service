@@ -1,6 +1,7 @@
 import { startServiceProcess, startSetupDataProcess } from "./stubs/test-jobs";
 import { ingameTest } from "./ingame.test";
 import { placeBetTest } from "./place-bet.test";
+import { shoeVerificationTest } from "./shoe-verification.test";
 
 let processStartService;
 const JEST_ASSERT_WAITING_RESPONSE_TIMEOUT = 50000;
@@ -22,5 +23,4 @@ afterAll(() => {
     processStartService.kill();
 });
 
-ingameTest();
-placeBetTest();
+shoeVerificationTest();
