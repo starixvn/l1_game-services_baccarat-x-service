@@ -24,10 +24,10 @@ export default class ShoeConsumer {
             const { cards, rawValue, hashValue } = this.decryptShoe(roundResult.shoe);
             const { usedCardIndexes } = round;
 
-            return { cards, rawValue, hashValue, usedCardIndexes, burnedCards, cutCardIndex, cutCardPF };
+            return { shoeVerification: { cards, rawValue, hashValue, usedCardIndexes, burnedCards, cutCardIndex, cutCardPF } };
         }
 
-        return {};
+        return { shoeVerification: {} };
     }
 
     decryptShoe({ encryptedShoe, encryptedShoeHash }) {
