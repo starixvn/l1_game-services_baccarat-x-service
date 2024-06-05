@@ -9,7 +9,7 @@ export default class ShoeConsumer {
     }
 
     async getShoeVerification(roundId) {
-        const round = await this.roundsRepository.findOne({ roundId }).lean().exec();
+        const round = await this.roundsRepository.findOne({ id: roundId }).lean().exec();
         const roundResult = await this.resultsRepository
             .findOne({ firstRoundId: { $lte: roundId }, lastRoundId: { $gte: roundId }, isAvailable: false }, { _id: false })
             .lean()
