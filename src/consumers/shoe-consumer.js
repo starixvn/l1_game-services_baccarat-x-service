@@ -34,8 +34,7 @@ export default class ShoeConsumer {
     decryptShoe({ encryptedShoe, encryptedShoeHash }) {
         const shoe = Helpers.CryptoHelper.decrypt(encryptedShoe);
         const hashValue = Helpers.CryptoHelper.decrypt(encryptedShoeHash);
-        const cardString = shoe.split("_")[0];
-        const cardValues = cardString.match(/10[♠♣♥♦]|[2-9JQKA][♠♣♥♦]/g);
+        const cardValues = shoe.match(/10[♠♣♥♦]|[2-9JQKA][♠♣♥♦]/g);
         const cards = cardValues.map((card) => getCardFromString(card));
 
         return { cards, rawValue: shoe, hashValue };
