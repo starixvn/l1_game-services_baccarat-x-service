@@ -1,4 +1,5 @@
 import { Helpers } from "sc-card-game-base";
+import { getCardFromString } from "../helpers/card-helper";
 
 export default class ShoeConsumer {
     constructor(gameData, resultsRepository, roundsRepository, cutCardPFRepository) {
@@ -34,16 +35,20 @@ export default class ShoeConsumer {
         const shoe = Helpers.CryptoHelper.decrypt(encryptedShoe);
         const hashValue = Helpers.CryptoHelper.decrypt(encryptedShoeHash);
         const cardString = shoe.split("_")[0];
-        const cards = cardString.split(",");
+        const cardValues = cardString.match(/10[♠♣♥♦]|[2-9JQKA][♠♣♥♦]/g);
+        const cards = cardValues.map((card) => getCardFromString(card));
 
-        return { cards, rawValue: cardString, hashValue };
+        return { cards, rawValue: shoe, hashValue };
     }
 
     generateShoe(cardsFromAdmin, randomMode) {
-        const { CardChain, CryptoHelper } = Helpers;
+        const { CardChain, CryptoHelper, CardData } = Helpers;
         const cards = CardChain.updateCards(CardChain.generateCards(8, randomMode), cardsFromAdmin);
 
-        const shoeString = cards.map((card) => `${card.rank}${card.suit}`).toString();
+        const shoeString = cards
+            .map((card) => `${CardData.name[card.rank]}${CardData.suit[card.suit]}`)
+            .toString()
+            .replaceAll(",", "");
 
         const rawValue = `${shoeString}_${CryptoHelper.randomString()}`;
         const hashValue = CryptoHelper.createHashSHA256(rawValue);
