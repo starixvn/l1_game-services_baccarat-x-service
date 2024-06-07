@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const PlayerCutCardSchema = {
     name: { type: String, required: true },
-    cutIndex: { type: Number, required: true },
+    clientSeed: { type: Number, required: true },
     time: { type: Date, required: true },
 };
 

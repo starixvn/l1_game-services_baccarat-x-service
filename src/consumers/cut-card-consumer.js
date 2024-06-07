@@ -37,13 +37,13 @@ export default class CutCardConsumer {
         this.publisher.publishToUser(player.UID, { cutCard: { successful: false } });
     }
 
-    async insertPlayerCutCard(name, cutIndex) {
+    async insertPlayerCutCard(name, clientSeed) {
         const { roundId } = this.gameData;
 
         await this.cutCardPFRepository.updateOne(
             { roundId },
             {
-                $addToSet: { playerCutCards: { name, cutIndex, time: new Date() } },
+                $addToSet: { playerCutCards: { name, clientSeed, time: new Date() } },
             }
         );
     }
@@ -63,7 +63,7 @@ export default class CutCardConsumer {
         const { serverCutCardIndex, playerCutCards } = await this.cutCardPFRepository.findOne({ roundId }).lean().exec();
 
         const averageCutIndex =
-            playerCutCards.reduce((total, cur) => total + cur.cutIndex, serverCutCardIndex) / (playerCutCards.length + 1);
+            playerCutCards.reduce((total, cur) => total + cur.clientSeed, serverCutCardIndex) / (playerCutCards.length + 1);
 
         return Math.floor(averageCutIndex);
     }

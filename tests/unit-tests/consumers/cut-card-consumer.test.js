@@ -210,7 +210,7 @@ describe("cutCardConsumer", () => {
             // Assert
             expect(cutCardPFRepository.updateOne).toHaveBeenCalledWith(
                 { roundId },
-                { $addToSet: { playerCutCards: { name: player.profile.name, cutIndex: payload.cutCardIndex, time: mockDate } } }
+                { $addToSet: { playerCutCards: { name: player.profile.name, clientSeed: payload.cutCardIndex, time: mockDate } } }
             );
         });
     });
@@ -248,8 +248,8 @@ describe("cutCardConsumer", () => {
         it("should return cutCardIndex", async () => {
             // Arrange
             const serverCutCardIndex = 145;
-            const playerCutCards = [{ cutIndex: 156 }, { cutIndex: 136 }];
-            const expectResult = Math.floor((serverCutCardIndex + playerCutCards[0].cutIndex + playerCutCards[1].cutIndex) / 3);
+            const playerCutCards = [{ clientSeed: 156 }, { clientSeed: 136 }];
+            const expectResult = Math.floor((serverCutCardIndex + playerCutCards[0].clientSeed + playerCutCards[1].clientSeed) / 3);
             cutCardPFRepository.findOne().lean().exec.mockResolvedValueOnce({ serverCutCardIndex, playerCutCards });
 
             // Act
