@@ -21,8 +21,8 @@
     "license": "ISC",
     "type": "module",
     "dependencies": {
-        "sc-card-game-base": "1.2.1-beta.4",
-        "sc-multiple-games-base": "1.9.1-beta.4"
+        "sc-card-game-base": "1.2.1-beta.5",
+        "sc-multiple-games-base": "1.9.1-beta.5"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.24.4",
