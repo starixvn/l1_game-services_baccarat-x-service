@@ -17,8 +17,7 @@ export default class BaccaratXBot extends Table.Crons.TableGameBot {
 
     async contributeCutCard(bot) {
         const { minCutCardIndex, maxCutCardIndex } = this.definition;
-        const chance = new Chance();
-        const cutCardIndex = chance.integer({ min: minCutCardIndex, max: maxCutCardIndex });
+        const cutCardIndex = this.chance.integer({ min: minCutCardIndex, max: maxCutCardIndex });
 
         await this.cutCardConsumer.insertPlayerCutCard(bot.name, cutCardIndex);
     }
