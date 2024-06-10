@@ -80,6 +80,6 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
 
         this.roundResultPublisher.publishFinalCutCardIndex();
 
-        await this.resultsRepository.update({ firstRoundId: this.gameData.roundId, isAvailable: true }, { cutCardIndex });
+        await this.resultsRepository.update({ firstRoundId: this.gameData.roundId, isAvailable: true }, { $set: { cutCardIndex } });
     }
 }
