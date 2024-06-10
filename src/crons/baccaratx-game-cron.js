@@ -103,9 +103,10 @@ export default class BaccaratXGameCron extends GameCron {
             await this.resetForNewRoundWhenChangingShoe();
 
             const isHavingSufficientChain = await this.generateAndPublishShoe();
-            this.bot.startBotCutCard();
 
             if (isHavingSufficientChain) {
+                this.bot.startBotCutCard();
+
                 this.gameData.remainingTime--;
             }
         } else if (!this.gameData.disabled) {
