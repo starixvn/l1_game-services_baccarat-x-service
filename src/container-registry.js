@@ -40,6 +40,7 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
         this.container.register({
             roundsRepository: asValue(repositories.roundsRepository),
             betsRepository: asValue(repositories.betsRepository),
+            tempBetsRepository: asValue(repositories.tempBetsRepository),
             resultsRepository: asValue(repositories.resultsRepository),
             betLogsRepository: asValue(repositories.betLogsRepository),
             cutCardPFRepository: asValue(repositories.cutCardPFRepository),

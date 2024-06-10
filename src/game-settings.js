@@ -32,6 +32,7 @@ export default [
         repositories: {
             roundsRepository: getRoundModel("bac81_round"),
             betsRepository: getBetModel("bac81_bet"),
+            tempBetsRepository: getBetModel("bac81_tmpBets"),
             betLogsRepository: getBetLogModel("bac81_betlog"),
             resultsRepository: getResultModel("bac81_result"),
             cutCardPFRepository: getCutCardPfModel("bac81_cut_card_pf"),
