@@ -2,7 +2,6 @@ import { stub, stubMongoose } from "jest-micro-auto-stub";
 import mongoose from "mongoose";
 import { GameDefinition, Publishers, TableGameData } from "sc-card-game-base";
 import { Core } from "sc-game-base";
-import MultiplierCardsConsumer from "../../../src/consumers/multiplier-cards-consumer";
 import SettleGameRoundConsumer from "../../../src/consumers/settle-game-round-consumer";
 import BaccaratPlayer from "../../../src/helpers/baccarat-player";
 import { getSettlementResult } from "../../../src/helpers/result-helper";
@@ -13,7 +12,6 @@ const endGame = jest.fn();
 const roundsRepository = stubMongoose(mongoose.Model);
 const betsRepository = stubMongoose(mongoose.Model);
 const resultsRepository = stubMongoose(mongoose.Model);
-const multiplierCardsConsumer = stub(MultiplierCardsConsumer);
 const definition = new GameDefinition({}, jest.fn(), jest.fn());
 const gameData = new TableGameData();
 const gameConfigs = {
@@ -57,7 +55,6 @@ describe("SettleGameRoundConsumer", () => {
             betsRepository,
             gameManagementApiClientFactory,
             resultsRepository,
-            multiplierCardsConsumer,
         });
     });
 
@@ -66,30 +63,6 @@ describe("SettleGameRoundConsumer", () => {
         jest.clearAllMocks();
     });
 
-    describe("generateOddsMultipliers", () => {
-        describe("when applyMultiplier is false", () => {
-            it("should return undefined", () => {
-                //Arrange
-                gameData.gameConfigs.applyMultiplier = false;
-
-                //Assert
-                expect(consumer.generateOddsMultipliers()).toBeUndefined();
-            });
-        });
-        describe("when applyMultiplier is true", () => {
-            it("should return multipliers", () => {
-                //Arrange
-                gameData.gameConfigs.applyMultiplier = true;
-                multiplierCardsConsumer.withdrawCards.mockReturnValueOnce([{ value: 1, suit: 0, rank: 10 }]);
-
-                //Act
-                const result = consumer.generateOddsMultipliers();
-
-                //Assert
-                expect(result).toEqual([{ value: 1, suit: 0, rank: 10 }]);
-            });
-        });
-    });
 
     describe("settleAppliedMultiplierCards", () => {
         describe("when applyMultiplier is true", () => {

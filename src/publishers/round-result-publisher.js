@@ -45,4 +45,8 @@ export default class RoundResultPublisher extends Core.BaseEventPublishers.BaseE
             winners: payload,
         });
     }
+
+    publishMultiplierCards(multiplierCards) {
+        this.publishToAllUsers({ multiplierCards });
+    }
 }
