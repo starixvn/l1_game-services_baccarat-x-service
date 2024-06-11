@@ -11,6 +11,7 @@ const bet = {
     bankerPair: { type: Number, default: 0 },
     totalAmount: { type: Number, default: 0 },
     fee: { type: Number, default: 0 },
+    amount: { type: Number, default: 0 },
     multipliers: { type: Object },
 
     betwin: { type: Number, default: 0 },

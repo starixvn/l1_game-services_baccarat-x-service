@@ -39,6 +39,7 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueue {
         const existingBetIncrement = {
             [bet.betChoice]: bet.amount,
             totalAmount: bet.amount,
+            amount: bet.amount,
         };
 
         if (configs.applyMultiplier) {
