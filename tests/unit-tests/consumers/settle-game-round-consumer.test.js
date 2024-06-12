@@ -12,7 +12,9 @@ const endGame = jest.fn();
 const roundsRepository = stubMongoose(mongoose.Model);
 const betsRepository = stubMongoose(mongoose.Model);
 const resultsRepository = stubMongoose(mongoose.Model);
-const definition = new GameDefinition({}, jest.fn(), jest.fn());
+
+const generateResult = jest.fn();
+const definition = new GameDefinition({}, generateResult, jest.fn());
 const gameData = new TableGameData();
 const gameConfigs = {
     odds: {
@@ -62,7 +64,6 @@ describe("SettleGameRoundConsumer", () => {
         gameData.gameConfigs = { ...gameConfigs };
         jest.clearAllMocks();
     });
-
 
     describe("settleAppliedMultiplierCards", () => {
         describe("when applyMultiplier is true", () => {
@@ -580,6 +581,111 @@ describe("SettleGameRoundConsumer", () => {
 
             //Assert
             expect(betResult.totalWin).toEqual(bet.player * gameConfigs.odds.player);
+        });
+    });
+
+    describe("generateResult", () => {
+        it("should return result", async () => {
+            gameData.shoe = {
+                currentIndex: 0,
+            };
+            generateResult.mockReturnValueOnce({
+                result: {
+                    player: {
+                        card1: {
+                            rank: 10,
+                            suit: 1,
+                        },
+                        card2: {
+                            rank: 8,
+                            suit: 0,
+                        },
+                        card3: null,
+                        score: 9,
+                    },
+                    banker: {
+                        card1: {
+                            rank: 12,
+                            suit: 3,
+                        },
+                        card2: {
+                            rank: 8,
+                            suit: 3,
+                        },
+                        card3: null,
+                        score: 9,
+                    },
+                },
+                usedCardsCount: 4,
+            });
+
+            const { result, usedCardIndexes } = await consumer.generateResult();
+
+            expect(usedCardIndexes).toEqual([4, 5, 6, 7]);
+            expect(result).toEqual({
+                player: {
+                    card1: {
+                        rank: 10,
+                        suit: 1,
+                    },
+                    card2: {
+                        rank: 8,
+                        suit: 0,
+                    },
+                    card3: null,
+                    score: 9,
+                },
+                banker: {
+                    card1: {
+                        rank: 12,
+                        suit: 3,
+                    },
+                    card2: {
+                        rank: 8,
+                        suit: 3,
+                    },
+                    card3: null,
+                    score: 9,
+                },
+            });
+        });
+
+        it("should update gameData.shoe.currentIndex", async () => {
+            gameData.shoe = {
+                currentIndex: 0,
+            };
+            generateResult.mockReturnValueOnce({
+                result: {
+                    player: {
+                        card1: {
+                            rank: 10,
+                            suit: 1,
+                        },
+                        card2: {
+                            rank: 8,
+                            suit: 0,
+                        },
+                        card3: null,
+                        score: 9,
+                    },
+                    banker: {
+                        card1: {
+                            rank: 12,
+                            suit: 3,
+                        },
+                        card2: {
+                            rank: 8,
+                            suit: 3,
+                        },
+                        card3: null,
+                        score: 9,
+                    },
+                },
+                usedCardsCount: 4,
+            });
+
+            await consumer.generateResult();
+            expect(gameData.shoe.currentIndex).toEqual(4);
         });
     });
 });

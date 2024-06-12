@@ -38,15 +38,12 @@ class BaccaratGame {
         this.player.score = score.player;
         this.banker.score = score.banker;
         
-        const numberOfCards = this.player.getNumberOfCards() + this.banker.getNumberOfCards();
-
         return {
             player: score.player > score.banker,
             banker: score.player < score.banker,
             tie: score.player === score.banker,
             playerPair: this.player.hasPair(),
             bankerPair: this.banker.hasPair(),
-            natural: numberOfCards === 4 && (score.player >= 8 || score.banker >= 8),
         };
     }
 
