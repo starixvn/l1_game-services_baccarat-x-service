@@ -85,7 +85,7 @@ describe("cutCardConsumer", () => {
                 await consumer.consume(player, payload);
 
                 // Assert
-                expect(publisher.publishToUser).toHaveBeenCalledWith(player.UID, { cutCard: { successful: false, errorCode: "SB19xx" } });
+                expect(publisher.publishToUser).toHaveBeenCalledWith(player.UID, { cutCard: { successful: false } });
             });
         });
     });
