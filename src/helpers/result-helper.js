@@ -13,7 +13,7 @@ const generateResult = (shoe) => {
     } while (action !== BaccaratGame.Actions.finalComparison);
 
     const usedCardsCount = baccaratGame.player.getNumberOfCards() + baccaratGame.banker.getNumberOfCards();
-    return { result: { player: baccaratGame.player, banker: baccaratGame.banker, cards: cards.slice(0, usedCardsCount) }, usedCardsCount };
+    return { result: { player: baccaratGame.player, banker: baccaratGame.banker }, usedCardsCount };
 };
 
 const settlementRuleEntries = Object.entries({
@@ -37,7 +37,7 @@ const settlementRuleEntries = Object.entries({
 });
 
 const getTotalScore = (handResult) => {
-    return Object.values(handResult).reduce((result, card) => {
+    return handResult.getCards().reduce((result, card) => {
         const cardValue = getCardValue(card);
 
         return (result + cardValue) % 10;
