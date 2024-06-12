@@ -1,7 +1,14 @@
 import { asClass, asValue } from "awilix";
 import { Consumers } from "sc-card-game-base";
 import { MultipleTableGamesContainerRegistry } from "sc-multiple-games-base";
-import { CutCardConsumer, MultiplierCardsConsumer, RoundResultConsumer, SettleGameRoundConsumer, ShoeConsumer } from "./consumers";
+import {
+    CutCardConsumer,
+    MultiplierCardsConsumer,
+    RoundResultConsumer,
+    SettleGameRoundConsumer,
+    ShoeConsumer,
+    InGameConsumer,
+} from "./consumers";
 import { BaccaratXBot, BaccaratXGameCron, ProcessBetQueue } from "./crons";
 import RoundResultPublisher from "./publishers/round-result-publisher";
 import { SocketRouter } from "./routers";
@@ -33,6 +40,7 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
             roundResultConsumer: asClass(RoundResultConsumer).singleton(),
             settleGameRoundConsumer: asClass(SettleGameRoundConsumer).singleton().proxy(),
             unsettledRoundConsumer: asClass(Consumers.UnsettledRoundConsumer).singleton().proxy(),
+            inGameConsumer: asClass(InGameConsumer).singleton().proxy(),
         });
     }
 

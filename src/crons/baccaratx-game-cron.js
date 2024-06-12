@@ -171,4 +171,10 @@ export default class BaccaratXGameCron extends GameCron {
             return false;
         }
     }
+
+    async getWholeRoundByChainStatus() {
+        const { durations } = this.definition;
+        const { isSufficient } = await this.roundResultConsumer.checkSufficientChain();
+        return isSufficient ? durations.wholeRound : durations.generatingShoe;
+    }
 }
