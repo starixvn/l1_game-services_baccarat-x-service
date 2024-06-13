@@ -52,6 +52,7 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
             resultsRepository: asValue(repositories.resultsRepository),
             betLogsRepository: asValue(repositories.betLogsRepository),
             cutCardPFRepository: asValue(repositories.cutCardPFRepository),
+            multipliersRepository: asValue(repositories.multipliersRepository),
             allGamesBetsRepository: asValue(repositories.allGamesBetsRepository),
         });
     }

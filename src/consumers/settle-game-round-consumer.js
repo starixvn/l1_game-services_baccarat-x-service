@@ -54,7 +54,7 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         let appliedCardsPerChoice, oddsMultipliers, appliedMultipliers;
 
         if (gameConfigs.applyMultiplier) {
-            oddsMultipliers = this.gameData.oddsMultipliers ?? this.multiplierCardsConsumer.withdrawCards();
+            oddsMultipliers = this.gameData.oddsMultipliers ?? (await this.multiplierCardsConsumer.generate());
             appliedMultipliers = this.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
 
             appliedCardsPerChoice = this.settleAppliedCardsPerChoice(appliedMultipliers);

@@ -99,4 +99,12 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueue {
             playerInGame.ownBets.fee = (playerInGame.ownBets.fee ?? 0) + bet.fee;
         }
     }
+
+    generatePlacingBetResult(player, balance, bet, rate) {
+        const result = super.generatePlacingBetResult(player, balance, bet, rate);
+        const { fee } = bet;
+        result.endBet += fee;
+
+        return result;
+    }
 }

@@ -78,6 +78,11 @@ export default class BaccaratXGameCron extends GameCron {
         this.startCron();
     }
 
+    async queryLastResult() {
+        await super.queryLastResult();
+        await this.multiplierCardsConsumer.queryCurrentRoundMultiplierResult();
+    }
+
     async initShoe() {
         if (this.resultsRepository) {
             const results = await this.resultsRepository
@@ -133,7 +138,7 @@ export default class BaccaratXGameCron extends GameCron {
         }
 
         if (remainingTime === durations.lockingBet - 1) {
-            this.generateAndPublishOddsMultipliers();
+            await this.generateAndPublishOddsMultipliers();
             this.gameStatusPublisher.publishEndPlacingBetStatus();
         }
 
@@ -146,10 +151,10 @@ export default class BaccaratXGameCron extends GameCron {
         }
     }
 
-    generateAndPublishOddsMultipliers() {
+    async generateAndPublishOddsMultipliers() {
         const { applyMultiplier } = this.gameData.gameConfigs;
         if (applyMultiplier) {
-            this.gameData.oddsMultipliers = this.multiplierCardsConsumer.withdrawCards();
+            await this.multiplierCardsConsumer.generate();
             this.roundResultPublisher.publishMultiplierCards(this.gameData.oddsMultipliers);
         }
     }
