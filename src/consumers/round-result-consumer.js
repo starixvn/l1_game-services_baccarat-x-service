@@ -20,10 +20,9 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
     }
 
     async setUnavailable() {
-        await this.resultsRepository.update(
+        await this.resultsRepository.updateOne(
             { isAvailable: true },
             { $set: { isAvailable: false, lastRoundId: this.gameData.roundId - 1 } }
-            //{ multi: true }
         );
     }
 
@@ -80,6 +79,6 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
 
         this.roundResultPublisher.publishFinalCutCardIndex();
 
-        await this.resultsRepository.update({ firstRoundId: this.gameData.roundId, isAvailable: true }, { $set: { cutCardIndex } });
+        await this.resultsRepository.updateOne({ firstRoundId: this.gameData.roundId, isAvailable: true }, { $set: { cutCardIndex } });
     }
 }

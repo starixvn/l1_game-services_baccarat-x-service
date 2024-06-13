@@ -36,9 +36,6 @@ export default {
         url: "mongodb://mongo:27017",
         options: {
             dbName: "game-service-test-db",
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            auto_reconnect: true,
         },
     },
     sentry: {

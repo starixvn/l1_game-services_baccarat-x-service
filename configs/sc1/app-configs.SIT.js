@@ -26,8 +26,6 @@ export default {
         url: "mongodb://lmn_backend:LmnBackend%40517@10.99.99.53:39130,10.99.99.54:39130,10.99.99.188:39130,10.99.99.187:39130/?replicaSet=SabaSIT&appName=baccaratx",
         options: {
             dbName: "minigame",
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
         },
     },
     sentry: {
@@ -50,7 +48,8 @@ export default {
     metrics: {
         enable: true,
         secretKey: "6c1f0f28-70f2-46ae-b031-22624a6cd8df",
-    },  gameManagementApiSettings: {
+    },
+    gameManagementApiSettings: {
         BASE: "http://l1_game_management_service_sit:5000",
     },
     otel: {

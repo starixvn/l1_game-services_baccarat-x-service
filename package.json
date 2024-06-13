@@ -21,6 +21,7 @@
     "license": "ISC",
     "type": "module",
     "dependencies": {
+        "mongoose": "8.4.1",
         "sc-card-game-base": "1.2.1-beta.5",
         "sc-multiple-games-base": "1.9.1-beta.5"
     },
@@ -43,7 +44,8 @@
         "sc-game-service-integration-utils": "2.2.0"
     },
     "resolutions": {
-        "sc-base-database": "2.2.1-beta.0"
+        "sc-base-database": "2.2.1-beta.0",
+        "mongoose": "8.4.1"
     },
     "husky": {
         "hooks": {

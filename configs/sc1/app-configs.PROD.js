@@ -26,9 +26,6 @@ export default {
         url: "mongodb://lmn_backend:M7K4ttH%2AtZ3ml%3F%29%7CA%5DjN4%3FLBhwF%266IO%3C@10.99.99.53:39110,10.99.99.54:39110,10.99.99.188:39110,10.99.99.187:39110/?replicaSet=SabaMain&appName=baccaratx",
         options: {
             dbName: "minigame",
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            auto_reconnect: true,
         },
     },
     sentry: {

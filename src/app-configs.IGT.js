@@ -13,9 +13,6 @@ export default Object.assign(appConfigs, {
         url: "mongodb://127.0.0.1:27017",
         options: {
             dbName: "game-service-test-db",
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            auto_reconnect: true,
         },
     },
 });

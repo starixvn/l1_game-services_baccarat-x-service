@@ -32,7 +32,7 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         const usedCardIndexes = Array.from({ length: usedCardsCount }, (_, i) => usedCardsCount + i);
         this.gameData.shoe.currentIndex = this.gameData.shoe.currentIndex + usedCardsCount;
         this.gameData.shoe.remainingCards = this.definition.maxCardsPerRound - usedCardsCount;
-        await this.resultsRepository.update(
+        await this.resultsRepository.updateOne(
             { isAvailable: true },
             {
                 $set: {
