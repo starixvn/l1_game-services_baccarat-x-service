@@ -9,7 +9,7 @@ import morgan from "morgan";
 import { logger } from "sc-common";
 import { init as initApis } from "sc-base-apis";
 import mongoose from "mongoose";
-import { startCorsCron } from "sc-game-base/src/core/helpers/cors-helper";
+import { startCorsCron, isAllowAccess } from "sc-game-base/src/core/helpers/cors-helper";
 const { authenticationHelpers, chatBotHelper } = Core.Helpers;
 export default class BaccaratxApp extends Core.BaseGameApp {
     startGames(definitions) {
