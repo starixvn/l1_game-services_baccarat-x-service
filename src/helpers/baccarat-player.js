@@ -16,6 +16,10 @@ export default class BaccaratPlayer {
         }, 0);
     }
 
+    updateScore() {
+        this.score = this.getTotalScore();
+    }
+
     getThirdCardValue() {
         return getCardValue(this.card3);
     }

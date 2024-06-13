@@ -4,7 +4,7 @@ const Actions = {
     receiveTwoCards: "receiveTwoCards",
     playerReceiveThirdCard: "playerReceiveThirdCard",
     bankerReceiveThirdCard: "bankerReceiveThirdCard",
-    finalComparison: "finalComparison",
+    finalize: "finalize",
 };
 
 class BaccaratGame {
@@ -33,18 +33,9 @@ class BaccaratGame {
         this.banker.card3 = card;
     }
 
-    finalComparison() {
-        const score = this.getTotalScore();
-        this.player.score = score.player;
-        this.banker.score = score.banker;
-        
-        return {
-            player: score.player > score.banker,
-            banker: score.player < score.banker,
-            tie: score.player === score.banker,
-            playerPair: this.player.hasPair(),
-            bankerPair: this.banker.hasPair(),
-        };
+    finalize() {
+        this.player.updateScore();
+        this.banker.updateScore();
     }
 
     getTotalScore() {
@@ -71,7 +62,7 @@ class BaccaratGame {
 
         if (numberOfCards.player === 2 && numberOfCards.banker === 2) {
             if (score.player >= 8 || score.banker >= 8) {
-                return Actions.finalComparison;
+                return Actions.finalize;
             }
 
             if (score.player <= 5) {
@@ -83,7 +74,7 @@ class BaccaratGame {
                 return Actions.bankerReceiveThirdCard;
             }
 
-            return Actions.finalComparison;
+            return Actions.finalize;
         }
 
         if (numberOfCards.player === 3 && numberOfCards.banker === 2) {
@@ -94,10 +85,10 @@ class BaccaratGame {
                 return Actions.bankerReceiveThirdCard;
             }
 
-            return Actions.finalComparison;
+            return Actions.finalize;
         }
 
-        return Actions.finalComparison;
+        return Actions.finalize;
     }
 
     checkBankerHasReceiveThirdCard(score, thirdCardOfPlayer) {

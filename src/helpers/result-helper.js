@@ -1,5 +1,4 @@
 import BaccaratGame from "./baccarat-game";
-import { getCardValue } from "./card-helper";
 
 const generateResult = (shoe) => {
     const { currentIndex } = shoe;
@@ -10,45 +9,19 @@ const generateResult = (shoe) => {
     do {
         action = baccaratGame.getAction();
         baccaratGame[action]();
-    } while (action !== BaccaratGame.Actions.finalComparison);
+    } while (action !== BaccaratGame.Actions.finalize);
 
     const usedCardsCount = baccaratGame.player.getNumberOfCards() + baccaratGame.banker.getNumberOfCards();
     return { result: { player: baccaratGame.player, banker: baccaratGame.banker }, usedCardsCount };
 };
 
 const settlementRuleEntries = Object.entries({
-    player: ({ player, banker }) => {
-        const playerScore = getTotalScore(player);
-        const bankerScore = getTotalScore(banker);
-        return playerScore > bankerScore;
-    },
-    banker: ({ player, banker }) => {
-        const playerScore = getTotalScore(player);
-        const bankerScore = getTotalScore(banker);
-        return playerScore < bankerScore;
-    },
-    tie: ({ player, banker }) => {
-        const playerScore = getTotalScore(player);
-        const bankerScore = getTotalScore(banker);
-        return playerScore === bankerScore;
-    },
-    playerPair: ({ player }) => hasPair(player),
-    bankerPair: ({ banker }) => hasPair(banker),
+    player: ({ player, banker }) => player.score > banker.score,
+    banker: ({ player, banker }) => player.score < banker.score,
+    tie: ({ player, banker }) => player.score === banker.score,
+    playerPair: ({ player }) => player.hasPair(),
+    bankerPair: ({ banker }) => banker.hasPair(),
 });
-
-const getTotalScore = (handResult) => {
-    return handResult.getCards().reduce((result, card) => {
-        const cardValue = getCardValue(card);
-
-        return (result + cardValue) % 10;
-    }, 0);
-};
-
-const hasPair = (handResult) => {
-    const { card1, card2 } = handResult;
-
-    return card1.rank === card2.rank;
-};
 
 const getSettlementResult = (roundResult) => {
     return settlementRuleEntries.reduce((result, [choice, rule]) => {

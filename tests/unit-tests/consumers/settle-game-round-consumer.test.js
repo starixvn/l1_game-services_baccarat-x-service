@@ -523,6 +523,8 @@ describe("SettleGameRoundConsumer", () => {
             ],
         ])("should update odds of choices", (result, oddsMultipliers, expectedOdds) => {
             //Arrange
+            result.player.updateScore();
+            result.banker.updateScore();
             const settlementResult = getSettlementResult(result);
             const appliedMultipliers = consumer.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
             const appliedCardsPerChoice = consumer.settleAppliedCardsPerChoice(appliedMultipliers);
