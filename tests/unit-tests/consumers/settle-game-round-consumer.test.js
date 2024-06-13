@@ -2,6 +2,7 @@ import { stub, stubMongoose } from "jest-micro-auto-stub";
 import mongoose from "mongoose";
 import { GameDefinition, Publishers, TableGameData } from "sc-card-game-base";
 import { Core } from "sc-game-base";
+import { MultiplierCardsConsumer } from "../../../src/consumers";
 import SettleGameRoundConsumer from "../../../src/consumers/settle-game-round-consumer";
 import BaccaratPlayer from "../../../src/helpers/baccarat-player";
 import { getSettlementResult } from "../../../src/helpers/result-helper";
@@ -12,6 +13,7 @@ const endGame = jest.fn();
 const roundsRepository = stubMongoose(mongoose.Model);
 const betsRepository = stubMongoose(mongoose.Model);
 const resultsRepository = stubMongoose(mongoose.Model);
+const multiplierCardsConsumer = stub(MultiplierCardsConsumer);
 
 const generateResult = jest.fn();
 const definition = new GameDefinition({}, generateResult, jest.fn());
@@ -57,6 +59,7 @@ describe("SettleGameRoundConsumer", () => {
             betsRepository,
             gameManagementApiClientFactory,
             resultsRepository,
+            multiplierCardsConsumer,
         });
     });
 
