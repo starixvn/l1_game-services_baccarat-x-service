@@ -1,6 +1,32 @@
 import { Consumers } from "sc-card-game-base";
 
 export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundConsumer {
+    constructor({
+        definition,
+        gameData,
+        roundResultPublisher,
+        userBetResultPublisher,
+        endGame,
+        roundsRepository,
+        betsRepository,
+        gameManagementApiClientFactory,
+        resultsRepository,
+        multiplierCardsConsumer,
+    }) {
+        super({
+            definition,
+            gameData,
+            roundResultPublisher,
+            userBetResultPublisher,
+            endGame,
+            roundsRepository,
+            betsRepository,
+            gameManagementApiClientFactory,
+            resultsRepository,
+        });
+        this.multiplierCardsConsumer = multiplierCardsConsumer;
+    }
+
     async generateResult() {
         const { result, usedCardsCount } = this.definition.generateResult(this.gameData.shoe);
         const usedCardIndexes = Array.from({ length: usedCardsCount }, (_, i) => usedCardsCount + i);
@@ -28,7 +54,7 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         let appliedCardsPerChoice, oddsMultipliers, appliedMultipliers;
 
         if (gameConfigs.applyMultiplier) {
-            oddsMultipliers = this.gameData.oddsMultipliers;
+            oddsMultipliers = this.gameData.oddsMultipliers ?? this.multiplierCardsConsumer.withdrawCards();
             appliedMultipliers = this.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
 
             appliedCardsPerChoice = this.settleAppliedCardsPerChoice(appliedMultipliers);
