@@ -130,8 +130,8 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         const finalOdds = { ...this.gameData.gameConfigs.odds };
 
         for (const [choice, win] of Object.entries(settlementResult)) {
-            if (win && appliedCardsPerChoice[choice].length > 0) {
-                finalOdds[choice] = (finalOdds[choice] - 1) * this.calculateCardMultipliers(appliedCardsPerChoice[choice]);
+            if (win) {
+                finalOdds[choice] = (finalOdds[choice] - 1) * this.calculateCardMultipliers(appliedCardsPerChoice[choice]) + 1;
             }
         }
 

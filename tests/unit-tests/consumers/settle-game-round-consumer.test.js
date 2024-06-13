@@ -472,7 +472,7 @@ describe("SettleGameRoundConsumer", () => {
                 ],
                 {
                     ...gameData.gameConfigs.odds,
-                    tie: (gameData.gameConfigs.odds.tie - 1) * 2 * 5,
+                    tie: (gameData.gameConfigs.odds.tie - 1) * 2 * 5 + gameData.gameConfigs.odds.tie,
                 },
             ],
             [
@@ -521,7 +521,7 @@ describe("SettleGameRoundConsumer", () => {
                 ],
                 {
                     ...gameData.gameConfigs.odds,
-                    player: (gameData.gameConfigs.odds.player - 1) * 2,
+                    player: (gameData.gameConfigs.odds.player - 1) * 2 + gameData.gameConfigs.odds.player,
                 },
             ],
         ])("should update odds of choices", (result, oddsMultipliers, expectedOdds) => {
