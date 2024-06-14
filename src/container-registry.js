@@ -5,6 +5,7 @@ import {
     CutCardConsumer,
     InGameConsumer,
     MultiplierCardsConsumer,
+    PlaceBetConsumer,
     RoundResultConsumer,
     SettleGameRoundConsumer,
     ShoeConsumer,
@@ -41,6 +42,7 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
             settleGameRoundConsumer: asClass(SettleGameRoundConsumer).singleton().proxy(),
             unsettledRoundConsumer: asClass(Consumers.UnsettledRoundConsumer).singleton().proxy(),
             inGameConsumer: asClass(InGameConsumer).singleton(),
+            placeBetConsumer: asClass(PlaceBetConsumer).singleton(),
         });
     }
 
