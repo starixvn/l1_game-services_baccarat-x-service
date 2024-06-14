@@ -12,6 +12,7 @@ import {
 } from "./consumers";
 import { BaccaratXBot, BaccaratXGameCron, ProcessBetQueue } from "./crons";
 import RoundResultPublisher from "./publishers/round-result-publisher";
+import RoundQuery from "./query-apis/round-query";
 import { SocketRouter } from "./routers";
 
 export default class ContainerRegistry extends MultipleTableGamesContainerRegistry {
@@ -74,6 +75,14 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
 
         this.container.register({
             socketRouter: asClass(SocketRouter).proxy(),
+        });
+    }
+
+    registerApis() {
+        super.registerApis();
+
+        this.container.register({
+            roundQuery: asClass(RoundQuery).singleton(),
         });
     }
 }
