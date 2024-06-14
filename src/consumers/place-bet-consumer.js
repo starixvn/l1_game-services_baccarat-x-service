@@ -5,7 +5,7 @@ export default class PlaceBetConsumer extends Consumers.PlaceBetConsumer {
         super.consume(player, payload);
 
         const name = player.profile.name;
-        if (!this.gameData.ingame[name]) {
+        if (this.gameData.ingame[name]) {
             this.gameData.ingame[name].currencyGroupId = player.session.currencyGroupId;
             this.gameData.ingame[name].maxBet = player.profile.maxBet;
         }
