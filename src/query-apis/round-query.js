@@ -1,8 +1,8 @@
 import { Core } from "sc-game-base";
 
 export default class RoundQuery extends Core.QueryApis.RoundQuery {
-    constructor(gameData, roundsRepository) {
-        super(roundsRepository);
+    constructor(gameData, roundsRepository, resultsRepository) {
+        super(roundsRepository, resultsRepository);
         this.gameData = gameData;
     }
 

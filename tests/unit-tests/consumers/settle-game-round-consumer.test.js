@@ -283,7 +283,7 @@ describe("SettleGameRoundConsumer", () => {
             });
 
             describe("when player has pair ", () => {
-                it("should return player cards exist in oddsMultiplier", () => {
+                it("should return player cards exist in oddsMultiplier exluding 3rd card", () => {
                     //Arrange
                     gameData.gameConfigs.applyMultiplier = true;
                     const roundResult = {
@@ -341,6 +341,11 @@ describe("SettleGameRoundConsumer", () => {
                             suit: 2,
                             value: 3,
                         },
+                        {
+                            rank: 2,
+                            suit: 2,
+                            value: 2,
+                        },
                     ];
                     //Act
                     const result = consumer.settleAppliedMultiplierCards(oddsMultipliers, roundResult, settlementResult);
@@ -360,7 +365,7 @@ describe("SettleGameRoundConsumer", () => {
             });
 
             describe("when banker has pair ", () => {
-                it("should return banker cards exist in oddsMultiplier", () => {
+                it("should return banker cards exist in oddsMultiplier excluding 3rd card", () => {
                     //Arrange
                     gameData.gameConfigs.applyMultiplier = true;
                     const roundResult = {
@@ -382,6 +387,10 @@ describe("SettleGameRoundConsumer", () => {
                             {
                                 rank: 6,
                                 suit: 3,
+                            },
+                            {
+                                rank: 1,
+                                suit: 2,
                             }
                         ),
                     };
@@ -525,13 +534,82 @@ describe("SettleGameRoundConsumer", () => {
                     player: (gameData.gameConfigs.odds.player - 1) * 2 + 1,
                 },
             ],
-        ])("should update odds of choices", (result, oddsMultipliers, expectedOdds) => {
+            [
+                {
+                    player: new TestBaccaratPlayer(
+                        {
+                            rank: 6,
+                            suit: 0,
+                        },
+                        {
+                            rank: 12,
+                            suit: 0,
+                        }
+                    ),
+                    banker: new TestBaccaratPlayer(
+                        {
+                            rank: 10,
+                            suit: 0,
+                        },
+                        {
+                            rank: 10,
+                            suit: 0,
+                        },
+                        {
+                            rank: 12,
+                            suit: 3,
+                        }
+                    ),
+                },
+                [
+                    {
+                        rank: 8,
+                        suit: 2,
+                        value: 2,
+                    },
+                    {
+                        rank: 12,
+                        suit: 3,
+                        value: 3,
+                    },
+                    {
+                        rank: 4,
+                        suit: 2,
+                        value: 2,
+                    },
+                    {
+                        rank: 6,
+                        suit: 1,
+                        value: 2,
+                    },
+                    {
+                        rank: 11,
+                        suit: 2,
+                        value: 2,
+                    },
+                    {
+                        rank: 3,
+                        suit: 1,
+                        value: 2,
+                    },
+                    {
+                        rank: 4,
+                        suit: 1,
+                        value: 3,
+                    },
+                ],
+                {
+                    ...gameData.gameConfigs.odds,
+                },
+            ],
+        ])("should update odds of choices with multipliers", (result, oddsMultipliers, expectedOdds) => {
             //Arrange
             result.player.updateScore();
             result.banker.updateScore();
             const settlementResult = getSettlementResult(result);
             const appliedMultipliers = consumer.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
-            const appliedCardsPerChoice = consumer.settleAppliedCardsPerChoice(appliedMultipliers);
+            console.log(appliedMultipliers.banker);
+            const appliedCardsPerChoice = consumer.settleAppliedCardsPerChoice(result, appliedMultipliers);
 
             //Act
             const odds = consumer.settleOdds(settlementResult, appliedCardsPerChoice);

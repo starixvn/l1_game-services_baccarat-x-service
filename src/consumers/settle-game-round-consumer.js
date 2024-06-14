@@ -57,7 +57,7 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
             oddsMultipliers = this.gameData.oddsMultipliers ?? (await this.multiplierCardsConsumer.generate());
             appliedMultipliers = this.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
 
-            appliedCardsPerChoice = this.settleAppliedCardsPerChoice(appliedMultipliers);
+            appliedCardsPerChoice = this.settleAppliedCardsPerChoice(result, appliedMultipliers);
             finalOdds = this.settleOdds(settlementResult, appliedCardsPerChoice);
         }
 
@@ -114,13 +114,21 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
             appliedMultiplierCards.player.push(...filterCards(playerCards));
             appliedMultiplierCards.banker.push(...filterCards(bankerCards));
         } else {
-            if (settlementResult.player || settlementResult.playerPair) {
+            if (settlementResult.player) {
                 appliedMultiplierCards.player.push(...filterCards(playerCards));
             }
 
-            if (settlementResult.banker || settlementResult.bankerPair) {
+            if (settlementResult.banker) {
                 appliedMultiplierCards.banker.push(...filterCards(bankerCards));
             }
+        }
+
+        if (settlementResult.playerPair && appliedMultiplierCards.player.length === 0) {
+            appliedMultiplierCards.player.push(...filterCards(playerCards.slice(0, 2)));
+        }
+
+        if (settlementResult.bankerPair && appliedMultiplierCards.banker.length === 0) {
+            appliedMultiplierCards.banker.push(...filterCards(bankerCards.slice(0, 2)));
         }
 
         return appliedMultiplierCards;
@@ -142,16 +150,28 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         return cards.reduce((acc, curr) => acc * curr.value, 1);
     }
 
-    settleAppliedCardsPerChoice(appliedMultipliers) {
+    settleAppliedCardsPerChoice(result, appliedMultipliers) {
+        const { player, banker } = result;
+
+        const uniqueBankerCards = appliedMultipliers.banker.filter(
+            (bankerCard) =>
+                !appliedMultipliers.player.some((playerCard) => playerCard.rank === bankerCard.rank && playerCard.suit === bankerCard.suit)
+        );
+
+        const playerPairCards = appliedMultipliers.player.filter(
+            (playerCard) => player.card3 && (playerCard.rank !== player.card3.rank || playerCard.suit !== player.card3.suit)
+        );
+
+        const bankerPairCards = appliedMultipliers.banker.filter(
+            (bankerCard) => banker.card3 && (bankerCard.rank !== banker.card3.rank || bankerCard.suit !== banker.card3.suit)
+        );
+
         return {
             player: appliedMultipliers.player,
             banker: appliedMultipliers.banker,
-            tie: [
-                ...appliedMultipliers.player,
-                ...appliedMultipliers.banker.filter((b) => !appliedMultipliers.player.some((p) => p.rank === b.rank && p.suit === b.suit)),
-            ],
-            playerPair: appliedMultipliers.player,
-            bankerPair: appliedMultipliers.banker,
+            tie: [...appliedMultipliers.player, ...uniqueBankerCards],
+            playerPair: playerPairCards,
+            bankerPair: bankerPairCards,
         };
     }
 
