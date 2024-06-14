@@ -15,6 +15,8 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
         allGamesHistoryQuery,
         cutCardConsumer,
         shoeConsumer,
+        roundQuery,
+        gameResultServiceConsumer,
     }) {
         super({
             definition,
@@ -28,6 +30,8 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
             logService,
             playGamePermissionValidator,
             allGamesHistoryQuery,
+            roundQuery,
+            gameResultServiceConsumer,
         });
 
         this.cutCardConsumer = cutCardConsumer;

@@ -637,7 +637,7 @@ describe("SettleGameRoundConsumer", () => {
 
             const { result, usedCardIndexes } = await consumer.generateResult();
 
-            expect(usedCardIndexes).toEqual([4, 5, 6, 7]);
+            expect(usedCardIndexes).toEqual([0, 1, 2, 3]);
             expect(result).toEqual({
                 player: {
                     card1: {

@@ -13,13 +13,10 @@ export default class RoundQuery extends Core.QueryApis.RoundQuery {
             .exec();
 
         return rounds.map((round) => {
-            const result = round.result ?? this.convertResult(round);
-            const settlementResult = round.settlementResult ?? this.convertSettlementResult(result);
-
             return {
                 roundId: round.id,
-                result,
-                settlementResult,
+                result: round.result,
+                settlementResult: round.settlementResult,
                 oddsMultipliers: round.oddsMultipliers,
                 appliedMultipliers: round.appliedMultipliers,
             };

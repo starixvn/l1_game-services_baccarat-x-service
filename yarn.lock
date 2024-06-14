@@ -7233,10 +7233,10 @@ sc-instrument@1.1.1-beta.2:
     opentelemetry-instrumentation-socket.io "0.34.0"
     socket.io "4.6.1"
 
-sc-multiple-games-base@1.9.1-beta.5:
-  version "1.9.1-beta.5"
-  resolved "https://npm.lumigame.com/sc-multiple-games-base/-/sc-multiple-games-base-1.9.1-beta.5.tgz#136aba4bb025b961429adaec56042b186cd93e5a"
-  integrity sha512-ugKg+0vjp59+NZglZ/M6aQXRLIOJBCbdeMNMt1xqBYclxLA9d5pr92vg+fXC/jz3AFv3BhjmkQl/aMLuir8W9Q==
+sc-multiple-games-base@1.9.1-beta.6:
+  version "1.9.1-beta.6"
+  resolved "https://npm.lumigame.com/sc-multiple-games-base/-/sc-multiple-games-base-1.9.1-beta.6.tgz#56055f44578cbfbdf2b89011a576bf61a6006b58"
+  integrity sha512-6BIJNlvqJRrHFFyjwr+jbJkOhOePCbFosdASaiAkI5M7O0kPwiYN6wUazuqGb1cMAfdoR8vbSmEdqPvIp9w9MQ==
   dependencies:
     sc-game-base "5.2.0-beta.1"
 
