@@ -30,6 +30,7 @@ const gameConfigs = {
     maxWinPerRound: 3000,
 };
 gameData.gameConfigs = { ...gameConfigs };
+gameData.currencyGroupGames = [{ groupId: "111", maxBet: 2000 }];
 
 const gameManagementApiClientFactory = {
     instance: jest.fn(),
@@ -472,7 +473,7 @@ describe("SettleGameRoundConsumer", () => {
                 ],
                 {
                     ...gameData.gameConfigs.odds,
-                    tie: (gameData.gameConfigs.odds.tie - 1) * 2 * 5 + gameData.gameConfigs.odds.tie,
+                    tie: (gameData.gameConfigs.odds.tie - 1) * 2 * 5 + 1,
                 },
             ],
             [
@@ -521,7 +522,7 @@ describe("SettleGameRoundConsumer", () => {
                 ],
                 {
                     ...gameData.gameConfigs.odds,
-                    player: (gameData.gameConfigs.odds.player - 1) * 2 + gameData.gameConfigs.odds.player,
+                    player: (gameData.gameConfigs.odds.player - 1) * 2 + 1,
                 },
             ],
         ])("should update odds of choices", (result, oddsMultipliers, expectedOdds) => {
@@ -551,6 +552,7 @@ describe("SettleGameRoundConsumer", () => {
         };
 
         const bet = {
+            name: "player1",
             player: 2,
             banker: 0,
             tie: 0,
@@ -562,6 +564,11 @@ describe("SettleGameRoundConsumer", () => {
 
         const appliedCardsPerChoice = {
             player: [{ suit: 1, rank: 1, value: 2 }],
+        };
+
+        gameData.ingame[bet.name] = {
+            currencyGroupId: "111",
+            maxBet: 2000,
         };
 
         it("should calculate betResult.totalAmount", () => {
@@ -586,6 +593,10 @@ describe("SettleGameRoundConsumer", () => {
 
             //Assert
             expect(betResult.totalWin).toEqual(bet.player * gameConfigs.odds.player);
+        });
+
+        afterAll(() => {
+            gameData.ingame = {};
         });
     });
 
