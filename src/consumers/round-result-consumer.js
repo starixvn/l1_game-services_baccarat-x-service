@@ -46,7 +46,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
 
         await this.resultsRepository.create(record);
 
-        return { cards, currentIndex: burnedCards, rawValue, hashValue, firstRoundId };
+        return { cards, currentIndex: burnedCards, rawValue, hashValue, firstRoundId: record.firstRoundId };
     }
 
     calculateBurnedCards(cards) {
