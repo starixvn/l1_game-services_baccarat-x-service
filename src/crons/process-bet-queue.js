@@ -22,7 +22,7 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueueSeparateB
     }
 
     calculateRebetTotalAmount(rebet) {
-        let totalAmount = {};
+        let totalAmount = 0;
 
         for (const amount of Object.values(rebet)) {
             totalAmount += amount;
