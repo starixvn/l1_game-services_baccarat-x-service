@@ -6,6 +6,8 @@ import ProcessBetQueue from "../../../src/crons/process-bet-queue";
 
 const definition = new BaccaratGameDefinition({});
 const gameData = new TableGameData();
+gameData.currencyGroupGames = [{ groupId: "111", maxBet: 2000 }];
+
 const gameConfigs = {
     odds: {
         player: 2,
@@ -88,9 +90,10 @@ describe("ProcessBetQueue", () => {
     });
     describe("upsertBet", () => {
         const player = {
-            session: {},
+            session: { currencyGroupId: "111" },
             profile: {
                 name: "player01",
+                maxBet: 2000,
             },
         };
         describe("when gameConfigs.applyMultiplier is true", () => {

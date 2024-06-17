@@ -34,6 +34,7 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueue {
             freeBet: bet.freeBet,
             roundId,
             clientSeed: bet.clientSeed,
+            maxWin: this.getMaxWinPerRound(player),
         };
         const existingBetFilter = { uid: player.UID, roundId, freeBet: bet.freeBet };
         const existingBetIncrement = {
@@ -106,5 +107,13 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueue {
         result.endBet += fee;
 
         return result;
+    }
+
+    getMaxWinPerRound(player) {
+        const { maxWinPerRound } = this.gameData.gameConfigs;
+        const settings = this.gameData.currencyGroupGames.find((x) => x.groupId.toString() === player.session.currencyGroupId);
+        const maxBet = Math.min(player.profile.maxBet, settings.maxBet);
+
+        return maxWinPerRound * maxBet;
     }
 }

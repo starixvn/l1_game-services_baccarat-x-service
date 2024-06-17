@@ -236,18 +236,9 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
             betResult.totalWin += bet.player + bet.banker;
         }
 
-        betResult.totalWin = +Math.min(betResult.totalWin, this.getMaxWinPerRound(bet)).toFixed(2);
+        betResult.totalWin = +Math.min(betResult.totalWin, bet.maxWin).toFixed(2);
         betResult.netWin = +(betResult.netWin - bet.fee).toFixed(2);
 
         return betResult;
-    }
-
-    getMaxWinPerRound(bet) {
-        const { maxWinPerRound } = this.gameData.gameConfigs;
-        const inGameData = this.gameData.ingame[bet.name];
-        const settings = this.gameData.currencyGroupGames.find((x) => x.groupId.toString() === inGameData.currencyGroupId);
-        const maxBet = Math.min(inGameData.maxBet, settings.maxBet);
-
-        return maxWinPerRound * maxBet;
     }
 }

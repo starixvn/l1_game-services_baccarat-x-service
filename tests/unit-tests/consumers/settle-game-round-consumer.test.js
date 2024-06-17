@@ -30,7 +30,6 @@ const gameConfigs = {
     maxWinPerRound: 3000,
 };
 gameData.gameConfigs = { ...gameConfigs };
-gameData.currencyGroupGames = [{ groupId: "111", maxBet: 2000 }];
 
 const gameManagementApiClientFactory = {
     instance: jest.fn(),
@@ -608,7 +607,6 @@ describe("SettleGameRoundConsumer", () => {
             result.banker.updateScore();
             const settlementResult = getSettlementResult(result);
             const appliedMultipliers = consumer.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
-            console.log(appliedMultipliers.banker);
             const appliedCardsPerChoice = consumer.settleAppliedCardsPerChoice(result, appliedMultipliers);
 
             //Act
@@ -638,6 +636,7 @@ describe("SettleGameRoundConsumer", () => {
             bankerPair: 0,
             fee: 0.8,
             totalAmount: 4.8,
+            maxWin: 4000000,
         };
 
         const appliedCardsPerChoice = {
