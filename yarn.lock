@@ -7247,6 +7247,13 @@ sc-pf-client-seed@^1.0.1-beta.0:
   dependencies:
     chance "^1.1.11"
 
+sc-rebet-mode@2.0.2-beta.0:
+  version "2.0.2-beta.0"
+  resolved "https://npm.lumigame.com/sc-rebet-mode/-/sc-rebet-mode-2.0.2-beta.0.tgz#968b3a2245e1cd3ebbdfdf72841a4e5db52d1318"
+  integrity sha512-rpFUOyiRcgmLVxFB5OWkRGSBG0b6rXHF+ly3JbtuoOYYrAgVMjVXF4MrZpChV1V17ljVpWWNA2DdfJLMTJK23g==
+  dependencies:
+    sc-game-base "5.2.0-beta.1"
+
 seedrandom@^3.0.5:
   version "3.0.5"
   resolved "https://npm.lumigame.com/seedrandom/-/seedrandom-3.0.5.tgz#54edc85c95222525b0c7a6f6b3543d8e0b3aa0a7"

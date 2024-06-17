@@ -139,7 +139,7 @@ describe("ProcessBetQueue", () => {
             await processBetQueue.insertBetLog(player, 1, bet, 1);
 
             //Assert
-            expect(betLogsRepository.create.mock.calls[0][0].fee).toEqual(bet.fee);
+            expect(betLogsRepository.insertMany.mock.calls[0][0][0].fee).toEqual(bet.fee);
         });
     });
 

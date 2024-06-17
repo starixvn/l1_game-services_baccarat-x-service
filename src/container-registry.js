@@ -1,11 +1,11 @@
 import { asClass, asValue } from "awilix";
 import { Consumers } from "sc-card-game-base";
 import { MultipleTableGamesContainerRegistry } from "sc-multiple-games-base";
+import { RebetContainerRegistry } from "sc-rebet-mode";
 import {
     CutCardConsumer,
     InGameConsumer,
     MultiplierCardsConsumer,
-    PlaceBetConsumer,
     RoundResultConsumer,
     SettleGameRoundConsumer,
     ShoeConsumer,
@@ -20,8 +20,15 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
         super.register(appConfigs, definition, gameData);
 
         this.registerRepositories(definition.repositories);
-
+        this.registerRebetMode();
         return this.container;
+    }
+
+    registerRebetMode() {
+        this.container.register(new RebetContainerRegistry().registerTableGame(SocketRouter));
+        this.container.register({
+            processBetQueue: asClass(ProcessBetQueue).singleton().proxy(),
+        });
     }
 
     registerPublishers() {
@@ -43,7 +50,6 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
             settleGameRoundConsumer: asClass(SettleGameRoundConsumer).singleton().proxy(),
             unsettledRoundConsumer: asClass(Consumers.UnsettledRoundConsumer).singleton().proxy(),
             inGameConsumer: asClass(InGameConsumer).singleton(),
-            placeBetConsumer: asClass(PlaceBetConsumer).singleton(),
         });
     }
 

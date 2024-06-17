@@ -21,6 +21,7 @@ const bet = {
 
     siteId: { type: String },
     freeBet: { type: Boolean, default: false },
+    rebet: { type: Boolean, default: false },
 
     currency: { type: String, required: true },
     rate: { type: Number, required: true },
@@ -43,6 +44,7 @@ const betLog = {
 
     siteId: { type: String },
     freeBet: { type: Boolean, default: false },
+    rebet: { type: Boolean, default: false },
 
     playerId: { type: String, required: true },
     operatorId: { type: String, required: true },
