@@ -28,11 +28,12 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
 
     async createResultRecord() {
         const { randomMode } = this.gameData.gameConfigs;
-        const { cardsFromAdmin } = this.getResultFromAdmin();
+        const { cardsFromAdmin, luckyCardsFromAdmin, cutCardIndexFromAdmin } = this.getResultFromAdmin();
         const shoe = this.shoeConsumer.generateShoe(cardsFromAdmin, randomMode);
         const { encryptedShoe, encryptedShoeHash, cards, rawValue, hashValue } = shoe;
         const burnedCards = this.calculateBurnedCards(shoe.cards);
-        const serverCutCardIndex = await this.cutCardConsumer.generateServerCutCardIndex();
+        const serverCutCardIndex =
+            cutCardIndexFromAdmin > 0 ? cutCardIndexFromAdmin : await this.cutCardConsumer.generateServerCutCardIndex();
 
         const record = {
             isAvailable: true,
@@ -46,7 +47,28 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
 
         await this.resultsRepository.create(record);
 
-        return { cards, currentIndex: burnedCards, burnedCards, rawValue, hashValue, firstRoundId: record.firstRoundId };
+        return {
+            cards,
+            currentIndex: burnedCards,
+            burnedCards,
+            rawValue,
+            hashValue,
+            firstRoundId: record.firstRoundId,
+            presetMultiplierCards: luckyCardsFromAdmin,
+            presetCutCardIndex: cutCardIndexFromAdmin > 0,
+        };
+    }
+
+    getResultFromAdmin() {
+        const result = super.getResultFromAdmin();
+        const resultFromAdmin = this.gameData.settlementResultFromAdmin;
+
+        let luckyCardsFromAdmin;
+        if (resultFromAdmin?.result?.luckyCards) {
+            luckyCardsFromAdmin = resultFromAdmin.result.luckyCards;
+        }
+
+        return { luckyCardsFromAdmin, ...result };
     }
 
     calculateBurnedCards(cards) {
@@ -74,8 +96,10 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
     }
 
     async updateAndPublishFinalCutCardIndex() {
-        const cutCardIndex = await this.cutCardConsumer.calculateCutCardIndex();
-        this.gameData.shoe.cutCardIndex = cutCardIndex;
+        if (!this.gameData.shoe.presetCutCardIndex) {
+            const cutCardIndex = await this.cutCardConsumer.calculateCutCardIndex();
+            this.gameData.shoe.cutCardIndex = cutCardIndex;
+        }
 
         this.roundResultPublisher.publishFinalCutCardIndex();
 

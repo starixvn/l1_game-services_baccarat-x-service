@@ -149,7 +149,6 @@ describe("ProcessBetQueue", () => {
                 await processBetQueue.upsertBet(player, 1, bet, 1);
 
                 //Assert
-                console.log(betsRepository.updateOne.mock.calls[0][1]);
                 expect(betsRepository.updateOne.mock.calls[0][1].$inc).toEqual({
                     fee: 20,
                     player: 100,

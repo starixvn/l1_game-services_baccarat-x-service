@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { TableGameData } from "sc-card-game-base";
 import MultiplierCardsConsumer from "../../../src/consumers/multiplier-cards-consumer";
 const gameData = new TableGameData();
+gameData.shoe = {};
 const gameConfigs = {
     odds: {
         player: 2,
