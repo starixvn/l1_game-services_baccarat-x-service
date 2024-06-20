@@ -94,10 +94,10 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         if (!this.gameData.shoe.presetCutCardIndex) {
             const cutCardIndex = await this.cutCardConsumer.calculateCutCardIndex();
             this.gameData.shoe.cutCardIndex = cutCardIndex;
+
+            await this.resultsRepository.updateOne({ firstRoundId: this.gameData.roundId, isAvailable: true }, { $set: { cutCardIndex } });
         }
 
         this.roundResultPublisher.publishFinalCutCardIndex();
-
-        await this.resultsRepository.updateOne({ firstRoundId: this.gameData.roundId, isAvailable: true }, { $set: { cutCardIndex } });
     }
 }
