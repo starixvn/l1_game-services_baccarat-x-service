@@ -63,12 +63,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         const result = super.getResultFromAdmin();
         const resultFromAdmin = this.gameData.settlementResultFromAdmin;
 
-        let luckyCardsFromAdmin;
-        if (resultFromAdmin?.result?.luckyCards) {
-            luckyCardsFromAdmin = resultFromAdmin.result.luckyCards;
-        }
-
-        return { luckyCardsFromAdmin, ...result };
+        return { luckyCardsFromAdmin: resultFromAdmin?.result?.luckyCards, ...result };
     }
 
     calculateBurnedCards(cards) {
