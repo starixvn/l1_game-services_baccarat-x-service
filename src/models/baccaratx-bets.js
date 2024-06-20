@@ -30,6 +30,7 @@ const bet = {
     operatorId: { type: String, required: true },
     roundId: { type: Number, default: 0, required: true },
     paid: { type: Boolean, default: false },
+    reachMaxWin: { type: Boolean, default: false },
 };
 
 const betLog = {

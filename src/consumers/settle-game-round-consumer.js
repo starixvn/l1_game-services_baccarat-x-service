@@ -186,6 +186,7 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
                     bet.betwin = betResult.totalWin;
                     bet.multipliers = betResult.multipliers;
                     bet.paid = true;
+                    bet.reachMaxWin = betResult.totalWin === bet.maxWin;
 
                     await bet.save();
                     await this.callEndGame(bet, roundId, time, betResult);
