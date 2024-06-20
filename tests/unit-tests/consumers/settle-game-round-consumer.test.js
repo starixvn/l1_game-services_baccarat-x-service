@@ -16,7 +16,7 @@ const resultsRepository = stubMongoose(mongoose.Model);
 const multiplierCardsConsumer = stub(MultiplierCardsConsumer);
 
 const generateResult = jest.fn();
-const definition = new GameDefinition({}, generateResult, jest.fn());
+const definition = new GameDefinition({}, generateResult, getSettlementResult);
 const gameData = new TableGameData();
 const gameConfigs = {
     odds: {
@@ -42,6 +42,7 @@ class TestBaccaratPlayer extends BaccaratPlayer {
         this.card1 = card1;
         this.card2 = card2;
         this.card3 = card3;
+        this.updateScore();
     }
 }
 
@@ -779,6 +780,50 @@ describe("SettleGameRoundConsumer", () => {
 
             await consumer.generateResult();
             expect(gameData.shoe.currentIndex).toEqual(4);
+        });
+    });
+
+    describe("settleRound", () => {
+        afterEach(() => {
+            gameData.oddsMultipliers = null;
+        });
+        it("should calculate odds with multiplier cards", async () => {
+            //Arrange
+            gameData.oddsMultipliers = [{ rank: 10, suit: 1, value: 4 }];
+            roundsRepository.create.mockReturnValueOnce({ id: 1, time: new Date() });
+            jest.spyOn(consumer, "generateResult").mockReturnValueOnce({
+                result: {
+                    player: new TestBaccaratPlayer(
+                        {
+                            rank: 10,
+                            suit: 1,
+                        },
+                        {
+                            rank: 8,
+                            suit: 0,
+                        },
+                        null
+                    ),
+                    banker: new TestBaccaratPlayer(
+                        {
+                            rank: 12,
+                            suit: 3,
+                        },
+                        {
+                            rank: 8,
+                            suit: 3,
+                        },
+                        null
+                    ),
+                },
+                usedCardIndexes: 4,
+            });
+            const spy = jest.spyOn(consumer, "settleOdds");
+            //Act
+            await consumer.settleRound();
+
+            //Assert
+            expect(spy).toHaveBeenCalled();
         });
     });
 });
