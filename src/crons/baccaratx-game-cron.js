@@ -109,15 +109,7 @@ export default class BaccaratXGameCron extends GameCron {
         }
 
         if (!this.gameData.disabled && this.gameData.remainingTime === durations.generatingShoe) {
-            await this.resetForNewRoundWhenChangingShoe();
-
-            const isHavingSufficientChain = await this.generateAndPublishShoe();
-
-            if (isHavingSufficientChain) {
-                this.bot.startBotCutCard();
-
-                this.gameData.remainingTime--;
-            }
+            await this.startNewShoe();
         } else if (!this.gameData.disabled) {
             this.gameData.remainingTime--;
         }
@@ -128,7 +120,7 @@ export default class BaccaratXGameCron extends GameCron {
 
         if (this.isStartingTime(this.gameData.remainingTime, durations)) {
             this.resetForNewRound();
-            this.bot && (await this.bot.reset());
+            await this.bot?.reset();
             this.appConfigs.enabledBoostedOdds && (await this.updatePromotionOddsAndNotify());
         }
 
@@ -146,8 +138,20 @@ export default class BaccaratXGameCron extends GameCron {
             await this.initNewRound();
             await this.settleGameRoundConsumer.settleRound();
         } else if (this.gameData.remainingTime < durations.placingBets) {
-            this.bot && (await this.bot.run());
+            this.bot?.run();
             this.runningRoundInfoPublisher.publish();
+        }
+    }
+
+    async startNewShoe() {
+        await this.resetForNewRoundWhenChangingShoe();
+
+        const isHavingSufficientChain = await this.generateAndPublishShoe();
+
+        if (isHavingSufficientChain) {
+            this.bot.startBotCutCard();
+
+            this.gameData.remainingTime--;
         }
     }
 
