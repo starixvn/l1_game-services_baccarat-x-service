@@ -6,6 +6,6 @@ const bet = {
     bet: { type: Object, required: true },
 };
 
-export default function allGamesHistoriesModel(modelName) {
+export default function allGamesHistories(modelName) {
     return mongoose.model(modelName, new mongoose.Schema(bet));
 }

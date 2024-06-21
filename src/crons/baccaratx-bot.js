@@ -37,7 +37,7 @@ export default class BaccaratXBot extends Table.Crons.TableGameBot {
     async startBotCutCard() {
         const botsCutCard = this.getBotsToCutCard();
 
-        botsCutCard.forEach(async (bot) => await this.contributeCutCard(bot));
+        await Promise.all(botsCutCard.map((bot) => this.contributeCutCard(bot)));
     }
 
     resetAllBotData() {

@@ -1,12 +1,20 @@
 import { generateResult, getSettlementResult as settle } from "./helpers/result-helper";
-import { allGamesHistoriesModel, getBetLogModel, getBetModel, getCutCardPfModel, getMultipliersModel, getResultModel, getRoundModel } from "./models";
+import {
+    allGamesHistories,
+    getBetLogModel,
+    getBetModel,
+    getCutCardPfModel,
+    getMultipliersModel,
+    getResultModel,
+    getRoundModel,
+} from "./models";
 
 const choicesMapper = { player: 1, banker: 2, tie: 3, playerPair: 4, bankerPair: 5 };
 const choices = ["player", "banker", "tie", "playerPair", "bankerPair"];
 const hedgeBetGroups = [["player", "banker"]];
 const commonChoices = ["player", "banker", "tie"];
 
-const allGamesBetsRepository = allGamesHistoriesModel("megabigsmall_histories");
+const allGamesBetsRepository = allGamesHistories("megabigsmall_histories");
 
 export default [
     {
