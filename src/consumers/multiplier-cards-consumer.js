@@ -11,7 +11,7 @@ export default class MultiplierCardsConsumer {
     async generate() {
         let multiplierCards = [];
 
-        if (this.gameData.shoe.presetMultiplierCards) {
+        if (this.gameData.shoe?.presetMultiplierCards) {
             multiplierCards = this.gameData.shoe.presetMultiplierCards;
         } else {
             const { randomMode, oddsMultipliers } = this.gameData.gameConfigs;
