@@ -44,8 +44,6 @@ export default class MultiplierCardsConsumer {
 
         if (currentRoundRecord) {
             this.gameData.oddsMultipliers = currentRoundRecord.cards;
-        } else {
-            this.gameData.oddsMultipliers  = await this.generate();
         }
     }
 }

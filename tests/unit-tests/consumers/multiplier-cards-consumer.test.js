@@ -82,7 +82,7 @@ describe("MultiplierCardsConsumer", () => {
         });
 
         describe("when current round has not generated multipliers", () => {
-            it("generate multiplier cards", async () => {
+            it("do nothing", async () => {
                 //Arrange
                 gameData.roundId = 1;
 
@@ -92,7 +92,7 @@ describe("MultiplierCardsConsumer", () => {
                 await consumer.queryCurrentRoundMultiplierResult();
 
                 //Assert
-                expect(gameData.oddsMultipliers.length).toBeGreaterThan(0);
+                expect(gameData.oddsMultipliers).toBeUndefined();
             });
         });
     });
