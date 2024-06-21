@@ -602,6 +602,66 @@ describe("SettleGameRoundConsumer", () => {
                     ...gameData.gameConfigs.odds,
                 },
             ],
+            [
+                {
+                    player: new TestBaccaratPlayer(
+                        {
+                            rank: 1,
+                            suit: 1,
+                        },
+                        {
+                            rank: 1,
+                            suit: 1,
+                        },
+                        {
+                            rank: 4,
+                            suit: 2,
+                        }
+                    ),
+                    banker: new TestBaccaratPlayer(
+                        {
+                            rank: 1,
+                            suit: 3,
+                        },
+                        {
+                            rank: 1,
+                            suit: 0,
+                        },
+                        {
+                            rank: 2,
+                            suit: 2,
+                        }
+                    ),
+                },
+                [
+                    {
+                        rank: 1,
+                        suit: 1,
+                        value: 2,
+                    },
+                    {
+                        rank: 1,
+                        suit: 0,
+                        value: 3,
+                    },
+                    {
+                        rank: 9,
+                        suit: 4,
+                        value: 4,
+                    },
+                    {
+                        rank: 4,
+                        suit: 2,
+                        value: 3,
+                    },
+                ],
+                {
+                    ...gameData.gameConfigs.odds,
+                    player: 2 * 2 * 3 * (gameData.gameConfigs.odds.player - 1) + 1,
+                    playerPair: 2 * 2 * (gameData.gameConfigs.odds.playerPair - 1) + 1,
+                    bankerPair: 3 * (gameData.gameConfigs.odds.bankerPair - 1) + 1,
+                },
+            ],
         ])("should update odds of choices with multipliers", (result, oddsMultipliers, expectedOdds) => {
             //Arrange
             result.player.updateScore();

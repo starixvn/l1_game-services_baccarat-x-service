@@ -108,27 +108,35 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         const playerCards = result.player.getCards();
         const bankerCards = result.banker.getCards();
 
-        const filterCards = (cards) => oddsMultipliers.filter((om) => cards.some((card) => card.rank === om.rank && card.suit === om.suit));
+        const filterMultiplierCards = (cards) => {
+            const result = [];
+            for (const card of cards) {
+                const multiplierCard = oddsMultipliers.find((om) => card.rank === om.rank && card.suit === om.suit);
+                multiplierCard && result.push(multiplierCard);
+            }
+
+            return result;
+        };
 
         if (settlementResult.tie) {
-            appliedMultiplierCards.player.push(...filterCards(playerCards));
-            appliedMultiplierCards.banker.push(...filterCards(bankerCards));
+            appliedMultiplierCards.player.push(...filterMultiplierCards(playerCards));
+            appliedMultiplierCards.banker.push(...filterMultiplierCards(bankerCards));
         } else {
             if (settlementResult.player) {
-                appliedMultiplierCards.player.push(...filterCards(playerCards));
+                appliedMultiplierCards.player.push(...filterMultiplierCards(playerCards));
             }
 
             if (settlementResult.banker) {
-                appliedMultiplierCards.banker.push(...filterCards(bankerCards));
+                appliedMultiplierCards.banker.push(...filterMultiplierCards(bankerCards));
             }
         }
 
         if (settlementResult.playerPair && appliedMultiplierCards.player.length === 0) {
-            appliedMultiplierCards.player.push(...filterCards(playerCards.slice(0, 2)));
+            appliedMultiplierCards.player.push(...filterMultiplierCards(playerCards.slice(0, 2)));
         }
 
         if (settlementResult.bankerPair && appliedMultiplierCards.banker.length === 0) {
-            appliedMultiplierCards.banker.push(...filterCards(bankerCards.slice(0, 2)));
+            appliedMultiplierCards.banker.push(...filterMultiplierCards(bankerCards.slice(0, 2)));
         }
 
         return appliedMultiplierCards;
@@ -153,11 +161,6 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
     settleAppliedCardsPerChoice(result, appliedMultipliers) {
         const { player, banker } = result;
 
-        const uniqueBankerCards = appliedMultipliers.banker.filter(
-            (bankerCard) =>
-                !appliedMultipliers.player.some((playerCard) => playerCard.rank === bankerCard.rank && playerCard.suit === bankerCard.suit)
-        );
-
         const playerPairCards = appliedMultipliers.player.filter(
             (playerCard) => player.card3 && (playerCard.rank !== player.card3.rank || playerCard.suit !== player.card3.suit)
         );
@@ -169,7 +172,7 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         return {
             player: appliedMultipliers.player,
             banker: appliedMultipliers.banker,
-            tie: [...appliedMultipliers.player, ...uniqueBankerCards],
+            tie: [...appliedMultipliers.player, ...appliedMultipliers.banker],
             playerPair: playerPairCards,
             bankerPair: bankerPairCards,
         };
