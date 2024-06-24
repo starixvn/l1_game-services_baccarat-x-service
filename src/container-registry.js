@@ -1,5 +1,5 @@
 import { asClass, asValue } from "awilix";
-import { Consumers } from "sc-card-game-base";
+import { Consumers, Publishers } from "sc-card-game-base";
 import { MultipleTableGamesContainerRegistry } from "sc-multiple-games-base";
 import { RebetContainerRegistry } from "sc-rebet-mode";
 import {
@@ -36,6 +36,7 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
 
         this.container.register({
             roundResultPublisher: asClass(RoundResultPublisher).singleton(),
+            runningRoundInfoPublisher: asClass(Publishers.RunningRoundInfoPublisher).singleton(),
         });
     }
 
