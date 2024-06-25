@@ -79,7 +79,7 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
 
     async handleRebet(payload) {
         try {
-            if (!this.baseSocketRouter.verify()) {
+            if (!this.verify()) {
                 return;
             }
 
