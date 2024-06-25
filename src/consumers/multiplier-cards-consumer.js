@@ -22,10 +22,12 @@ export default class MultiplierCardsConsumer {
                 this.chance.integer({ min: oddsMultipliers.numberOfCardsRange.min, max: oddsMultipliers.numberOfCardsRange.max })
             );
 
+            const multiplierValues = oddsMultipliers.values.filter((x) => x.ratio > 0);
+
             for (const card of multiplierCards) {
                 card.value = this.chance.weighted(
-                    oddsMultipliers.values.map((x) => x.number),
-                    oddsMultipliers.values.map((x) => x.ratio)
+                    multiplierValues.map((x) => x.number),
+                    multiplierValues.map((x) => x.ratio)
                 );
             }
         }
