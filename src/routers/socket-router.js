@@ -17,6 +17,7 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
         shoeConsumer,
         roundQuery,
         gameResultServiceConsumer,
+        rebetConsumer,
     }) {
         super({
             definition,
@@ -36,12 +37,15 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
 
         this.cutCardConsumer = cutCardConsumer;
         this.shoeConsumer = shoeConsumer;
+        this.rebetConsumer = rebetConsumer;
     }
+
     init(socketClient) {
         super.init(socketClient);
 
         this.socketClient.on("cutCard", this.handleCutCard.bind(this));
         this.socketClient.on("shoeVerification", this.handleShoeVerification.bind(this));
+        this.socketClient.on("rebet", this.handleRebet.bind(this));
     }
 
     handleCutCard(payload) {
@@ -70,6 +74,18 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
             this.socketClient.emit(this.definition.name, result);
         } catch (err) {
             this.logService.logError(err);
+        }
+    }
+
+    async handleRebet(payload) {
+        try {
+            if (!this.baseSocketRouter.verify()) {
+                return;
+            }
+
+            this.rebetConsumer.consume(this.gameData.realPlayers[this.socketClient.id], payload);
+        } catch (error) {
+            this.logService.logError(error);
         }
     }
 }
