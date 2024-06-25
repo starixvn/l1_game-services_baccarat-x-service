@@ -84,15 +84,15 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueueSeparateB
 
     async insertBetLog(player, roundId, bet, rate) {
         const betLogs = [];
+        
         if (bet.rebet) {
-            betLogs.push(
-                ...Object.entries(bet.lastBet).map(async ([betChoice, amount]) => {
-                    const betLog = { betChoice, amount };
-                    betLog.fee = this.setExtraFee(betLog);
+            const { receivedTime, clientSentTime } = bet;
+            for (const [betChoice, amount] of Object.entries(bet.lastBet)) {
+                const betLog = { betChoice, amount, receivedTime, clientSentTime };
+                betLog.fee = this.setExtraFee(betLog);
 
-                    return this.createBetLogModel(player, roundId, betLog, rate, true);
-                })
-            );
+                betLogs.push(this.createBetLogModel(player, roundId, betLog, rate, true));
+            }
         } else {
             betLogs.push(this.createBetLogModel(player, roundId, bet, rate, false));
         }
