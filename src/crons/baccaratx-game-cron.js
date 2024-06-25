@@ -184,6 +184,6 @@ export default class BaccaratXGameCron extends GameCron {
     async getWholeRoundByChainStatus() {
         const { durations } = this.definition;
         const { isSufficient } = await this.roundResultConsumer.checkSufficientChain();
-        return isSufficient ? durations.wholeRound : durations.generatingShoe;
+        return isSufficient ? durations.wholeRound : durations.wholeRound + durations.changingDeck;
     }
 }

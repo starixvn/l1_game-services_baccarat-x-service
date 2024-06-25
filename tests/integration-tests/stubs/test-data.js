@@ -14,8 +14,8 @@ const mockGameSettings = {
         dealCards: 2,
         changingDeck: 5,
         cutCard: 2,
-        generatingShoe: 10,
-        generatingCutCardIndex: 20,
+        generatingShoe: 18,
+        generatingCutCardIndex: 15,
     },
 };
 
@@ -69,4 +69,5 @@ const userBetData = (uid) => {
     return [];
 };
 
-export { game, currencyData, socketOptions, gameConfig, rounds, userBetData, mockGameSettings };
+export { currencyData, game, gameConfig, mockGameSettings, rounds, socketOptions, userBetData };
+
