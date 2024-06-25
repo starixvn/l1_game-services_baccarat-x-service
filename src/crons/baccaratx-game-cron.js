@@ -114,7 +114,7 @@ export default class BaccaratXGameCron extends GameCron {
             this.gameData.remainingTime--;
         }
 
-        if (this.gameData.remainingTime === durations.generatingCutCardIndex) {
+        if (this.gameData.remainingTime === durations.generatingCutCardIndex && this.gameData.shoe.firstRoundId === this.gameData.roundId) {
             await this.roundResultConsumer.updateAndPublishFinalCutCardIndex();
         }
 
