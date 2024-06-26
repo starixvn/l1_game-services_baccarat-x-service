@@ -16,7 +16,10 @@ export default class CutCardConsumer {
         const { remainingTime } = this.gameData;
 
         return (
-            remainingTime > durations.wholeRound + durations.cutCard && cutCardIndex >= minCutCardIndex && cutCardIndex <= maxCutCardIndex
+            remainingTime > durations.generatingCutCardIndex &&
+            remainingTime < durations.generatingShoe &&
+            cutCardIndex >= minCutCardIndex &&
+            cutCardIndex <= maxCutCardIndex
         );
     }
 
