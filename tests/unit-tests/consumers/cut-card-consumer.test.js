@@ -1,17 +1,23 @@
+import { stubMongoose } from "jest-micro-auto-stub";
 import mongoose from "mongoose";
 import CutCardConsumer from "../../../src/consumers/cut-card-consumer";
-import { stubMongoose } from "jest-micro-auto-stub";
 
 describe("cutCardConsumer", () => {
     let consumer;
     const roundId = 124,
-        gameData = { remainingTime: 200, roundId },
+        gameData = { remainingTime: 50, roundId },
         definition = {
             minCutCardIndex: 10,
             maxCutCardIndex: 50,
             durations: {
-                wholeRound: 100,
-                cutCard: 50,
+                wholeRound: 48,
+                placingBets: 30,
+                lockingBet: 3,
+                dealCards: 5,
+                changingDeck: 20,
+                cutCard: 3,
+                generatingShoe: 55,
+                generatingCutCardIndex: 45,
             },
         },
         publisher = {
@@ -179,7 +185,7 @@ describe("cutCardConsumer", () => {
 
         describe("when remaining time is exactly the threshold", () => {
             beforeEach(() => {
-                consumer.gameData.remainingTime = 150; // wholeRound + cutCard
+                consumer.gameData.remainingTime = 45; // wholeRound + cutCard
             });
 
             describe("when cut card index is within the valid range", () => {
