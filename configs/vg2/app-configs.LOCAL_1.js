@@ -11,8 +11,8 @@ export default {
 
         useAuthenticate: true,
         requestTimeout: 10000,
-        placeBetTimeout: 4000,
-        hitJackpotTimeout: 200000,
+        placeBetTimeout: 2000,
+
         enabledApiLogs: true,
     },
     socketOptions: {
