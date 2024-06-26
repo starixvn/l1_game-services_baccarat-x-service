@@ -3,7 +3,7 @@ import { Crons } from "sc-rebet-mode";
 export default class ProcessBetQueue extends Crons.TableProcessBetQueueSeparateBetLog {
     async proceedBet(player, payload) {
         if (payload.rebet) {
-            payload.amount = this.calculateRebetTotalAmount(payload.rebet);
+            payload.amount = this.calculateRebetTotalAmount(payload.lastBet);
         }
 
         payload.fee = this.setExtraFee(payload);
