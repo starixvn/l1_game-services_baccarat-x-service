@@ -79,8 +79,6 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
             .lean()
             .exec();
 
-        console.log(this.hasResultFromAdmin());
-        console.log(shoe);
         if (
             !this.hasResultFromAdmin() &&
             shoe &&
