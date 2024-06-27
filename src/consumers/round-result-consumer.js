@@ -80,7 +80,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
             .exec();
 
         console.log(this.hasResultFromAdmin());
-        console.log(shoe.currentIndex < shoe.cutCardIndex || (shoe.currentIndex === shoe.cutCardIndex && shoe.remainingCards !== 0));
+        console.log(shoe);
         if (
             !this.hasResultFromAdmin() &&
             shoe &&
