@@ -27,6 +27,7 @@ export default class RoundResultPublisher extends Core.BaseEventPublishers.BaseE
                     cutCardIndex,
                     burnedCards,
                     firstCard: cards[0],
+                    new: true,
                 },
             };
 
