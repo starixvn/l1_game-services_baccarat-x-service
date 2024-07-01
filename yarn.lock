@@ -7133,10 +7133,10 @@ sc-base-database@2.2.0, sc-base-database@2.2.1-beta.0:
     mongoose "^5.9.25"
     sc-common "1.8.1"
 
-sc-card-game-base@1.2.1-beta.6:
-  version "1.2.1-beta.6"
-  resolved "https://npm.lumigame.com/sc-card-game-base/-/sc-card-game-base-1.2.1-beta.6.tgz#ff61f79a053b6c9d9e8e174d629dabb7494f4bfb"
-  integrity sha512-Y05+n+4Fk9cDf5xy54Y4NPxbuIGBXUBERZdfSe4IohjWReehLRT6tP+WUo/XhbULj7gNp1ywpM9I1xJMarsmxw==
+sc-card-game-base@1.2.1-beta.7:
+  version "1.2.1-beta.7"
+  resolved "https://npm.lumigame.com/sc-card-game-base/-/sc-card-game-base-1.2.1-beta.7.tgz#c8d945e68989a25d78510aa4153ead16ae7e6e3a"
+  integrity sha512-2mam5Gig5xRW6tj/wqaofrMXeT/brICU96a3x2dkJKO7FoExTpP0R7LNwY6RndwaQEKKnnnTzNpX6xPT5++ODQ==
   dependencies:
     chance "^1.1.7"
     random "^3.0.6"
