@@ -20,9 +20,6 @@ const cutCardConsumer = {
 const shoeConsumer = {
     getShoeVerification: jest.fn(),
 };
-const rebetConsumer = {
-    consume: jest.fn(),
-};
 
 describe("SocketRouter", () => {
     const dependencies = {
@@ -41,7 +38,6 @@ describe("SocketRouter", () => {
         shoeConsumer,
         roundQuery: jest.fn(),
         gameResultServiceConsumer: jest.fn(),
-        rebetConsumer,
     };
     let socketRouter;
 
@@ -67,14 +63,6 @@ describe("SocketRouter", () => {
 
             // Assert
             expect(socketClient.on).toHaveBeenCalledWith("shoeVerification", expect.any(Function));
-        });
-
-        it("should initialize socketClient with event rebet", () => {
-            // Act
-            socketRouter.init(socketClient);
-
-            // Assert
-            expect(socketClient.on).toHaveBeenCalledWith("rebet", expect.any(Function));
         });
     });
 
@@ -160,52 +148,6 @@ describe("SocketRouter", () => {
 
                 // Act
                 await socketRouter.handleShoeVerification(payload);
-
-                // Assert
-                expect(logService.logError).toHaveBeenCalledWith(error);
-            });
-        });
-    });
-
-    describe("handleRebet", () => {
-        describe("when verify fails", () => {
-            it("should not consume rebet", () => {
-                // Arrange
-                const payload = { bet: "bet1" };
-                jest.spyOn(socketRouter, "verify").mockReturnValue(false);
-
-                // Act
-                socketRouter.handleRebet(payload);
-
-                // Assert
-                expect(rebetConsumer.consume).not.toHaveBeenCalled();
-            });
-        });
-
-        describe("when verify succeeds", () => {
-            it("should consume rebet", () => {
-                // Arrange
-                const payload = { bet: "bet1" };
-                jest.spyOn(socketRouter, "verify").mockReturnValue(true);
-
-                // Act
-                socketRouter.handleRebet(payload);
-
-                // Assert
-                expect(rebetConsumer.consume).toHaveBeenCalledWith(gameData.realPlayers[socketClient.id], payload);
-            });
-
-            it("should log error if an exception occurs", () => {
-                // Arrange
-                const payload = { bet: "bet1" };
-                const error = new Error("Test Error");
-                jest.spyOn(socketRouter, "verify").mockReturnValue(true);
-                rebetConsumer.consume.mockImplementation(() => {
-                    throw error;
-                });
-
-                // Act
-                socketRouter.handleRebet(payload);
 
                 // Assert
                 expect(logService.logError).toHaveBeenCalledWith(error);
