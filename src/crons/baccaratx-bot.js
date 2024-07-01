@@ -1,6 +1,5 @@
 import { helpers } from "sc-common";
 import { Table } from "sc-game-base";
-
 import constants from "../constants";
 
 export default class BaccaratXBot extends Table.Crons.TableGameBot {
