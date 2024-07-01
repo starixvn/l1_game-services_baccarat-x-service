@@ -4,6 +4,7 @@ import { GameDefinition, Publishers, TableGameData } from "sc-card-game-base";
 import { Core } from "sc-game-base";
 import { MultiplierCardsConsumer } from "../../../src/consumers";
 import SettleGameRoundConsumer from "../../../src/consumers/settle-game-round-consumer";
+import gameSettings from "../../../src/game-settings";
 import BaccaratPlayer from "../../../src/helpers/baccarat-player";
 import { getSettlementResult } from "../../../src/helpers/result-helper";
 
@@ -16,7 +17,7 @@ const resultsRepository = stubMongoose(mongoose.Model);
 const multiplierCardsConsumer = stub(MultiplierCardsConsumer);
 
 const generateResult = jest.fn();
-const definition = new GameDefinition({}, generateResult, getSettlementResult);
+const definition = new GameDefinition(gameSettings[0], generateResult, getSettlementResult);
 const gameData = new TableGameData();
 const gameConfigs = {
     odds: {

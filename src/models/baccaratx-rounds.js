@@ -19,6 +19,7 @@ const settlementResultSchema = new mongoose.Schema(
         tie: { type: Boolean, default: false },
         playerPair: { type: Boolean, default: false },
         bankerPair: { type: Boolean, default: false },
+        natural: { type: Boolean, default: false },
     },
     { _id: false }
 );

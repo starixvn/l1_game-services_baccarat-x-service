@@ -21,6 +21,10 @@ const settlementRuleEntries = Object.entries({
     tie: ({ player, banker }) => player.score === banker.score,
     playerPair: ({ player }) => player.hasPair(),
     bankerPair: ({ banker }) => banker.hasPair(),
+    natural: ({ player, banker }) => {
+        const numberOfCards = player.getNumberOfCards() + banker.getNumberOfCards();
+        return numberOfCards === 4 && (player.score >= 8 || banker.score >= 8);
+    },
 });
 
 const getSettlementResult = (roundResult) => {
