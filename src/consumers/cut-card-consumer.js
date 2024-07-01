@@ -10,24 +10,38 @@ export default class CutCardConsumer {
         this.chance = new Chance();
     }
 
-    validatePlayerCutCard(cutCard) {
+    async validatePlayerCutCard(cutCard, playerName) {
         const { cutCardIndex } = cutCard;
-        const { minCutCardIndex, maxCutCardIndex, durations } = this.definition;
-        const { remainingTime } = this.gameData;
 
-        return (
-            remainingTime > durations.generatingCutCardIndex &&
-            remainingTime < durations.generatingShoe &&
-            cutCardIndex >= minCutCardIndex &&
-            cutCardIndex <= maxCutCardIndex
-        );
+        const isValidTime = this.validateCutCardTime();
+        const isValidValue = this.validateCutCardIndex(cutCardIndex);
+
+        return isValidTime && isValidValue && !(await this.validateExistingCutCard(playerName));
+    }
+
+    async validateExistingCutCard(playerName) {
+        await this.cutCardPFRepository.exists({ roundId, "playerCutCards.name": playerName });
+    }
+
+    validateCutCardTime() {
+        const { remainingTime } = this.gameData;
+        const { durations } = this.definition;
+
+        return remainingTime > durations.generatingCutCardIndex && remainingTime < durations.generatingShoe;
+    }
+
+    validateCutCardIndex(cutCardIndex) {
+        const { minCutCardIndex, maxCutCardIndex } = this.definition;
+
+        return cutCardIndex >= minCutCardIndex && cutCardIndex <= maxCutCardIndex;
     }
 
     async consume(player, payload) {
         try {
             const { cutCardIndex } = payload;
-            if (this.validatePlayerCutCard(payload)) {
-                await this.insertPlayerCutCard(player.profile.name, cutCardIndex);
+            const playerName = player.profile.name;
+            if (await this.validatePlayerCutCard(payload)) {
+                await this.insertPlayerCutCard(playerName, cutCardIndex);
 
                 this.publisher.publishToUser(player.UID, { cutCard: { successful: true, cutCardIndex } });
 
