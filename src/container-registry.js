@@ -28,7 +28,6 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
         this.container.register(new RebetContainerRegistry().registerTableGame(SocketRouter));
         this.container.register({
             processBetQueue: asClass(ProcessBetQueue).singleton().proxy(),
-            socketRouter: asClass(SocketRouter).proxy(),
         });
     }
 

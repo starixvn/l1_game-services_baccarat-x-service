@@ -734,6 +734,25 @@ describe("SettleGameRoundConsumer", () => {
             expect(betResult.totalWin).toEqual(bet.player * gameConfigs.odds.player);
         });
 
+        it("should refund player/bank bet amount when result is tie", () => {
+            //Act
+            const betResult = consumer.calculateBetResult(
+                {
+                    player: false,
+                    banker: false,
+                    tie: true,
+                    playerPair: false,
+                    bankerPair: false,
+                },
+                bet,
+                gameConfigs.odds,
+                appliedCardsPerChoice
+            );
+
+            //Assert
+            expect(betResult.totalWin).toEqual(bet.player);
+        });
+
         afterAll(() => {
             gameData.ingame = {};
         });
