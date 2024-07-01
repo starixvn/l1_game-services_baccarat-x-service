@@ -31,7 +31,8 @@ export default class HttpRouter extends MultipleTableGamesHttpRouter {
             res.send(true);
         } catch (error) {
             this.logService.logError(error);
-            res.send(false);
         }
+
+        res.send(false);
     }
 }
