@@ -99,12 +99,12 @@ describe("cutCardConsumer", () => {
     describe("validatePlayerCutCard", () => {
         describe("when remaining time is sufficient", () => {
             describe("when cut card index is within the valid range", () => {
-                it("should return true", () => {
+                it("should return true", async () => {
                     // Arrange
                     const cutCard = { cutCardIndex: 25 };
 
                     // Act
-                    const result = consumer.validatePlayerCutCard(cutCard);
+                    const result = await consumer.validatePlayerCutCard(cutCard);
 
                     // Assert
                     expect(result).toBe(true);
