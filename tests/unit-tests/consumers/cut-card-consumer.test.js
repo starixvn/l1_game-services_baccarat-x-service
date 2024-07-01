@@ -54,7 +54,7 @@ describe("cutCardConsumer", () => {
             await consumer.consume(player, payload);
 
             // Assert
-            expect(consumer.validatePlayerCutCard).toHaveBeenCalledWith(payload);
+            expect(consumer.validatePlayerCutCard).toHaveBeenCalledWith(payload, player.profile.name);
         });
 
         describe("when payload is valid", () => {
