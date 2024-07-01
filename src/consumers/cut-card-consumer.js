@@ -22,7 +22,7 @@ export default class CutCardConsumer {
     async validateExistingCutCard(playerName) {
         const { roundId } = this.gameData;
 
-        await this.cutCardPFRepository.exists({ roundId, "playerCutCards.name": playerName });
+        return this.cutCardPFRepository.exists({ roundId, "playerCutCards.name": playerName });
     }
 
     validateCutCardTime() {
