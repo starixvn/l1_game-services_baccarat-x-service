@@ -42,7 +42,7 @@ export default class CutCardConsumer {
         try {
             const { cutCardIndex } = payload;
             const playerName = player.profile.name;
-            if (await this.validatePlayerCutCard(payload)) {
+            if (await this.validatePlayerCutCard(payload, playerName)) {
                 await this.insertPlayerCutCard(playerName, cutCardIndex);
 
                 this.publisher.publishToUser(player.UID, { cutCard: { successful: true, cutCardIndex } });
