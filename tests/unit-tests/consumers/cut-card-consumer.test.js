@@ -97,6 +97,20 @@ describe("cutCardConsumer", () => {
     });
 
     describe("validatePlayerCutCard", () => {
+        describe("when exist cut card info", () => {
+            it("should return false", async () => {
+                // Arrange
+                const playerName = "Mike";
+                cutCardPFRepository.exist = jest.fn().mockResolvedValueOnce({ name: playerName });
+
+                // Act
+                const result = await consumer.validatePlayerCutCard({}, playerName);
+
+                // Assert
+                expect(result).toBeFalsy();
+            });
+        });
+
         describe("when remaining time is sufficient", () => {
             describe("when cut card index is within the valid range", () => {
                 it("should return true", async () => {
@@ -112,12 +126,12 @@ describe("cutCardConsumer", () => {
             });
 
             describe("when cut card index is less than minCutCardIndex", () => {
-                it("should return false", () => {
+                it("should return false", async () => {
                     // Arrange
                     const cutCard = { cutCardIndex: 5 };
 
                     // Act
-                    const result = consumer.validatePlayerCutCard(cutCard);
+                    const result = await consumer.validatePlayerCutCard(cutCard);
 
                     // Assert
                     expect(result).toBe(false);
@@ -125,12 +139,12 @@ describe("cutCardConsumer", () => {
             });
 
             describe("when cut card index is greater than maxCutCardIndex", () => {
-                it("should return false", () => {
+                it("should return false", async () => {
                     // Arrange
                     const cutCard = { cutCardIndex: 55 };
 
                     // Act
-                    const result = consumer.validatePlayerCutCard(cutCard);
+                    const result = await consumer.validatePlayerCutCard(cutCard);
 
                     // Assert
                     expect(result).toBe(false);
@@ -138,12 +152,12 @@ describe("cutCardConsumer", () => {
             });
 
             describe("when cut card index is exactly minCutCardIndex", () => {
-                it("should return true", () => {
+                it("should return true", async () => {
                     // Arrange
                     const cutCard = { cutCardIndex: 10 };
 
                     // Act
-                    const result = consumer.validatePlayerCutCard(cutCard);
+                    const result = await consumer.validatePlayerCutCard(cutCard);
 
                     // Assert
                     expect(result).toBe(true);
@@ -151,12 +165,12 @@ describe("cutCardConsumer", () => {
             });
 
             describe("when cut card index is exactly maxCutCardIndex", () => {
-                it("should return true", () => {
+                it("should return true", async () => {
                     // Arrange
                     const cutCard = { cutCardIndex: 50 };
 
                     // Act
-                    const result = consumer.validatePlayerCutCard(cutCard);
+                    const result = await consumer.validatePlayerCutCard(cutCard);
 
                     // Assert
                     expect(result).toBe(true);
@@ -170,12 +184,12 @@ describe("cutCardConsumer", () => {
             });
 
             describe("when cut card index is within the valid range", () => {
-                it("should return false", () => {
+                it("should return false", async () => {
                     // Arrange
                     const cutCard = { cutCardIndex: 25 };
 
                     // Act
-                    const result = consumer.validatePlayerCutCard(cutCard);
+                    const result = await consumer.validatePlayerCutCard(cutCard);
 
                     // Assert
                     expect(result).toBe(false);
@@ -189,12 +203,12 @@ describe("cutCardConsumer", () => {
             });
 
             describe("when cut card index is within the valid range", () => {
-                it("should return false", () => {
+                it("should return false", async () => {
                     // Arrange
                     const cutCard = { cutCardIndex: 25 };
 
                     // Act
-                    const result = consumer.validatePlayerCutCard(cutCard);
+                    const result = await consumer.validatePlayerCutCard(cutCard);
 
                     // Assert
                     expect(result).toBe(false);
