@@ -186,4 +186,10 @@ export default class BaccaratXGameCron extends GameCron {
         const { isSufficient } = await this.roundResultConsumer.checkSufficientChain();
         return isSufficient ? durations.wholeRound : durations.wholeRound + durations.changingDeck;
     }
+
+    resetForNewRound() {
+        super.resetForNewRound();
+
+        this.gameData.oddsMultipliers = [];
+    }
 }

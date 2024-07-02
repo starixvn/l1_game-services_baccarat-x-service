@@ -1,5 +1,5 @@
-import { Table } from "sc-game-base";
 import { Helpers } from "sc-card-game-base";
+import { Table } from "sc-game-base";
 
 export default class InGameConsumer extends Table.EventConsumers.TableInGameConsumer {
     async buildPayload(realPlayer) {
@@ -18,6 +18,7 @@ export default class InGameConsumer extends Table.EventConsumers.TableInGameCons
                     firstCard: cards[0],
                     currentIndex,
                 },
+                oddsMultipliers: this.gameData.oddsMultipliers,
             };
         } else {
             return payload;
