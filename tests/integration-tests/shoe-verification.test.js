@@ -4,7 +4,7 @@ import { initUserSession } from "./init-user-session";
 
 export const shoeVerificationTest = () => {
     describe("when user get shoe verification", () => {
-        it("should return bet result", async () => {
+        it("should return shoe verification info", async () => {
             // Arrange
             const client = new GameClientDriver(socketOptions, initUserSession(normalUser));
             await client.handleSignedInEvent();
