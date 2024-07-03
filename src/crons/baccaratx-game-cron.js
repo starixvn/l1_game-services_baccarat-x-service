@@ -1,6 +1,4 @@
 import { tracer } from "sc-instrument";
-import * as api from "@opentelemetry/api";
-
 import { GameData } from "sc-card-game-base";
 import { GameCron } from "sc-card-game-base/src/crons";
 import BaccaratGameDefinition from "../baccarat-game-definition";
@@ -128,7 +126,7 @@ export default class BaccaratXGameCron extends GameCron {
         }
 
         if (this.isStartingTime(this.gameData.remainingTime, durations)) {
-            this.resetForNewRound(span);
+            this.resetForNewRound();
             await this.bot?.reset();
             this.appConfigs.enabledBoostedOdds && (await this.updatePromotionOddsAndNotify());
         }
@@ -144,7 +142,7 @@ export default class BaccaratXGameCron extends GameCron {
         }
 
         if (this.gameData.remainingTime === -1) {
-            await this.settleGameRoundConsumer.settleRound(span);
+            await this.settleGameRoundConsumer.settleRound();
             await this.initNewRound();
         } else if (this.gameData.remainingTime < durations.placingBets) {
             this.bot?.run();
@@ -154,10 +152,10 @@ export default class BaccaratXGameCron extends GameCron {
         span.end();
     }
 
-    async startNewShoe(parentSpan) {
+    async startNewShoe() {
         await this.resetForNewRoundWhenChangingShoe();
 
-        const isHavingSufficientChain = await this.generateAndPublishShoe(parentSpan);
+        const isHavingSufficientChain = await this.generateAndPublishShoe();
 
         if (isHavingSufficientChain) {
             this.bot.startBotCutCard();
@@ -175,18 +173,18 @@ export default class BaccaratXGameCron extends GameCron {
         }
     }
 
-    async generateAndPublishShoe(parentSpan) {
+    async generateAndPublishShoe() {
         if (!this.isGeneratingResult) {
             try {
                 this.isGeneratingResult = true;
-                await this.roundResultConsumer.generateAndPublishHash(parentSpan);
+                await this.roundResultConsumer.generateAndPublishHash();
             } catch (e) {
                 this.logService.logError(e);
             } finally {
                 this.isGeneratingResult = false;
             }
 
-            const { isSufficient } = await this.roundResultConsumer.checkSufficientChain(parentSpan);
+            const { isSufficient } = await this.roundResultConsumer.checkSufficientChain();
 
             return isSufficient;
         } else {
@@ -194,9 +192,8 @@ export default class BaccaratXGameCron extends GameCron {
         }
     }
 
-    resetForNewRound(parentSpan) {
-        const ctx = api.trace.setSpan(api.context.active(), parentSpan);
-        const span = tracer.startSpan("cron.resetForNewRound", undefined, ctx);
+    resetForNewRound() {
+        const span = tracer.startSpan("cron.resetForNewRound");
 
         super.resetForNewRound();
 

@@ -1,5 +1,3 @@
-import { tracer } from "sc-instrument";
-import * as api from "@opentelemetry/api";
 import { Consumers } from "sc-card-game-base";
 
 export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundConsumer {
@@ -47,10 +45,7 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         return { result, usedCardIndexes };
     }
 
-    async settleRound(parentSpan) {
-        const ctx = api.trace.setSpan(api.context.active(), parentSpan);
-        const span = tracer.startSpan("settleRound", undefined, ctx);
-
+    async settleRound() {
         const { result, usedCardIndexes } = await this.generateResult(this.gameData.shoe);
         const settlementResult = this.definition.settle(result);
         const { roundId, exchangeRates, gameConfigs } = this.gameData;
@@ -105,8 +100,6 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
                     this.roundResultPublisher.publishWinners(roundId, this.gameData.winningPlayers);
                 }
             });
-
-        span.end();
     }
 
     settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult) {
