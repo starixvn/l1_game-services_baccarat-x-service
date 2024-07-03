@@ -1,4 +1,6 @@
 import { tracer } from "sc-instrument";
+import * as api from "@opentelemetry/api";
+
 import { GameData } from "sc-card-game-base";
 import { GameCron } from "sc-card-game-base/src/crons";
 import BaccaratGameDefinition from "../baccarat-game-definition";
@@ -126,7 +128,7 @@ export default class BaccaratXGameCron extends GameCron {
         }
 
         if (this.isStartingTime(this.gameData.remainingTime, durations)) {
-            this.resetForNewRound();
+            this.resetForNewRound(span);
             await this.bot?.reset();
             this.appConfigs.enabledBoostedOdds && (await this.updatePromotionOddsAndNotify());
         }
@@ -192,8 +194,9 @@ export default class BaccaratXGameCron extends GameCron {
         }
     }
 
-    resetForNewRound() {
-        const span = tracer.startSpan("cron.resetForNewRound");
+    resetForNewRound(parentSpan) {
+        const ctx = api.trace.setSpan(api.context.active(), parentSpan);
+        const span = tracer.startSpan("cron.resetForNewRound", undefined, ctx);
 
         super.resetForNewRound();
 
