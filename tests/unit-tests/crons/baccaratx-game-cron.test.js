@@ -1,6 +1,6 @@
-import { BaccaratXGameCron } from "../../../src/crons";
-import { GameCron } from "sc-card-game-base/src/crons";
 import { GameData } from "sc-card-game-base";
+import { GameCron } from "sc-card-game-base/src/crons";
+import { BaccaratXGameCron } from "../../../src/crons";
 
 describe("baccaratXGameCron", () => {
     const mockDependencies = {
@@ -328,7 +328,7 @@ describe("baccaratXGameCron", () => {
 
         describe("when remaining time is less than 0", () => {
             beforeEach(() => {
-                baccaratXGameCron.gameData.remainingTime = -1;
+                baccaratXGameCron.gameData.remainingTime = 0;
             });
 
             it("should settle the game round", async () => {
