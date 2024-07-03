@@ -1,3 +1,4 @@
+import { tracer } from "sc-instrument";
 import { GameData } from "sc-card-game-base";
 import { GameCron } from "sc-card-game-base/src/crons";
 import BaccaratGameDefinition from "../baccarat-game-definition";
@@ -75,6 +76,7 @@ export default class BaccaratXGameCron extends GameCron {
         await this.initShoe();
         await this.initNewRound();
         await this.unsettledRoundConsumer.proceed();
+
         this.startCron();
     }
 
@@ -84,17 +86,21 @@ export default class BaccaratXGameCron extends GameCron {
     }
 
     async initShoe() {
+        const span = tracer.startSpan("initShoe");
         if (this.resultsRepository) {
             const results = await this.resultsRepository
                 .findOne({ isAvailable: true }, null, { sort: { time: -1 } })
                 .lean()
                 .exec();
+
             if (results?.shoe) {
                 const decryptShoe = this.shoeConsumer.decryptShoe(results.shoe);
 
                 this.gameData.shoe = { ...results, ...decryptShoe };
             }
         }
+
+        span.end();
     }
 
     async proceed() {
@@ -157,6 +163,7 @@ export default class BaccaratXGameCron extends GameCron {
 
     async generateAndPublishOddsMultipliers() {
         const { applyMultiplier } = this.gameData.gameConfigs;
+
         if (applyMultiplier) {
             await this.multiplierCardsConsumer.generate();
             this.roundResultPublisher.publishMultiplierCards(this.gameData.oddsMultipliers);
@@ -175,6 +182,7 @@ export default class BaccaratXGameCron extends GameCron {
             }
 
             const { isSufficient } = await this.roundResultConsumer.checkSufficientChain();
+
             return isSufficient;
         } else {
             return false;
