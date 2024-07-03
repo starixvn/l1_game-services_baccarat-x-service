@@ -116,13 +116,13 @@ export default class BaccaratXGameCron extends GameCron {
         }
 
         if (!this.gameData.disabled && this.gameData.remainingTime === durations.generatingShoe) {
-            await this.startNewShoe();
+            await this.startNewShoe(span);
         } else if (!this.gameData.disabled) {
             this.gameData.remainingTime--;
         }
 
         if (this.gameData.remainingTime === durations.generatingCutCardIndex && this.gameData.shoe.firstRoundId === this.gameData.roundId) {
-            await this.roundResultConsumer.updateAndPublishFinalCutCardIndex();
+            await this.roundResultConsumer.updateAndPublishFinalCutCardIndex(span);
         }
 
         if (this.isStartingTime(this.gameData.remainingTime, durations)) {
@@ -152,10 +152,10 @@ export default class BaccaratXGameCron extends GameCron {
         span.end();
     }
 
-    async startNewShoe() {
+    async startNewShoe(parentSpan) {
         await this.resetForNewRoundWhenChangingShoe();
 
-        const isHavingSufficientChain = await this.generateAndPublishShoe();
+        const isHavingSufficientChain = await this.generateAndPublishShoe(parentSpan);
 
         if (isHavingSufficientChain) {
             this.bot.startBotCutCard();
@@ -173,18 +173,18 @@ export default class BaccaratXGameCron extends GameCron {
         }
     }
 
-    async generateAndPublishShoe() {
+    async generateAndPublishShoe(parentSpan) {
         if (!this.isGeneratingResult) {
             try {
                 this.isGeneratingResult = true;
-                await this.roundResultConsumer.generateAndPublishHash();
+                await this.roundResultConsumer.generateAndPublishHash(parentSpan);
             } catch (e) {
                 this.logService.logError(e);
             } finally {
                 this.isGeneratingResult = false;
             }
 
-            const { isSufficient } = await this.roundResultConsumer.checkSufficientChain();
+            const { isSufficient } = await this.roundResultConsumer.checkSufficientChain(parentSpan);
 
             return isSufficient;
         } else {

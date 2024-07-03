@@ -1,4 +1,5 @@
 import { tracer } from "sc-instrument";
+import * as api from "@opentelemetry/api";
 import Chance from "chance";
 import { Consumers } from "sc-card-game-base";
 
@@ -10,10 +11,11 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         this.chance = new Chance();
     }
 
-    async generateAndPublishHash() {
-        const span = tracer.startSpan("RoundResultConsumer.generateAndPublishHash");
+    async generateAndPublishHash(parentSpan) {
+        const ctx = api.trace.setSpan(api.context.active(), parentSpan);
+        const span = tracer.startSpan("RoundResultConsumer.generateAndPublishHash", undefined, ctx);
 
-        const { isSufficient } = await this.checkSufficientChain();
+        const { isSufficient } = await this.checkSufficientChain(span);
         if (!isSufficient) {
             await this.setUnavailable();
             this.gameData.shoe = await this.createResultRecord();
@@ -82,8 +84,9 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         return cardValue + 1;
     }
 
-    async checkSufficientChain() {
-        const span = tracer.startSpan("RoundResultConsumer.checkSufficientChain");
+    async checkSufficientChain(parentSpan) {
+        const ctx = api.trace.setSpan(api.context.active(), parentSpan);
+        const span = tracer.startSpan("RoundResultConsumer.checkSufficientChain", undefined, ctx);
 
         let isSufficient = false;
         const { shoe } = this.gameData;
@@ -101,7 +104,10 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         return { shoe, isSufficient };
     }
 
-    async updateAndPublishFinalCutCardIndex() {
+    async updateAndPublishFinalCutCardIndex(parentSpan) {
+        const ctx = api.trace.setSpan(api.context.active(), parentSpan);
+        const span = tracer.startSpan("RoundResultConsumer.updateAndPublishFinalCutCardIndex", undefined, ctx);
+
         if (!this.gameData.shoe.presetCutCardIndex) {
             const cutCardIndex = await this.cutCardConsumer.calculateCutCardIndex();
             this.gameData.shoe.cutCardIndex = cutCardIndex;
@@ -110,5 +116,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         }
 
         this.roundResultPublisher.publishFinalCutCardIndex();
+
+        span.end();
     }
 }
