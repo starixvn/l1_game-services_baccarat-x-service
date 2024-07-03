@@ -199,8 +199,12 @@ export default class BaccaratXGameCron extends GameCron {
     }
 
     resetForNewRound() {
+        const span = tracer.startSpan("cron.resetForNewRound");
+
         super.resetForNewRound();
 
         this.gameData.oddsMultipliers = [];
+
+        span.end();
     }
 }

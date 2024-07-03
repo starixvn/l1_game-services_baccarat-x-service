@@ -1,3 +1,4 @@
+import { tracer } from "sc-instrument";
 import Chance from "chance";
 import { Consumers } from "sc-card-game-base";
 
@@ -10,6 +11,8 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
     }
 
     async generateAndPublishHash() {
+        const span = tracer.startSpan("RoundResultConsumer.generateAndPublishHash");
+
         const { isSufficient } = await this.checkSufficientChain();
         if (!isSufficient) {
             await this.setUnavailable();
@@ -17,6 +20,8 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
             this.gameData.settlementResultFromAdmin = {};
             this.roundResultPublisher.publishNewShoeHash();
         }
+
+        span.end();
     }
 
     async setUnavailable() {
@@ -27,6 +32,8 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
     }
 
     async createResultRecord() {
+        const span = tracer.startSpan("RoundResultConsumer.createResultRecord");
+
         const { randomMode } = this.gameData.gameConfigs;
         const { cardsFromAdmin, luckyCardsFromAdmin, cutCardIndexFromAdmin } = this.getResultFromAdmin();
         const shoe = this.shoeConsumer.generateShoe(cardsFromAdmin, randomMode);
@@ -46,6 +53,8 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         };
 
         await this.resultsRepository.create(record);
+
+        span.end();
 
         return {
             cards,
@@ -73,6 +82,8 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
     }
 
     async checkSufficientChain() {
+        const span = tracer.startSpan("RoundResultConsumer.checkSufficientChain");
+
         let isSufficient = false;
         const shoe = await this.resultsRepository
             .findOne({ isAvailable: true }, null, { sort: { time: -1 } })
@@ -86,6 +97,8 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         ) {
             isSufficient = true;
         }
+
+        span.end();
 
         return { shoe, isSufficient };
     }
