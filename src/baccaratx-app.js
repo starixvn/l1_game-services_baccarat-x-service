@@ -1,3 +1,8 @@
+import appConfigs from "./app-configs";
+import { startTrace } from "sc-instrument";
+
+startTrace(appConfigs.otel?.enabled, appConfigs.otel?.endpoint, appConfigs.otel?.system, appConfigs.sentry.env, "Baccarat X");
+
 import { TableGameData } from "sc-card-game-base";
 import { Core } from "sc-game-base";
 import ContainerRegistry from "./container-registry";
@@ -11,6 +16,7 @@ import { init as initApis } from "sc-base-apis";
 import mongoose from "mongoose";
 import { startCorsCron, isAllowAccess } from "sc-game-base/src/core/helpers/cors-helper";
 const { authenticationHelpers, chatBotHelper } = Core.Helpers;
+
 export default class BaccaratxApp extends Core.BaseGameApp {
     startGames(definitions) {
         definitions.forEach(async (definition) => {
