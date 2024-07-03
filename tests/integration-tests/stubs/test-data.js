@@ -33,8 +33,8 @@ const gameConfig = {
     displayName: "Bac 81",
     enabled: true,
     botenabled: false,
-    minbet: 1,
-    maxbet: 2000,
+    minBet: 1,
+    maxBet: 2000,
     disabledround: null,
     bot_maxbet: 10,
     hour_maxbot: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -70,4 +70,3 @@ const userBetData = (uid) => {
 };
 
 export { currencyData, game, gameConfig, mockGameSettings, rounds, socketOptions, userBetData };
-

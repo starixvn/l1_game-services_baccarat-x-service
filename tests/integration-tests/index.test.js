@@ -24,3 +24,5 @@ afterAll(() => {
 });
 
 shoeVerificationTest();
+placeBetTest();
+ingameTest();

@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { users } from "sc-base-database";
-import { middlewares } from "sc-common";
 import {
     createCurrencyGroupGames,
     createDummyCurrency,
@@ -10,13 +9,15 @@ import {
     createPartnerConfig,
     normalUser,
 } from "sc-game-service-integration-utils";
+import { configureDatabase } from "../../../src/helpers/database-helper";
 
 import appConfigs from "../../../src/app-configs.IGT";
 import { currencyData, game, gameConfig, rounds, userBetData } from "./test-data";
 
 const connectDatabase = async () => {
     console.log("connect database");
-    await middlewares.database.configureDatabase(mongoose, appConfigs.database);
+
+    await configureDatabase(mongoose, appConfigs.database);
 
     await clearAllData();
 };
@@ -25,7 +26,7 @@ const clearAllData = async () => {
     const collections = await mongoose.connection.db.collections();
 
     for (const collection of collections) {
-        await collection.remove();
+        await collection.deleteMany({});
     }
 };
 

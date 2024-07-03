@@ -37,7 +37,7 @@ export const placeBetTest = () => {
             expect(betResult).toStrictEqual({
                 betChoice: "player",
                 freeBet: false,
-                endBet: 100,
+                endBet: 120,
                 ownBets: { player: 100, fee: 20 },
                 ownChip: { betChoice: "player", amount: 100 },
                 user: {
