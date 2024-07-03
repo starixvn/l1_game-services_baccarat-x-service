@@ -15,4 +15,7 @@ export default Object.assign(appConfigs, {
             dbName: "game-service-test-db",
         },
     },
+    gameManagementApiSettings: {
+        BASE: "https://l1-proxy.lumigame.com/game-management-service-igt-test",
+    },
 });
