@@ -151,10 +151,7 @@ describe("RoundResultConsumer", () => {
     describe("checkSufficientChain", () => {
         it("should return true when there is sufficient chain", async () => {
             // Arrange
-            jest.spyOn(roundResultConsumer.resultsRepository, "findOne").mockReturnValue({
-                lean: jest.fn().mockReturnThis(),
-                exec: jest.fn().mockResolvedValue({ currentIndex: 315, cutCardIndex: 320 }),
-            });
+            mockGameData.shoe = { currentIndex: 315, cutCardIndex: 320 };
             jest.spyOn(roundResultConsumer, "hasResultFromAdmin").mockReturnValue(false);
 
             // Act

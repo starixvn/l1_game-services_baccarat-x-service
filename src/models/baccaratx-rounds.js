@@ -26,8 +26,8 @@ const settlementResultSchema = new mongoose.Schema(
 
 const resultSchema = new mongoose.Schema(
     {
-        player: { type: hand },
-        banker: { type: hand },
+        player: hand,
+        banker: hand,
     },
     { _id: false }
 );

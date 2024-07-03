@@ -137,11 +137,11 @@ export default class BaccaratXGameCron extends GameCron {
         }
 
         if (remainingTime === durations.lockingBet - 1) {
-            await this.generateAndPublishOddsMultipliers();
             this.gameStatusPublisher.publishEndPlacingBetStatus();
+            await this.generateAndPublishOddsMultipliers();
         }
 
-        if (this.gameData.remainingTime < 0) {
+        if (this.gameData.remainingTime === -1) {
             await this.settleGameRoundConsumer.settleRound();
             await this.initNewRound();
         } else if (this.gameData.remainingTime < durations.placingBets) {
@@ -190,12 +190,6 @@ export default class BaccaratXGameCron extends GameCron {
         } else {
             return false;
         }
-    }
-
-    async getWholeRoundByChainStatus() {
-        const { durations } = this.definition;
-        const { isSufficient } = await this.roundResultConsumer.checkSufficientChain();
-        return isSufficient ? durations.wholeRound : durations.wholeRound + durations.changingDeck;
     }
 
     resetForNewRound() {

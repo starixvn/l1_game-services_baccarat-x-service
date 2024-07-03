@@ -870,7 +870,7 @@ describe("SettleGameRoundConsumer", () => {
         it("should calculate odds with multiplier cards", async () => {
             //Arrange
             gameData.oddsMultipliers = [{ rank: 10, suit: 1, value: 4 }];
-            roundsRepository.create.mockReturnValueOnce({ id: 1, time: new Date() });
+            roundsRepository.create.mockResolvedValueOnce({ id: 1, time: new Date() });
             jest.spyOn(consumer, "generateResult").mockReturnValueOnce({
                 result: {
                     player: new TestBaccaratPlayer(

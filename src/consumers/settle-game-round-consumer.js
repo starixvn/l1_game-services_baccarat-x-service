@@ -61,43 +61,45 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
             finalOdds = this.settleOdds(settlementResult, appliedCardsPerChoice);
         }
 
-        const newRound = await this.roundsRepository.create({
-            id: roundId,
-            result,
-            settlementResult,
-            time: new Date(),
-            exchangeRateId: exchangeRates.exId,
-            oddsMultipliers,
-            appliedMultipliers,
-            usedCardIndexes,
-            extraFeeRatio: this.gameData.gameConfigs.oddsMultipliers?.extraFeeRatio,
-        });
-
-        if (newRound) {
-            this.roundResultPublisher.publishRoundResult({
-                ...this.collectRoundResult(result, settlementResult, roundId),
-                oddsMultipliers,
-                appliedMultipliers,
-                finalOdds,
-            });
-
-            const finish = {
-                settlementResult,
+        this.roundsRepository
+            .create({
+                id: roundId,
                 result,
-                roundId: newRound.id,
-                time: newRound.time,
+                settlementResult,
+                time: new Date(),
+                exchangeRateId: exchangeRates.exId,
                 oddsMultipliers,
                 appliedMultipliers,
-                finalOdds,
-                appliedCardsPerChoice,
-            };
+                usedCardIndexes,
+                extraFeeRatio: this.gameData.gameConfigs.oddsMultipliers?.extraFeeRatio,
+            })
+            .then(async (newRound) => {
+                if (newRound) {
+                    console.log(newRound);
+                    this.roundResultPublisher.publishRoundResult({
+                        ...this.collectRoundResult(result, settlementResult, roundId),
+                        oddsMultipliers,
+                        appliedMultipliers,
+                        finalOdds,
+                    });
 
-            this.gameData.roundId = finish.roundId + 1;
+                    const finish = {
+                        settlementResult,
+                        result,
+                        roundId: newRound.id,
+                        time: newRound.time,
+                        oddsMultipliers,
+                        appliedMultipliers,
+                        finalOdds,
+                        appliedCardsPerChoice,
+                    };
 
-            await this.settleBets(finish);
+                    this.gameData.roundId = finish.roundId + 1;
 
-            this.roundResultPublisher.publishWinners(roundId, this.gameData.winningPlayers);
-        }
+                    await this.settleBets(finish);
+                    this.roundResultPublisher.publishWinners(roundId, this.gameData.winningPlayers);
+                }
+            });
     }
 
     settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult) {

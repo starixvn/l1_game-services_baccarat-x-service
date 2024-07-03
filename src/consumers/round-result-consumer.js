@@ -59,6 +59,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         return {
             cards,
             currentIndex: burnedCards,
+            cutCardIndex: serverCutCardIndex,
             burnedCards,
             rawValue,
             hashValue,
@@ -85,10 +86,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         const span = tracer.startSpan("RoundResultConsumer.checkSufficientChain");
 
         let isSufficient = false;
-        const shoe = await this.resultsRepository
-            .findOne({ isAvailable: true }, null, { sort: { time: -1 } })
-            .lean()
-            .exec();
+        const { shoe } = this.gameData;
 
         if (
             !this.hasResultFromAdmin() &&
