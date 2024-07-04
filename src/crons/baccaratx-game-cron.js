@@ -72,7 +72,6 @@ export default class BaccaratXGameCron extends GameCron {
         await this.queryLastResult();
         await this.getSettingForNewRound();
         await this.updateExchangeRates();
-
         await this.initShoe();
         await this.initNewRound();
         await this.unsettledRoundConsumer.proceed();
@@ -117,7 +116,9 @@ export default class BaccaratXGameCron extends GameCron {
 
         if (!this.gameData.disabled && this.gameData.remainingTime === durations.generatingShoe) {
             await this.startNewShoe(span);
-        } else if (!this.gameData.disabled) {
+        }
+
+        if (!this.gameData.disabled) {
             this.gameData.remainingTime--;
         }
 
@@ -153,15 +154,9 @@ export default class BaccaratXGameCron extends GameCron {
     }
 
     async startNewShoe() {
-        await this.resetForNewRoundWhenChangingShoe();
-
-        const isHavingSufficientChain = await this.generateAndPublishShoe();
-
-        if (isHavingSufficientChain) {
-            this.bot.startBotCutCard();
-
-            this.gameData.remainingTime--;
-        }
+        this.resetForNewRound();
+        await this.roundResultConsumer.generateAndPublishHash();
+        await this.bot.startBotCutCard();
     }
 
     async generateAndPublishOddsMultipliers() {
@@ -170,25 +165,6 @@ export default class BaccaratXGameCron extends GameCron {
         if (applyMultiplier) {
             await this.multiplierCardsConsumer.generate();
             this.roundResultPublisher.publishMultiplierCards(this.gameData.oddsMultipliers);
-        }
-    }
-
-    async generateAndPublishShoe() {
-        if (!this.isGeneratingResult) {
-            try {
-                this.isGeneratingResult = true;
-                await this.roundResultConsumer.generateAndPublishHash();
-            } catch (e) {
-                this.logService.logError(e);
-            } finally {
-                this.isGeneratingResult = false;
-            }
-
-            const { isSufficient } = await this.roundResultConsumer.checkSufficientChain();
-
-            return isSufficient;
-        } else {
-            return false;
         }
     }
 

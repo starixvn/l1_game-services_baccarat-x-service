@@ -373,8 +373,8 @@ describe("baccaratXGameCron", () => {
 
     describe("startNewShoe", () => {
         beforeEach(() => {
-            jest.spyOn(baccaratXGameCron, "resetForNewRoundWhenChangingShoe").mockResolvedValue();
-            jest.spyOn(baccaratXGameCron, "generateAndPublishShoe").mockResolvedValue(true);
+            jest.spyOn(baccaratXGameCron, "resetForNewRound").mockResolvedValue();
+            jest.spyOn(baccaratXGameCron.roundResultConsumer, "generateAndPublishHash").mockResolvedValue();
             jest.spyOn(baccaratXGameCron.bot, "startBotCutCard").mockReturnValue();
         });
 
@@ -383,53 +383,23 @@ describe("baccaratXGameCron", () => {
             await baccaratXGameCron.startNewShoe();
 
             // Assert
-            expect(baccaratXGameCron.resetForNewRoundWhenChangingShoe).toHaveBeenCalled();
+            expect(baccaratXGameCron.resetForNewRound).toHaveBeenCalled();
         });
 
-        describe("when generating and publishing shoe is sufficient", () => {
-            it("should start the bot to cut the card", async () => {
-                // Act
-                await baccaratXGameCron.startNewShoe();
+        it("should call roundResultConsumer.generateAndPublishHash", async () => {
+            // Act
+            await baccaratXGameCron.startNewShoe();
 
-                // Assert
-                expect(baccaratXGameCron.bot.startBotCutCard).toHaveBeenCalled();
-            });
-
-            it("should decrement remaining time", async () => {
-                // Arrange
-                const initialRemainingTime = baccaratXGameCron.gameData.remainingTime;
-
-                // Act
-                await baccaratXGameCron.startNewShoe();
-
-                // Assert
-                expect(baccaratXGameCron.gameData.remainingTime).toBe(initialRemainingTime - 1);
-            });
+            // Assert
+            expect(baccaratXGameCron.roundResultConsumer.generateAndPublishHash).toHaveBeenCalled();
         });
 
-        describe("when generating and publishing shoe is not sufficient", () => {
-            beforeEach(() => {
-                baccaratXGameCron.generateAndPublishShoe.mockResolvedValue(false);
-            });
+        it("should start the bot to cut the card", async () => {
+            // Act
+            await baccaratXGameCron.startNewShoe();
 
-            it("should not start the bot to cut the card", async () => {
-                // Act
-                await baccaratXGameCron.startNewShoe();
-
-                // Assert
-                expect(baccaratXGameCron.bot.startBotCutCard).not.toHaveBeenCalled();
-            });
-
-            it("should not decrement remaining time", async () => {
-                // Arrange
-                const initialRemainingTime = baccaratXGameCron.gameData.remainingTime;
-
-                // Act
-                await baccaratXGameCron.startNewShoe();
-
-                // Assert
-                expect(baccaratXGameCron.gameData.remainingTime).toBe(initialRemainingTime);
-            });
+            // Assert
+            expect(baccaratXGameCron.bot.startBotCutCard).toHaveBeenCalled();
         });
     });
 
@@ -479,81 +449,6 @@ describe("baccaratXGameCron", () => {
 
                 // Assert
                 expect(baccaratXGameCron.roundResultPublisher.publishMultiplierCards).not.toHaveBeenCalled();
-            });
-        });
-    });
-
-    describe("generateAndPublishShoe", () => {
-        beforeEach(() => {
-            baccaratXGameCron.isGeneratingResult = false;
-            jest.spyOn(baccaratXGameCron.roundResultConsumer, "generateAndPublishHash").mockResolvedValue();
-            jest.spyOn(baccaratXGameCron.roundResultConsumer, "checkSufficientChain").mockResolvedValue({ isSufficient: true });
-        });
-
-        describe("when isGeneratingResult is false", () => {
-            it("should set isGeneratingResult to true during execution", () => {
-                // Act
-                baccaratXGameCron.generateAndPublishShoe();
-
-                // Assert
-                expect(baccaratXGameCron.isGeneratingResult).toBe(true);
-            });
-
-            it("should generate and publish hash", async () => {
-                // Act
-                await baccaratXGameCron.generateAndPublishShoe();
-
-                // Assert
-                expect(baccaratXGameCron.roundResultConsumer.generateAndPublishHash).toHaveBeenCalled();
-            });
-
-            it("should check sufficient chain", async () => {
-                // Act
-                await baccaratXGameCron.generateAndPublishShoe();
-
-                // Assert
-                expect(baccaratXGameCron.roundResultConsumer.checkSufficientChain).toHaveBeenCalled();
-            });
-
-            it("should set isGeneratingResult to false after execution", async () => {
-                // Act
-                await baccaratXGameCron.generateAndPublishShoe();
-
-                // Assert
-                expect(baccaratXGameCron.isGeneratingResult).toBe(false);
-            });
-
-            it("should return true if the chain is sufficient", async () => {
-                // Act
-                const result = await baccaratXGameCron.generateAndPublishShoe();
-
-                // Assert
-                expect(result).toBe(true);
-            });
-
-            it("should return false if the chain is not sufficient", async () => {
-                // Assert
-                baccaratXGameCron.roundResultConsumer.checkSufficientChain.mockResolvedValue({ isSufficient: false });
-
-                // Act
-                const result = await baccaratXGameCron.generateAndPublishShoe();
-
-                // Assert
-                expect(result).toBe(false);
-            });
-        });
-
-        describe("when isGeneratingResult is true", () => {
-            beforeEach(() => {
-                baccaratXGameCron.isGeneratingResult = true;
-            });
-
-            it("should return false", async () => {
-                // Act
-                const result = await baccaratXGameCron.generateAndPublishShoe();
-
-                // Assert
-                expect(result).toBe(false);
             });
         });
     });
