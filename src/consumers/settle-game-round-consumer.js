@@ -1,3 +1,4 @@
+import { tracer } from "sc-instrument";
 import { Consumers } from "sc-card-game-base";
 
 export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundConsumer {
@@ -28,10 +29,13 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
     }
 
     async generateResult() {
+        const span = tracer.startSpan("generateResult");
+
         const { result, usedCardsCount } = this.definition.generateResult(this.gameData.shoe);
         const usedCardIndexes = Array.from({ length: usedCardsCount }, (_, i) => this.gameData.shoe.currentIndex + i);
         this.gameData.shoe.currentIndex = this.gameData.shoe.currentIndex + usedCardsCount;
         this.gameData.shoe.remainingCards = this.definition.maxCardsPerRound - usedCardsCount;
+
         await this.resultsRepository.updateOne(
             { isAvailable: true },
             {
@@ -42,10 +46,14 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
             }
         );
 
+        span.end();
+
         return { result, usedCardIndexes };
     }
 
     async settleRound() {
+        const span = tracer.startSpan("settleRound");
+
         const { result, usedCardIndexes } = await this.generateResult(this.gameData.shoe);
         const settlementResult = this.definition.settle(result);
         const { roundId, exchangeRates, gameConfigs } = this.gameData;
@@ -100,6 +108,8 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
                     this.roundResultPublisher.publishWinners(roundId, this.gameData.winningPlayers);
                 }
             });
+
+        span.end();
     }
 
     settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult) {
