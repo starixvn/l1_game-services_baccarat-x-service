@@ -6,6 +6,7 @@ import {
     CutCardConsumer,
     InGameConsumer,
     MultiplierCardsConsumer,
+    RebetConsumer,
     RoundResultConsumer,
     SettleGameRoundConsumer,
     ShoeConsumer,
