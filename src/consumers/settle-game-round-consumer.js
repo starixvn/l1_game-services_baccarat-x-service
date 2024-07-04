@@ -1,7 +1,7 @@
 import { tracer } from "sc-instrument";
 import { Consumers } from "sc-card-game-base";
 
-export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundConsumer {
+export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRoundConsumer {
     constructor({
         definition,
         gameData,
@@ -82,7 +82,6 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
             })
             .then(async (newRound) => {
                 if (newRound) {
-                    console.log(newRound);
                     this.roundResultPublisher.publishRoundResult({
                         ...this.collectRoundResult(result, settlementResult, roundId),
                         oddsMultipliers,
