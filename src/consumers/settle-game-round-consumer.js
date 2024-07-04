@@ -51,10 +51,9 @@ export default class SettleGameRoundConsumer extends Consumers.SettleGameRoundCo
         return { result, usedCardIndexes };
     }
 
-    async settleRound() {
+    async settleRound({ result, usedCardIndexes }) {
         const span = tracer.startSpan("settleRound");
 
-        const { result, usedCardIndexes } = await this.generateResult(this.gameData.shoe);
         const settlementResult = this.definition.settle(result);
         const { roundId, exchangeRates, gameConfigs } = this.gameData;
 

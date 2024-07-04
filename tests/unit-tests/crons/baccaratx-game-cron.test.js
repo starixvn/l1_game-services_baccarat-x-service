@@ -11,7 +11,7 @@ describe("baccaratXGameCron", () => {
             run: jest.fn(),
             startBotCutCard: jest.fn(),
         },
-        settleGameRoundConsumer: { settleRound: jest.fn() },
+        settleGameRoundConsumer: { settleRound: jest.fn(), generateResult: jest.fn() },
         gameStatusPublisher: { publishStartPlacingBetStatus: jest.fn(), publishEndPlacingBetStatus: jest.fn() },
         runningRoundInfoPublisher: { publish: jest.fn() },
         logService: { logError: jest.fn() },
@@ -329,6 +329,15 @@ describe("baccaratXGameCron", () => {
         describe("when remaining time is less than 0", () => {
             beforeEach(() => {
                 baccaratXGameCron.gameData.remainingTime = 0;
+                baccaratXGameCron.settleGameRoundConsumer.generateResult.mockReturnValueOnce({ result: {}, usedCardIndexes: 4 });
+            });
+
+            it("should generate result", async () => {
+                // Act
+                await baccaratXGameCron.proceed();
+
+                // Assert
+                expect(baccaratXGameCron.settleGameRoundConsumer.generateResult).toHaveBeenCalled();
             });
 
             it("should settle the game round", async () => {
