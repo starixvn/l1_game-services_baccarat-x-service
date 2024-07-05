@@ -7,5 +7,7 @@ export default class RebetConsumer extends Consumers.RebetConsumer {
         if (lastBet) {
             lastBet.totalAmount = lastBet.amount;
         }
+
+        return lastBet;
     }
 }
