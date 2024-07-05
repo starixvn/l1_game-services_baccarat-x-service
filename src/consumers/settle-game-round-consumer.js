@@ -1,5 +1,5 @@
-import { tracer } from "sc-instrument";
 import { Consumers } from "sc-card-game-base";
+import { tracer } from "sc-instrument";
 
 export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRoundConsumer {
     constructor({
@@ -10,6 +10,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         endGame,
         roundsRepository,
         betsRepository,
+        tempBetsRepository,
         gameManagementApiClientFactory,
         resultsRepository,
         multiplierCardsConsumer,
@@ -22,6 +23,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
             endGame,
             roundsRepository,
             betsRepository,
+            tempBetsRepository,
             gameManagementApiClientFactory,
             resultsRepository,
         });

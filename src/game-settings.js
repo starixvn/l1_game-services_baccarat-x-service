@@ -7,6 +7,7 @@ import {
     getMultipliersModel,
     getResultModel,
     getRoundModel,
+    getTmpBetModel,
 } from "./models";
 
 const choicesMapper = { player: 1, banker: 2, tie: 3, playerPair: 4, bankerPair: 5 };
@@ -40,7 +41,7 @@ export default [
         repositories: {
             roundsRepository: getRoundModel("bac81_round"),
             betsRepository: getBetModel("bac81_bet"),
-            tempBetsRepository: getBetModel("bac81_tmpBets"),
+            tempBetsRepository: getTmpBetModel("bac81_tmpBets"),
             betLogsRepository: getBetLogModel("bac81_betlog"),
             resultsRepository: getResultModel("bac81_result"),
             cutCardPFRepository: getCutCardPfModel("bac81_cut_card_pf"),

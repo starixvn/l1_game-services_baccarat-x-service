@@ -5,6 +5,15 @@ import RebetConsumer from "./rebet-consumer";
 import RoundResultConsumer from "./round-result-consumer";
 import SettleGameRoundConsumer from "./settle-game-round-consumer";
 import ShoeConsumer from "./shoe-consumer";
+import UnsettledRoundConsumer from "./unsettled-round-consumer";
 
-export { CutCardConsumer, InGameConsumer, MultiplierCardsConsumer, RebetConsumer, RoundResultConsumer, SettleGameRoundConsumer, ShoeConsumer };
-
+export {
+    CutCardConsumer,
+    InGameConsumer,
+    MultiplierCardsConsumer,
+    RebetConsumer,
+    RoundResultConsumer,
+    SettleGameRoundConsumer,
+    ShoeConsumer,
+    UnsettledRoundConsumer
+};

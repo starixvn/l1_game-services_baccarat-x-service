@@ -19,15 +19,11 @@ const bet = {
     time: { type: Date },
     odds: { type: Object },
 
-    siteId: { type: String },
     freeBet: { type: Boolean, default: false },
     rebet: { type: Boolean, default: false },
 
     currency: { type: String, required: true },
-    rate: { type: Number, required: true },
 
-    playerId: { type: String, required: true },
-    operatorId: { type: String, required: true },
     roundId: { type: Number, default: 0, required: true },
     paid: { type: Boolean, default: false },
     reachMaxWin: { type: Boolean, default: false },
@@ -59,6 +55,19 @@ const betLog = {
 };
 
 export function getBetModel(modelName) {
+    return mongoose.model(
+        modelName,
+        new mongoose.Schema({
+            ...bet,
+            playerId: { type: String, required: true },
+            siteId: { type: String, required: true },
+            rate: { type: Number, required: true },
+            operatorId: { type: String, required: true },
+        })
+    );
+}
+
+export function getTmpBetModel(modelName) {
     return mongoose.model(modelName, new mongoose.Schema(bet));
 }
 
