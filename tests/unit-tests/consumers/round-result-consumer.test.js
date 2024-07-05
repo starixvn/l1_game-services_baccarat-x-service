@@ -149,16 +149,155 @@ describe("RoundResultConsumer", () => {
     });
 
     describe("checkSufficientChain", () => {
-        it("should return true when there is sufficient chain", async () => {
-            // Arrange
-            mockGameData.shoe = { currentIndex: 315, cutCardIndex: 320 };
-            jest.spyOn(roundResultConsumer, "hasResultFromAdmin").mockReturnValue(false);
+        describe("when hasResultFromAdmin true", () => {
+            it("should return isSufficient false", async () => {
+                // Arrange
+                roundResultConsumer.hasResultFromAdmin = jest.fn(() => true);
 
-            // Act
-            const result = await roundResultConsumer.checkSufficientChain();
+                // Assert
+                const result = await roundResultConsumer.checkSufficientChain();
 
-            // Assert
-            expect(result.isSufficient).toBe(true);
+                // Assert
+                expect(result.isSufficient).toBe(false);
+            });
+        });
+
+        describe("when shoe not found", () => {
+            it("should return isSufficient false", async () => {
+                // Arrange
+                roundResultConsumer.hasResultFromAdmin = jest.fn(() => false);
+
+                // Assert
+                const result = await roundResultConsumer.checkSufficientChain();
+
+                // Assert
+                expect(result.isSufficient).toBe(false);
+            });
+        });
+
+        describe("when current index not reach cut card", () => {
+            it("should return isSufficient true ", async () => {
+                // Arrange
+                mockGameData.shoe = { currentIndex: 315, cutCardIndex: 320 };
+                jest.spyOn(roundResultConsumer, "hasResultFromAdmin").mockReturnValue(false);
+                jest.spyOn(roundResultConsumer, "lessThanCutCard").mockReturnValue(true);
+
+                // Act
+                const result = await roundResultConsumer.checkSufficientChain();
+
+                // Assert
+                expect(result.isSufficient).toBe(true);
+            });
+        });
+
+        describe("when current index reach cut card", () => {
+            beforeEach(() => {
+                jest.spyOn(roundResultConsumer, "hasResultFromAdmin").mockReturnValueOnce(false);
+                jest.spyOn(roundResultConsumer, "lessThanCutCard").mockReturnValueOnce(false);
+            });
+
+            describe("when must deal cards for remaining cards in round", () => {
+                //remaining in range [1,2]
+                it("should return isSufficient true ", async () => {
+                    // Arrange
+                    mockGameData.shoe = { currentIndex: 320, cutCardIndex: 320, remainingCards: 2 };
+                    jest.spyOn(roundResultConsumer, "mustDealCards").mockReturnValueOnce(true);
+
+                    // Act
+                    const result = await roundResultConsumer.checkSufficientChain();
+
+                    // Assert
+                    expect(result.isSufficient).toBe(true);
+                });
+            });
+
+            describe("when dont need deal cards for remaining cards in round", () => {
+                //remaining in range [1,2]
+                it("should return isSufficient false ", async () => {
+                    // Arrange
+                    mockGameData.shoe = { currentIndex: 320, cutCardIndex: 320, remainingCards: 0 };
+                    jest.spyOn(roundResultConsumer, "mustDealCards").mockReturnValueOnce(false);
+
+                    // Act
+                    const result = await roundResultConsumer.checkSufficientChain();
+
+                    // Assert
+                    expect(result.isSufficient).toBe(false);
+                });
+            });
+        });
+    });
+
+    describe("lessThanCutCard", () => {
+        describe("when current index not reach cut card", () => {
+            it("should return true ", () => {
+                // Arrange
+                const shoe = { currentIndex: 315, cutCardIndex: 320 };
+
+                // Act
+                const result = roundResultConsumer.lessThanCutCard(shoe);
+
+                // Assert
+                expect(result).toBe(true);
+            });
+        });
+
+        describe("when current index reach cut card", () => {
+            it("should return false", () => {
+                // Arrange
+                const shoe = { currentIndex: 321, cutCardIndex: 320 };
+
+                // Act
+                const result = roundResultConsumer.lessThanCutCard(shoe);
+
+                // Assert
+                expect(result).toBe(false);
+            });
+        });
+    });
+
+    describe("mustDealCards", () => {
+        describe("when current index equal cut card", () => {
+            describe("when has remaining cards in round", () => {
+                //remaining in range [1,2]
+                it("should return true", () => {
+                    // Arrange
+                    const shoe = { currentIndex: 320, cutCardIndex: 320, remainingCards: 2 };
+
+                    // Act
+                    const result = roundResultConsumer.mustDealCards(shoe);
+
+                    // Assert
+                    expect(result).toBe(true);
+                });
+            });
+
+            describe("when no remaining cards in round", () => {
+                //remaining in range [1,2]
+                it("should return false ", () => {
+                    // Arrange
+                    const shoe = { currentIndex: 320, cutCardIndex: 320, remainingCards: 0 };
+
+                    // Act
+                    const result = roundResultConsumer.mustDealCards(shoe);
+
+                    // Assert
+                    expect(result).toBe(false);
+                });
+            });
+        });
+
+        describe("when current index not equal cut card", () => {
+            it("should return false ", () => {
+                // Arrange
+                const shoe = { currentIndex: 321, cutCardIndex: 320, remainingCards: 0 };
+
+                // Act
+                const result = roundResultConsumer.mustDealCards(shoe);
+
+                // Assert
+                expect(result).toBe(false);
+            });
         });
     });
 

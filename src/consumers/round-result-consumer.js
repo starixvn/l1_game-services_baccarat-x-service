@@ -14,6 +14,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         const span = tracer.startSpan("RoundResultConsumer.generateAndPublishHash");
 
         const { isSufficient } = await this.checkSufficientChain(span);
+
         if (!isSufficient) {
             await this.setUnavailable();
             this.gameData.shoe = await this.createResultRecord();
@@ -36,6 +37,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
 
         const { randomMode } = this.gameData.gameConfigs;
         const { cardsFromAdmin, luckyCardsFromAdmin, cutCardIndexFromAdmin } = this.getResultFromAdmin();
+
         const shoe = this.shoeConsumer.generateShoe(cardsFromAdmin, randomMode);
         const { encryptedShoe, encryptedShoeHash, cards, rawValue, hashValue } = shoe;
         const burnedCards = this.calculateBurnedCards(shoe.cards);
@@ -79,26 +81,34 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
     calculateBurnedCards(cards) {
         const firstCard = cards[0];
         const cardValue = firstCard.rank >= 10 ? 10 : firstCard.rank + 1;
+
         return cardValue + 1;
     }
 
     async checkSufficientChain() {
-        const span = tracer.startSpan("RoundResultConsumer.checkSufficientChain");
-
-        let isSufficient = false;
         const { shoe } = this.gameData;
 
-        if (
-            !this.hasResultFromAdmin() &&
-            shoe &&
-            (shoe.currentIndex < shoe.cutCardIndex || (shoe.currentIndex === shoe.cutCardIndex && shoe.remainingCards !== 0))
-        ) {
-            isSufficient = true;
+        if (this.hasResultFromAdmin() || !shoe) {
+            return { isSufficient: false };
         }
 
-        span.end();
+        if (this.lessThanCutCard(shoe) || this.mustDealCards(shoe)) {
+            return { isSufficient: true };
+        }
 
-        return { shoe, isSufficient };
+        return { isSufficient: false };
+    }
+
+    lessThanCutCard(shoe) {
+        const { currentIndex, cutCardIndex } = shoe;
+
+        return currentIndex < cutCardIndex;
+    }
+
+    mustDealCards(shoe) {
+        const { currentIndex, cutCardIndex, remainingCards } = shoe;
+
+        return currentIndex === cutCardIndex && remainingCards > 0;
     }
 
     async updateAndPublishFinalCutCardIndex() {
