@@ -13,6 +13,7 @@ const userBetResultPublisher = stub(Core.BaseEventPublishers.UserBetResultPublis
 const endGame = jest.fn();
 const roundsRepository = stubMongoose(mongoose.Model);
 const betsRepository = stubMongoose(mongoose.Model);
+const tempBetsRepository = stubMongoose(mongoose.Model);
 const resultsRepository = stubMongoose(mongoose.Model);
 const multiplierCardsConsumer = stub(MultiplierCardsConsumer);
 
@@ -59,6 +60,7 @@ describe("SettleGameRoundConsumer", () => {
             endGame,
             roundsRepository,
             betsRepository,
+            tempBetsRepository,
             gameManagementApiClientFactory,
             resultsRepository,
             multiplierCardsConsumer,
@@ -898,6 +900,8 @@ describe("SettleGameRoundConsumer", () => {
             //Arrange
             gameData.oddsMultipliers = [{ rank: 10, suit: 1, value: 4 }];
             roundsRepository.create.mockResolvedValueOnce({ id: 1, time: new Date() });
+            betsRepository.find().exec.mockResolvedValueOnce([]);
+            tempBetsRepository.find().exec.mockResolvedValueOnce([]);
             const spy = jest.spyOn(consumer, "settleOdds");
 
             //Act

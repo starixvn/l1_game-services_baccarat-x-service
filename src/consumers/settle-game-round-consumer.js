@@ -154,6 +154,26 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         return appliedMultiplierCards;
     }
 
+    settleAppliedCardsPerChoice(result, appliedMultipliers) {
+        const { player, banker } = result;
+
+        const playerPairCards = appliedMultipliers.player.filter(
+            (playerCard) => !player.card3 || (playerCard.rank !== player.card3.rank || playerCard.suit !== player.card3.suit)
+        );
+
+        const bankerPairCards = appliedMultipliers.banker.filter(
+            (bankerCard) => !banker.card3 || (bankerCard.rank !== banker.card3.rank || bankerCard.suit !== banker.card3.suit)
+        );
+
+        return {
+            player: appliedMultipliers.player,
+            banker: appliedMultipliers.banker,
+            tie: [...appliedMultipliers.player, ...appliedMultipliers.banker],
+            playerPair: playerPairCards,
+            bankerPair: bankerPairCards,
+        };
+    }
+
     settleOdds(settlementResult, appliedCardsPerChoice) {
         const finalOdds = { ...this.gameData.gameConfigs.odds };
 
@@ -170,25 +190,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         return cards.reduce((acc, curr) => acc * curr.value, 1);
     }
 
-    settleAppliedCardsPerChoice(result, appliedMultipliers) {
-        const { player, banker } = result;
-
-        const playerPairCards = appliedMultipliers.player.filter(
-            (playerCard) => player.card3 && (playerCard.rank !== player.card3.rank || playerCard.suit !== player.card3.suit)
-        );
-
-        const bankerPairCards = appliedMultipliers.banker.filter(
-            (bankerCard) => banker.card3 && (bankerCard.rank !== banker.card3.rank || bankerCard.suit !== banker.card3.suit)
-        );
-
-        return {
-            player: appliedMultipliers.player,
-            banker: appliedMultipliers.banker,
-            tie: [...appliedMultipliers.player, ...appliedMultipliers.banker],
-            playerPair: playerPairCards,
-            bankerPair: bankerPairCards,
-        };
-    }
+   
 
     async settleBets({ settlementResult, roundId, time, appliedCardsPerChoice, finalOdds }) {
         const bets = await this.queryBets(roundId);
