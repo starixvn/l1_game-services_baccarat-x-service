@@ -9,7 +9,7 @@ export default class InGameConsumer extends Table.EventConsumers.TableInGameCons
         delete payload.resultHash;
 
         if (this.gameData.shoe) {
-            const { cutCardIndex, burnedCards, cards, currentIndex } = this.gameData.shoe;
+            const { cutCardIndex, burnedCards, cards, currentIndex, firstRoundId } = this.gameData.shoe;
             return {
                 ...payload,
                 shoeInfo: {
@@ -17,6 +17,7 @@ export default class InGameConsumer extends Table.EventConsumers.TableInGameCons
                     burnedCards,
                     firstCard: cards[0],
                     currentIndex,
+                    firstRoundId,
                 },
                 oddsMultipliers: this.gameData.oddsMultipliers,
             };

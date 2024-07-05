@@ -21,13 +21,14 @@ export default class RoundResultPublisher extends Core.BaseEventPublishers.BaseE
 
     publishFinalCutCardIndex() {
         if (this.gameData.shoe) {
-            const { cutCardIndex, burnedCards, cards } = this.gameData.shoe;
+            const { cutCardIndex, burnedCards, cards, firstRoundId } = this.gameData.shoe;
             const payload = {
                 shoeInfo: {
                     cutCardIndex,
                     burnedCards,
                     firstCard: cards[0],
                     new: true,
+                    firstRoundId,
                 },
             };
 
