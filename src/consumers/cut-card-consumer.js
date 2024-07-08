@@ -29,7 +29,7 @@ export default class CutCardConsumer {
         const { remainingTime } = this.gameData;
         const { durations } = this.definition;
 
-        return remainingTime > durations.generatingCutCardIndex && remainingTime < durations.generatingShoe;
+        return remainingTime > durations.generatingCutCardIndex + durations.lockingCutCard && remainingTime < durations.generatingShoe;
     }
 
     validateCutCardIndex(cutCardIndex) {

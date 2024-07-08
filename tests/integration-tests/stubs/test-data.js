@@ -13,7 +13,7 @@ const mockGameSettings = {
         lockingBet: 2,
         dealCards: 2,
         changingDeck: 5,
-        cutCard: 2,
+        lockingCutCard: 1,
         generatingShoe: 18,
         generatingCutCardIndex: 15,
     },

@@ -28,7 +28,7 @@ export default [
             lockingBet: 3,
             dealCards: 5,
             changingDeck: 20,
-            cutCard: 3,
+            lockingCutCard: 1,
             generatingShoe: 55,
             generatingCutCardIndex: 45,
         },
