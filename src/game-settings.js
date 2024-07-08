@@ -51,7 +51,7 @@ export default [
         numberOfRoundHistory: 100,
         numberOfDecks: 8,
         maxCardsPerRound: 6,
-        minCutCardIndex: 300,
-        maxCutCardIndex: 350,
+        minCutCardIndex: 250,
+        maxCutCardIndex: 306,
     },
 ];
