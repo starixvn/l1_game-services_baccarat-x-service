@@ -1,6 +1,6 @@
 import { Helpers } from "sc-card-game-base";
-import { InGameConsumer } from "../../../src/consumers";
 import { TableInGameConsumer } from "sc-game-base/src/table/event-consumers";
+import { InGameConsumer } from "../../../src/consumers";
 
 describe("InGameConsumer", () => {
     const gameManagementApiClientFactory = {
@@ -33,6 +33,7 @@ describe("InGameConsumer", () => {
                     { rank: 3, suit: 3 },
                 ],
                 currentIndex: 1,
+                hashValue: "hashValue",
             },
         };
         inGameConsumer = new InGameConsumer({}, gameData, {}, {}, getBalance, gameManagementApiClientFactory);
@@ -87,6 +88,8 @@ describe("InGameConsumer", () => {
                     burnedCards: 5,
                     firstCard: { rank: 1, suit: 1 },
                     currentIndex: 1,
+                    firstRound: true,
+                    hashValue: "hashValue",
                 });
             });
         });
