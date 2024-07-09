@@ -1,6 +1,8 @@
 import { Helpers } from "sc-card-game-base";
 import { TableInGameConsumer } from "sc-game-base/src/table/event-consumers";
+import BaccaratGameDefinition from "../../../src/baccarat-game-definition";
 import { InGameConsumer } from "../../../src/consumers";
+import gameSettings from "../../../src/game-settings";
 
 describe("InGameConsumer", () => {
     const gameManagementApiClientFactory = {
@@ -14,6 +16,7 @@ describe("InGameConsumer", () => {
     };
     let inGameConsumer;
     let gameData;
+    let definition = new BaccaratGameDefinition(gameSettings[0]);
     let realPlayer;
 
     beforeEach(() => {
@@ -36,7 +39,8 @@ describe("InGameConsumer", () => {
                 hashValue: "hashValue",
             },
         };
-        inGameConsumer = new InGameConsumer({}, gameData, {}, {}, getBalance, gameManagementApiClientFactory);
+
+        inGameConsumer = new InGameConsumer(definition, gameData, {}, {}, getBalance, gameManagementApiClientFactory);
         realPlayer = {}; // Mock player object
 
         jest.spyOn(TableInGameConsumer.prototype, "buildPayload").mockImplementation(async () => ({
@@ -88,8 +92,8 @@ describe("InGameConsumer", () => {
                     burnedCards: 5,
                     firstCard: { rank: 1, suit: 1 },
                     currentIndex: 1,
-                    firstRound: true,
                     hashValue: "hashValue",
+                    newShoePhase: false,
                 });
             });
         });

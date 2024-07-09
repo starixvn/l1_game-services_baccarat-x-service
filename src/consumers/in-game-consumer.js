@@ -10,6 +10,9 @@ export default class InGameConsumer extends Table.EventConsumers.TableInGameCons
 
         if (this.gameData.shoe) {
             const { cutCardIndex, burnedCards, cards, currentIndex, firstRoundId, hashValue } = this.gameData.shoe;
+            const { remainingTime } = this.gameData;
+            const { durations } = this.definition;
+
             return {
                 ...payload,
                 shoeInfo: {
@@ -18,7 +21,10 @@ export default class InGameConsumer extends Table.EventConsumers.TableInGameCons
                     firstCard: cards[0],
                     currentIndex,
                     hashValue,
-                    firstRound: this.gameData.roundId === firstRoundId,
+                    newShoePhase:
+                        this.gameData.roundId === firstRoundId &&
+                        remainingTime > durations.placingBets + durations.dealCards &&
+                        remainingTime < durations.generatingShoe,
                 },
                 oddsMultipliers: this.gameData.oddsMultipliers,
             };
