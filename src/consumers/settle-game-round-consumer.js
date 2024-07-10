@@ -196,18 +196,22 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         if (bets && bets.length) {
             await Promise.all(
                 bets.map(async (bet) => {
-                    const betResult = this.calculateBetResult(settlementResult, bet, finalOdds, appliedCardsPerChoice);
+                    try {
+                        const betResult = this.calculateBetResult(settlementResult, bet, finalOdds, appliedCardsPerChoice);
 
-                    bet.betwin = betResult.totalWin;
-                    bet.multipliers = betResult.multipliers;
-                    bet.paid = true;
-                    bet.reachMaxWin = betResult.totalWin === bet.maxWin;
+                        bet.betwin = betResult.totalWin;
+                        bet.multipliers = betResult.multipliers;
+                        bet.paid = true;
+                        bet.reachMaxWin = betResult.totalWin === bet.maxWin;
 
-                    await bet.save();
-                    await this.callEndGame(bet, roundId, time, betResult);
+                        await bet.save();
+                        await this.callEndGame(bet, roundId, time, betResult);
 
-                    this.captureBetResult(bet.uid, betResult, bet.rate);
-                    await this.userBetResultPublisher.publish(bet.uid, betResult);
+                        this.captureBetResult(bet.uid, betResult, bet.rate);
+                        await this.userBetResultPublisher.publish(bet.uid, betResult);
+                    } catch (e) {
+                        console.log(e);
+                    }
                 })
             );
         }
