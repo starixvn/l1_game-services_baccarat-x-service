@@ -158,11 +158,11 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         const { player, banker } = result;
 
         const playerPairCards = appliedMultipliers.player.filter(
-            (playerCard) => !player.card3 || (playerCard.rank !== player.card3.rank || playerCard.suit !== player.card3.suit)
+            (playerCard) => !player.card3 || (playerCard.rank !== player.card3.rank && playerCard.suit !== player.card3.suit)
         );
 
         const bankerPairCards = appliedMultipliers.banker.filter(
-            (bankerCard) => !banker.card3 || (bankerCard.rank !== banker.card3.rank || bankerCard.suit !== banker.card3.suit)
+            (bankerCard) => !banker.card3 || (bankerCard.rank !== banker.card3.rank && bankerCard.suit !== banker.card3.suit)
         );
 
         return {
@@ -189,8 +189,6 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
     calculateCardMultipliers(cards) {
         return cards.reduce((acc, curr) => acc * curr.value, 1);
     }
-
-   
 
     async settleBets({ settlementResult, roundId, time, appliedCardsPerChoice, finalOdds }) {
         const bets = await this.queryBets(roundId);
@@ -255,8 +253,14 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         }
 
         betResult.totalWin = +Math.min(betResult.totalWin, bet.maxWin).toFixed(2);
-        betResult.netWin = +(betResult.netWin - bet.fee).toFixed(2);
+        betResult.netWin = +(betResult.totalWin - bet.totalAmount).toFixed(2);
 
         return betResult;
+    }
+
+    captureBetResult(uid, betResult, rate) {
+        super.captureBetResult(uid, betResult, rate);
+        console.log(betResult);
+        console.log(this.gameData.winningPlayers[uid]);
     }
 }
