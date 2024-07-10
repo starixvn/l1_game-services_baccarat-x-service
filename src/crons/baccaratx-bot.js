@@ -174,4 +174,29 @@ export default class BaccaratXBot extends Table.Crons.TableGameBot {
 
         super.updateBalanceAndPublishBetPayload(botId, choice, amount, balance);
     }
+
+    async insertOrUpdateBet(bot, choice, amount, currentBet) {
+        const { maxWinPerRound, bot_maxbet } = this.gameData.gameConfigs;
+
+        const currentAmount = currentBet ? currentBet[choice] : 0;
+        const update = { [choice]: amount + currentAmount };
+        const create = {
+            uid: bot.id,
+            name: bot.name,
+            roundId: this.gameData.roundId,
+            time: new Date(),
+            currency: " ",
+            operatorId: " ",
+            clientSeed: bot.clientSeed,
+            maxWin: maxWinPerRound * bot_maxbet,
+        };
+
+        await this.tempBetsRepository.updateOne(
+            { uid: bot.id, roundId: this.gameData.roundId },
+            { $set: update, $setOnInsert: create },
+            { upsert: true, setDefaultsOnInsert: true }
+        );
+
+        return create.time;
+    }
 }

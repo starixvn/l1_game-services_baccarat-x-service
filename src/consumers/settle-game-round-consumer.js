@@ -196,22 +196,18 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         if (bets && bets.length) {
             await Promise.all(
                 bets.map(async (bet) => {
-                    try {
-                        const betResult = this.calculateBetResult(settlementResult, bet, finalOdds, appliedCardsPerChoice);
+                    const betResult = this.calculateBetResult(settlementResult, bet, finalOdds, appliedCardsPerChoice);
 
-                        bet.betwin = betResult.totalWin;
-                        bet.multipliers = betResult.multipliers;
-                        bet.paid = true;
-                        bet.reachMaxWin = betResult.totalWin === bet.maxWin;
+                    bet.betwin = betResult.totalWin;
+                    bet.multipliers = betResult.multipliers;
+                    bet.paid = true;
+                    bet.reachMaxWin = betResult.totalWin === bet.maxWin;
 
-                        await bet.save();
-                        await this.callEndGame(bet, roundId, time, betResult);
+                    await bet.save();
+                    await this.callEndGame(bet, roundId, time, betResult);
 
-                        this.captureBetResult(bet.uid, betResult, bet.rate);
-                        await this.userBetResultPublisher.publish(bet.uid, betResult);
-                    } catch (e) {
-                        console.log(e);
-                    }
+                    this.captureBetResult(bet.uid, betResult, bet.rate);
+                    await this.userBetResultPublisher.publish(bet.uid, betResult);
                 })
             );
         }
@@ -260,11 +256,5 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         betResult.netWin = +(betResult.totalWin - bet.totalAmount).toFixed(2);
 
         return betResult;
-    }
-
-    captureBetResult(uid, betResult, rate) {
-        super.captureBetResult(uid, betResult, rate);
-        console.log(betResult);
-        console.log(this.gameData.winningPlayers[uid]);
     }
 }
