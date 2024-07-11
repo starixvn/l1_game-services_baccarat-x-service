@@ -1,6 +1,18 @@
+import { logger } from "sc-common";
 import { Core } from "sc-game-base";
 
 export default class RoundResultPublisher extends Core.BaseEventPublishers.BaseEventPublisher {
+    /**
+     * @param {string} gameName
+     * @param {GameData} gameData
+     * @param {logger} logService
+     */
+    constructor(gameName, gameData, logService) {
+        super(gameName, gameData);
+
+        this.logService = logService;
+    }
+
     publishRoundResult(roundResult) {
         const payload = { finish: roundResult };
 
@@ -16,6 +28,8 @@ export default class RoundResultPublisher extends Core.BaseEventPublishers.BaseE
 
             this.publishToAllUsers(payload);
             this.publishToAllAdmins(payload);
+        } else {
+            this.logService.logCritical("Shoe is NOT empty or undefined");
         }
     }
 

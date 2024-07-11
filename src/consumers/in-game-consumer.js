@@ -6,6 +6,7 @@ export default class InGameConsumer extends Table.EventConsumers.TableInGameCons
         const payload = await super.buildPayload(realPlayer);
         payload.betPercentage = Helpers.ResultHelper.calculateBetUserPercentage(this.gameData.betUserCount);
         payload.gameConfigs.extraFeeRatio = this.gameData.gameConfigs.oddsMultipliers.extraFeeRatio;
+        payload.gameConfigs.maxWinPerRound = this.gameData.gameConfigs.maxWinPerRound;
         delete payload.resultHash;
 
         if (this.gameData.shoe) {
