@@ -14,6 +14,9 @@ jest.mock("sc-game-base", () => ({
 
 describe("RoundResultPublisher", () => {
     let roundResultPublisher, gameData;
+    const logService = {
+        logCritical: jest.fn(),
+    };
 
     beforeEach(() => {
         gameData = {
@@ -27,6 +30,7 @@ describe("RoundResultPublisher", () => {
 
         roundResultPublisher = new RoundResultPublisher();
         roundResultPublisher.gameData = gameData;
+        roundResultPublisher.logService = logService;
 
         jest.spyOn(BaseEventPublisher.prototype, "publishToAllAdmins").mockImplementation(() => {});
         jest.spyOn(BaseEventPublisher.prototype, "publishToAllUsers").mockImplementation(() => {});
@@ -90,6 +94,13 @@ describe("RoundResultPublisher", () => {
                 roundResultPublisher.publishNewShoeHash();
                 // Assert
                 expect(roundResultPublisher.publishToAllAdmins).not.toHaveBeenCalled();
+            });
+
+            it("should log critical", () => {
+                // Act
+                roundResultPublisher.publishNewShoeHash();
+                // Assert
+                expect(logService.logCritical).toHaveBeenCalledWith("Shoe is NOT empty or undefined");
             });
         });
     });
