@@ -114,12 +114,12 @@ export default class BaccaratXGameCron extends GameCron {
             }
         }
 
-        if (!this.gameData.disabled && this.gameData.remainingTime === durations.generatingShoe) {
-            await this.startNewShoe(span);
-        }
-
         if (!this.gameData.disabled) {
             this.gameData.remainingTime--;
+        }
+
+        if (!this.gameData.disabled && this.gameData.remainingTime === durations.generatingShoe) {
+            await this.startNewShoe(span);
         }
 
         if (this.gameData.remainingTime === durations.generatingCutCardIndex && this.gameData.shoe.firstRoundId === this.gameData.roundId) {
