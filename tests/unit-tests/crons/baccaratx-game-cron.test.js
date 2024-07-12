@@ -226,7 +226,7 @@ describe("baccaratXGameCron", () => {
             baccaratXGameCron.definition.durations = durations;
             baccaratXGameCron.gameData.isNewRound = true;
             baccaratXGameCron.gameData.disabled = false;
-            baccaratXGameCron.gameData.remainingTime = durations.generatingShoe;
+            baccaratXGameCron.gameData.remainingTime = durations.generatingShoe + 1;
             baccaratXGameCron.startNewShoe = jest.fn();
 
             jest.spyOn(baccaratXGameCron, "checkGameStatus").mockResolvedValue();
