@@ -119,7 +119,7 @@ export default class BaccaratXGameCron extends GameCron {
         }
 
         if (!this.gameData.disabled && this.gameData.remainingTime === durations.generatingShoe) {
-            await this.startNewShoe(span);
+            await this.startNewShoe();
         }
 
         if (this.gameData.remainingTime === durations.generatingCutCardIndex && this.gameData.shoe.firstRoundId === this.gameData.roundId) {
@@ -169,13 +169,9 @@ export default class BaccaratXGameCron extends GameCron {
         }
     }
 
-    resetForNewRound() {
-        const span = tracer.startSpan("cron.resetForNewRound");
-
-        super.resetForNewRound();
-
+    async initNewRound() {
+        this.gameData.isNewRound = true;
         this.gameData.oddsMultipliers = [];
-
-        span.end();
+        this.gameData.remainingTime = await this.getWholeRoundByChainStatus();
     }
 }
