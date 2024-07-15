@@ -89,6 +89,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
                         oddsMultipliers,
                         appliedMultipliers,
                         finalOdds,
+                        usedCardIndexes,
                     });
 
                     const finish = {
@@ -100,7 +101,6 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
                         appliedMultipliers,
                         finalOdds,
                         appliedCardsPerChoice,
-                        usedCardIndexes,
                     };
 
                     this.gameData.roundId = finish.roundId + 1;
