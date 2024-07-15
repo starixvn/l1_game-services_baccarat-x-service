@@ -19,6 +19,7 @@ export default class RoundQuery extends Core.QueryApis.RoundQuery {
                 settlementResult: round.settlementResult,
                 oddsMultipliers: round.oddsMultipliers,
                 appliedMultipliers: round.appliedMultipliers,
+                usedCardIndexes: round.usedCardIndexes,
             };
         });
     }
