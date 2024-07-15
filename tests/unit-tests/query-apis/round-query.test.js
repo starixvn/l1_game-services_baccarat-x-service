@@ -120,6 +120,7 @@ describe("RoundQuery", () => {
                     settlementResult: round.settlementResult,
                     oddsMultipliers: round.oddsMultipliers,
                     appliedMultipliers: round.appliedMultipliers,
+                    usedCardIndexes: round.usedCardIndexes,
                 },
             ]);
         });
