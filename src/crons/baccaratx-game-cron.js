@@ -1,6 +1,6 @@
-import { tracer } from "sc-instrument";
 import { GameData } from "sc-card-game-base";
 import { GameCron } from "sc-card-game-base/src/crons";
+import { tracer } from "sc-instrument";
 import BaccaratGameDefinition from "../baccarat-game-definition";
 import { CutCardConsumer, RoundResultConsumer, SettleGameRoundConsumer } from "../consumers";
 import { BaccaratXBot } from "./";
@@ -171,7 +171,6 @@ export default class BaccaratXGameCron extends GameCron {
 
     async initNewRound() {
         this.gameData.isNewRound = true;
-        this.gameData.oddsMultipliers = [];
         this.gameData.remainingTime = await this.getWholeRoundByChainStatus();
     }
 }
