@@ -41,9 +41,9 @@ export default {
         },
     },
     sentry: {
-        sentryUrl: "https://8f52d1ed1dbc4500adddbfb6e20f66aa@sentryuat.sabagame.com/217",
+        sentryUrl: "https://13f39b8359404ed5aec23655e64ccf78@sentry.lumigame.com/2",
         logIdentifier: "baccaratx",
-        env: "LOCAL",
+        env: "DEV",
     },
     authenticateSettings: {
         url: "https://auth.lumigame.com",

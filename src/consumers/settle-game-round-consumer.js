@@ -202,7 +202,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
                     bet.betwin = betResult.totalWin;
                     bet.multipliers = betResult.multipliers;
                     bet.paid = true;
-                    bet.reachMaxWin = betResult.totalWin === bet.maxWin;
+                    bet.reachMaxWin = betResult.reachMaxWin;
 
                     await bet.save();
                     await this.callEndGame(bet, roundId, time, betResult);
@@ -246,6 +246,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
                 totalLost: 0,
                 winningByChoices: {},
                 multipliers: gameConfigs.applyMultiplier ? {} : undefined,
+                reachMaxWin: false,
             }
         );
 
@@ -255,6 +256,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
 
         betResult.totalWin = +Math.min(betResult.totalWin, bet.maxWin).toFixed(2);
         betResult.netWin = +(betResult.totalWin - bet.totalAmount).toFixed(2);
+        betResult.reachMaxWin = betResult.totalWin === bet.maxWin;
 
         return betResult;
     }
