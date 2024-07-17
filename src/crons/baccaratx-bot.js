@@ -102,7 +102,7 @@ export default class BaccaratXBot extends Table.Crons.TableGameBot {
             return isSmallTicket ? maxBetOfSmallTicket : maxBet;
         }
 
-        return Math.min(minBet * 50, maxBet * 0.2);
+        return Math.min(minBet * 10, maxBet * 0.1);
     }
 
     getRandomChoiceFromGroup(group) {
