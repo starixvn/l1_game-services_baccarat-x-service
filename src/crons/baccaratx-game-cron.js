@@ -146,6 +146,7 @@ export default class BaccaratXGameCron extends GameCron {
             const { result, usedCardIndexes } = await this.settleGameRoundConsumer.generateResult();
             await this.initNewRound();
             await this.settleGameRoundConsumer.settleRound({ result, usedCardIndexes });
+            this.gameData.oddsMultipliers = null;
         } else if (this.gameData.remainingTime < durations.placingBets) {
             this.bot?.run();
             this.runningRoundInfoPublisher.publish();
