@@ -27,7 +27,7 @@ export default class InGameConsumer extends Table.EventConsumers.TableInGameCons
                         remainingTime > durations.placingBets + durations.dealCards &&
                         remainingTime < durations.generatingShoe,
                 },
-                multiplierCards: this.gameData.oddsMultipliers,
+                multiplierCards: this.gameData.oddsMultipliers ?? [],
             };
         } else {
             return payload;
