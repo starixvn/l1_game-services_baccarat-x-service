@@ -61,7 +61,6 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
         return {
             cards,
             currentIndex: burnedCards,
-            cutCardIndex: serverCutCardIndex,
             burnedCards,
             rawValue,
             hashValue,
