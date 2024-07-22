@@ -66,7 +66,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
             hashValue,
             firstRoundId: record.firstRoundId,
             presetMultiplierCards: luckyCardsFromAdmin,
-            presetCutCardIndex: cutCardIndexFromAdmin > 0,
+            presetCutCardIndex: cutCardIndexFromAdmin,
         };
     }
 
@@ -116,6 +116,8 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
             this.gameData.shoe.cutCardIndex = cutCardIndex;
 
             await this.resultsRepository.updateOne({ firstRoundId: this.gameData.roundId, isAvailable: true }, { $set: { cutCardIndex } });
+        } else {
+            this.gameData.shoe.cutCardIndex = this.gameData.shoe.presetCutCardIndex;
         }
 
         this.roundResultPublisher.publishFinalCutCardIndex();
