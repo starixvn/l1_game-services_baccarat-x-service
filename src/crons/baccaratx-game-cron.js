@@ -73,8 +73,8 @@ export default class BaccaratXGameCron extends GameCron {
         await this.getSettingForNewRound();
         await this.updateExchangeRates();
         await this.initShoe();
-        await this.initNewRound();
         await this.unsettledRoundConsumer.proceed();
+        await this.initNewRound();
 
         this.startCron();
     }
