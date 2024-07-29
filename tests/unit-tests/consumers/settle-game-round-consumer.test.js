@@ -154,22 +154,30 @@ describe("SettleGameRoundConsumer", () => {
                     const roundResult = {
                         player: new TestBaccaratPlayer(
                             {
-                                rank: 0,
-                                suit: 0,
+                                rank: 1,
+                                suit: 1,
                             },
                             {
-                                rank: 12,
-                                suit: 2,
+                                rank: 1,
+                                suit: 3,
+                            },
+                            {
+                                rank: 1,
+                                suit: 1,
                             }
                         ),
                         banker: new TestBaccaratPlayer(
                             {
-                                rank: 7,
-                                suit: 2,
+                                rank: 1,
+                                suit: 3,
                             },
                             {
-                                rank: 0,
-                                suit: 2,
+                                rank: 1,
+                                suit: 0,
+                            },
+                            {
+                                rank: 3,
+                                suit: 0,
                             }
                         ),
                     };
@@ -178,30 +186,42 @@ describe("SettleGameRoundConsumer", () => {
                         player: false,
                         banker: true,
                         tie: false,
-                        playerPair: false,
-                        bankerPair: false,
+                        playerPair: true,
+                        bankerPair: true,
                     };
 
                     const oddsMultipliers = [
                         {
-                            rank: 7,
-                            suit: 2,
+                            rank: 1,
+                            suit: 0,
+                            value: 3,
+                        },
+                        {
+                            rank: 1,
+                            suit: 1,
                             value: 2,
                         },
                     ];
                     //Act
                     const result = consumer.settleAppliedMultiplierCards(oddsMultipliers, roundResult, settlementResult);
+                    console.log(consumer.settleAppliedCardsPerChoice(result));
 
                     //Assert
                     expect(result).toEqual({
                         banker: [
                             {
-                                rank: 7,
-                                suit: 2,
+                                rank: 1,
+                                suit: 0,
+                                value: 3,
+                            },
+                        ],
+                        player: [
+                            {
+                                rank: 1,
+                                suit: 1,
                                 value: 2,
                             },
                         ],
-                        player: [],
                     });
                 });
             });
@@ -671,7 +691,7 @@ describe("SettleGameRoundConsumer", () => {
             result.banker.updateScore();
             const settlementResult = getSettlementResult(result);
             const appliedMultipliers = consumer.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
-            const appliedCardsPerChoice = consumer.settleAppliedCardsPerChoice(result, appliedMultipliers);
+            const appliedCardsPerChoice = consumer.settleAppliedCardsPerChoice(appliedMultipliers);
 
             //Act
             const odds = consumer.settleOdds(settlementResult, appliedCardsPerChoice);
