@@ -204,7 +204,7 @@ describe("SettleGameRoundConsumer", () => {
                     ];
                     //Act
                     const result = consumer.settleAppliedMultiplierCards(oddsMultipliers, roundResult, settlementResult);
-                    console.log(consumer.settleAppliedCardsPerChoice(result));
+                    console.log(consumer.settleAppliedCardsPerChoice(roundResult, result));
 
                     //Assert
                     expect(result).toEqual({
@@ -691,7 +691,7 @@ describe("SettleGameRoundConsumer", () => {
             result.banker.updateScore();
             const settlementResult = getSettlementResult(result);
             const appliedMultipliers = consumer.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
-            const appliedCardsPerChoice = consumer.settleAppliedCardsPerChoice(appliedMultipliers);
+            const appliedCardsPerChoice = consumer.settleAppliedCardsPerChoice(result, appliedMultipliers);
 
             //Act
             const odds = consumer.settleOdds(settlementResult, appliedCardsPerChoice);

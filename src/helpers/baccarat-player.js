@@ -39,4 +39,8 @@ export default class BaccaratPlayer {
 
         return [this.card1, this.card2];
     }
+
+    getFirst2Cards() {
+        return [this.card1, this.card2];
+    }
 }

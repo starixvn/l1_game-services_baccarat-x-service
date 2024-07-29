@@ -66,7 +66,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
             oddsMultipliers = this.gameData.oddsMultipliers ?? (await this.multiplierCardsConsumer.generate());
             appliedMultipliers = this.settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult);
 
-            appliedCardsPerChoice = this.settleAppliedCardsPerChoice(appliedMultipliers);
+            appliedCardsPerChoice = this.settleAppliedCardsPerChoice(result, appliedMultipliers);
             finalOdds = this.settleOdds(settlementResult, appliedCardsPerChoice);
         }
 
@@ -155,9 +155,20 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
         return appliedMultiplierCards;
     }
 
-    settleAppliedCardsPerChoice(appliedMultipliers) {
-        const playerPairCards = appliedMultipliers.player.slice(0, 2);
-        const bankerPairCards = appliedMultipliers.banker.slice(0, 2);
+    settleAppliedCardsPerChoice(result, appliedMultipliers) {
+        const { player, banker } = result;
+
+        const playerPairCards = player.getFirst2Cards().reduce((result, playerCard) => {
+            const multiplierCard = appliedMultipliers.player.find((x) => x.rank === playerCard.rank && x.suit === playerCard.suit);
+            multiplierCard && result.push(multiplierCard);
+            return result;
+        }, []);
+
+        const bankerPairCards = banker.getFirst2Cards().reduce((result, bankerCard) => {
+            const multiplierCard = appliedMultipliers.banker.find((x) => x.rank === bankerCard.rank && x.suit === bankerCard.suit);
+            multiplierCard && result.push(multiplierCard);
+            return result;
+        }, []);
 
         return {
             player: appliedMultipliers.player,
