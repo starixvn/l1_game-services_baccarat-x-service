@@ -7,7 +7,7 @@ export default class BaccaratXBot extends Table.Crons.TableGameBot {
         super(definition, gameData, publisher, gameManagementApiClientFactory, tempBetsRepository);
         this.cutCardConsumer = cutCardConsumer;
 
-        this.betChoiceRatio = { PlayerBanker: 95, PlayerBankerPair: 2, Tie: 3 };
+        this.betChoiceRatio = { PlayerBanker: 96, PlayerBankerPair: 2, Tie: 2 };
         this.playerBankerOpts = ["player", "banker"];
         this.playerBankerPairOpts = ["playerPair", "bankerPair"];
         this.tieOpts = ["tie"];
