@@ -170,7 +170,7 @@ describe("baccaratXBot", () => {
             const maxBet = bot.getMaxBet(bot.botsInRoom.bot1, "tie");
 
             // Assert
-            expect(maxBet).toBe(50);
+            expect(maxBet).toBe(150);
         });
     });
 
