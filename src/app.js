@@ -5,7 +5,7 @@ import gameSettings from "./game-settings";
 
 const run = async () => {
     const definitions = gameSettings.map((gameSetting) => new BaccaratGameDefinition(gameSetting));
-    const app = new BaccaratxApp("Baccarat X", appConfigs);
+    const app = new BaccaratxApp("Lucky Baccarat", appConfigs);
     await app.run();
     app.startGames(definitions);
 };

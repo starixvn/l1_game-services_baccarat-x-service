@@ -1,7 +1,7 @@
 import appConfigs from "./app-configs";
 import { startTrace } from "sc-instrument";
 
-startTrace(appConfigs.otel?.enabled, appConfigs.otel?.endpoint, appConfigs.otel?.system, appConfigs.sentry.env, "Baccarat X");
+startTrace(appConfigs.otel?.enabled, appConfigs.otel?.endpoint, appConfigs.otel?.system, appConfigs.sentry.env, "Lucky Baccarat");
 
 import { TableGameData } from "sc-card-game-base";
 import { Core } from "sc-game-base";
