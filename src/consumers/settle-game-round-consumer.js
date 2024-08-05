@@ -31,7 +31,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
     }
 
     async generateResult() {
-        const span = tracer.startSpan("generateResult");
+        const span = tracer?.startSpan("generateResult");
 
         const { result, usedCardsCount } = this.definition.generateResult(this.gameData.shoe);
         const usedCardIndexes = Array.from({ length: usedCardsCount }, (_, i) => this.gameData.shoe.currentIndex + i);
@@ -48,13 +48,13 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
             }
         );
 
-        span.end();
+        span?.end();
 
         return { result, usedCardIndexes };
     }
 
     async settleRound({ result, usedCardIndexes }) {
-        const span = tracer.startSpan("settleRound");
+        const span = tracer?.startSpan("settleRound");
 
         const settlementResult = this.definition.settle(result);
         const { roundId, exchangeRates, gameConfigs } = this.gameData;
@@ -110,7 +110,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
                 }
             });
 
-        span.end();
+        span?.end();
     }
 
     settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult) {

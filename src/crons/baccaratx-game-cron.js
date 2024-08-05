@@ -1,6 +1,5 @@
 import { GameData } from "sc-card-game-base";
 import { GameCron } from "sc-card-game-base/src/crons";
-import { tracer } from "sc-instrument";
 import BaccaratGameDefinition from "../baccarat-game-definition";
 import { CutCardConsumer, RoundResultConsumer, SettleGameRoundConsumer } from "../consumers";
 import { BaccaratXBot } from "./";
@@ -85,7 +84,6 @@ export default class BaccaratXGameCron extends GameCron {
     }
 
     async initShoe() {
-        const span = tracer.startSpan("cron.initShoe");
         if (this.resultsRepository) {
             const results = await this.resultsRepository
                 .findOne({ isAvailable: true }, null, { sort: { time: -1 } })
@@ -98,12 +96,9 @@ export default class BaccaratXGameCron extends GameCron {
                 this.gameData.shoe = { ...results, ...decryptShoe };
             }
         }
-
-        span.end();
     }
 
     async proceed() {
-        const span = tracer.startSpan("cron.proceed");
         const { durations } = this.definition;
 
         if (this.gameData.isNewRound) {
@@ -151,8 +146,6 @@ export default class BaccaratXGameCron extends GameCron {
             this.bot?.run();
             this.runningRoundInfoPublisher.publish();
         }
-
-        span.end();
     }
 
     async startNewShoe() {

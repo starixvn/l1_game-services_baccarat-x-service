@@ -11,7 +11,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
     }
 
     async generateAndPublishHash() {
-        const span = tracer.startSpan("RoundResultConsumer.generateAndPublishHash");
+        const span = tracer?.startSpan("RoundResultConsumer.generateAndPublishHash");
 
         const { isSufficient } = await this.checkSufficientChain(span);
 
@@ -22,7 +22,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
             this.roundResultPublisher.publishNewShoeHash();
         }
 
-        span.end();
+        span?.end();
     }
 
     async setUnavailable() {
@@ -33,7 +33,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
     }
 
     async createResultRecord() {
-        const span = tracer.startSpan("RoundResultConsumer.createResultRecord");
+        const span = tracer?.startSpan("RoundResultConsumer.createResultRecord");
 
         const { randomMode } = this.gameData.gameConfigs;
         const { cardsFromAdmin, luckyCardsFromAdmin, cutCardIndexFromAdmin } = this.getResultFromAdmin();
@@ -56,7 +56,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
 
         await this.resultsRepository.create(record);
 
-        span.end();
+        span?.end();
 
         return {
             cards,
