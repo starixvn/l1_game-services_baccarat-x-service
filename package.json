@@ -6,9 +6,9 @@
     "scripts": {
         "test": "jest --testPathPattern=tests/unit-tests",
         "test-coverage": "jest --collect-coverage --testPathPattern=tests/unit-tests",
-        "dev": "nodemon --es-module-specifier-resolution=node --watch ./src ./src/app.js",
+        "dev": "nodemon --es-module-specifier-resolution=node --watch ./src ./src/app.js --experimental-loader=@opentelemetry/instrumentation/hook.mjs",
         "debug": "nodemon --es-module-specifier-resolution=node --watch ./ --inspect ./src/app.js",
-        "prod": "node --max-old-space-size=8192 --es-module-specifier-resolution=node ./src/app.js",
+        "prod": "node --max-old-space-size=8192 --es-module-specifier-resolution=node ./src/app.js --experimental-loader=@opentelemetry/instrumentation/hook.mjs",
         "reg": "npm set registry http://npm.lumigame.com",
         "integration-test": "jest tests/integration-tests/index.test.js --ci --reporters=default --reporters=jest-junit --forceExit"
     },
@@ -25,7 +25,7 @@
         "sc-card-game-base": "1.2.1-beta.8",
         "sc-multiple-games-base": "1.9.1-beta.6",
         "sc-rebet-mode": "2.0.2-beta.1",
-        "sc-instrument": "1.1.2-beta.1"
+        "sc-instrument": "1.1.2-beta.2"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.24.4",
