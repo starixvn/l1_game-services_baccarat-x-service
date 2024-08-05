@@ -7482,6 +7482,15 @@ sc-instrument-helper@1.0.0:
     socket.io "^4.1.2"
     socket.io-msgpack-parser "^3.0.1"
 
+sc-instrument-helper@1.0.1-beta.0:
+  version "1.0.1-beta.0"
+  resolved "http://npm.lumigame.com/sc-instrument-helper/-/sc-instrument-helper-1.0.1-beta.0.tgz#9ddcf424194b2b007d46d83e76f7ee8004b4f773"
+  integrity sha512-0Azzna5sUKGtc7NC7NzB+W0v9eH8pRKM4WLAlaRRPGGi4zFl8JSUwMejlo6uk+KppCGiB0cfhrZutHFl36ZlKw==
+  dependencies:
+    mongoose "8.4.1"
+    socket.io "4.6.1"
+    socket.io-msgpack-parser "3.0.2"
+
 sc-instrument@1.1.1-beta.2:
   version "1.1.1-beta.2"
   resolved "https://npm.lumigame.com/sc-instrument/-/sc-instrument-1.1.1-beta.2.tgz#7345c39d2903f9b5db5e119ea5f767cb307c843a"
@@ -7771,6 +7780,14 @@ socket.io-client@^4.4.0:
     debug "~4.3.2"
     engine.io-client "~6.2.1"
     socket.io-parser "~4.2.0"
+
+socket.io-msgpack-parser@3.0.2:
+  version "3.0.2"
+  resolved "http://npm.lumigame.com/socket.io-msgpack-parser/-/socket.io-msgpack-parser-3.0.2.tgz#34c4d69acd0fa2a0eede98c14e29fa9f6a5b880a"
+  integrity sha512-1e76bJ1PCKi9H+JiYk+S29PBJvknHjQWM7Mtj0hjF2KxDA6b6rQxv3rTsnwBoz/haZOhlCDIMQvPATbqYeuMxg==
+  dependencies:
+    component-emitter "~1.3.0"
+    notepack.io "~2.2.0"
 
 socket.io-msgpack-parser@^3.0.1:
   version "3.0.1"
