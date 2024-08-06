@@ -24,9 +24,7 @@
         "mongoose": "8.4.1",
         "sc-card-game-base": "1.2.1-beta.8",
         "sc-multiple-games-base": "1.9.1-beta.6",
-        "sc-rebet-mode": "2.0.2-beta.1",
-        "sc-instrument": "1.1.2-beta.2",
-        "sc-instrument-helper": "1.0.1-beta.0"
+        "sc-rebet-mode": "2.0.2-beta.1"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.24.4",

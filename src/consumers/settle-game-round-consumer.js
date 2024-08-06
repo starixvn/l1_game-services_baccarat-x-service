@@ -1,5 +1,4 @@
 import { Consumers } from "sc-card-game-base";
-import { tracer } from "sc-instrument";
 
 export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRoundConsumer {
     constructor({
@@ -31,8 +30,6 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
     }
 
     async generateResult() {
-        const span = tracer?.startSpan("generateResult");
-
         const { result, usedCardsCount } = this.definition.generateResult(this.gameData.shoe);
         const usedCardIndexes = Array.from({ length: usedCardsCount }, (_, i) => this.gameData.shoe.currentIndex + i);
         this.gameData.shoe.currentIndex = this.gameData.shoe.currentIndex + usedCardsCount;
@@ -48,14 +45,10 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
             }
         );
 
-        span?.end();
-
         return { result, usedCardIndexes };
     }
 
     async settleRound({ result, usedCardIndexes }) {
-        const span = tracer?.startSpan("settleRound");
-
         const settlementResult = this.definition.settle(result);
         const { roundId, exchangeRates, gameConfigs } = this.gameData;
 
@@ -109,8 +102,6 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
                     this.roundResultPublisher.publishWinners(roundId, this.gameData.winningPlayers);
                 }
             });
-
-        span?.end();
     }
 
     settleAppliedMultiplierCards(oddsMultipliers, result, settlementResult) {
