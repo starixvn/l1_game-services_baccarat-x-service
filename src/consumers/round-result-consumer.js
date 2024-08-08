@@ -10,7 +10,7 @@ export default class RoundResultConsumer extends Consumers.RoundResultConsumer {
     }
 
     async generateAndPublishHash() {
-        const { isSufficient } = await this.checkSufficientChain(span);
+        const { isSufficient } = await this.checkSufficientChain();
 
         if (!isSufficient) {
             await this.setUnavailable();
