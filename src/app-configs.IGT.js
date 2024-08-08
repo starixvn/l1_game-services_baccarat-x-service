@@ -1,0 +1,21 @@
+import appConfigs from "./app-configs";
+
+export default Object.assign(appConfigs, {
+    authenticateSettings: {
+        url: "http://l1_auth_api_local:5000",
+        id: "game-services",
+        secret: "gameservices@20luminet&",
+        requestTimeout: 3000,
+        useAuthenticate: false,
+        audiences: ["api", "admin-api"],
+    },
+    database: {
+        url: "mongodb://127.0.0.1:27017",
+        options: {
+            dbName: "game-service-test-db",
+        },
+    },
+    gameManagementApiSettings: {
+        BASE: "https://l1-proxy.lumigame.com/game-management-service-igt-test",
+    },
+});

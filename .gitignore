@@ -1,0 +1,9 @@
+.DS_Store
+**/node_modules
+
+.idea
+/.vscode/settings.json
+
+**/coverage
+**/reports
+**/junit.xml
