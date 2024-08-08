@@ -7133,15 +7133,15 @@ sc-base-database@2.2.0, sc-base-database@2.2.1-beta.1:
     mongoose "^5.9.25"
     sc-common "1.8.1"
 
-sc-card-game-base@1.2.1-beta.8:
-  version "1.2.1-beta.8"
-  resolved "https://npm.lumigame.com/sc-card-game-base/-/sc-card-game-base-1.2.1-beta.8.tgz#3cad50bbc1772eaf1898afe1494224038267c9eb"
-  integrity sha512-mOwIno3orLRR5swWgxhoDr0P/uMo7fPXEKw1M9GrWRfIGvHLuZzacE0hle5xTPByIGYXREA9SmeHlPbvMuM3yA==
+sc-card-game-base@2.0.0:
+  version "2.0.0"
+  resolved "https://npm.lumigame.com/sc-card-game-base/-/sc-card-game-base-2.0.0.tgz#6f6e048b50af2dbbbaa46f6e338bea903c2223b1"
+  integrity sha512-9/X4cpod59YS7XO+J6ZZ1RP1NVsh3+Y1RkId4BWxpUxKZpZfi+QF2VXIBleLXraRsmeFH/ZfZcEe7QJZrJbvcQ==
   dependencies:
     chance "^1.1.7"
     random "^3.0.6"
     random-js "^2.1.0"
-    sc-game-base "5.2.0-beta.1"
+    sc-game-base "5.3.0"
 
 sc-common@1.8.1:
   version "1.8.1"
@@ -7154,7 +7154,7 @@ sc-common@1.8.1:
     mongoose-long "^0.3.0"
     numeral "^2.0.6"
 
-sc-game-base@5.2.0-beta.1:
+sc-game-base@5.2.0-beta.1, sc-game-base@5.3.0:
   version "5.2.0-beta.1"
   resolved "https://npm.lumigame.com/sc-game-base/-/sc-game-base-5.2.0-beta.1.tgz#ab22ce890eb7c600f8034f731425a45b8e54f02f"
   integrity sha512-ieKYfajTjZXxvezTowNhMG0apD67Yz5Mv8fF0Bh+ZfKZkGFhKk9Nh+bxKdb7f3e03g3OmZJs91sGiEqheEGTmg==
@@ -7233,12 +7233,12 @@ sc-instrument@1.1.1-beta.2:
     opentelemetry-instrumentation-socket.io "0.34.0"
     socket.io "4.6.1"
 
-sc-multiple-games-base@1.9.1-beta.6:
-  version "1.9.1-beta.6"
-  resolved "https://npm.lumigame.com/sc-multiple-games-base/-/sc-multiple-games-base-1.9.1-beta.6.tgz#56055f44578cbfbdf2b89011a576bf61a6006b58"
-  integrity sha512-6BIJNlvqJRrHFFyjwr+jbJkOhOePCbFosdASaiAkI5M7O0kPwiYN6wUazuqGb1cMAfdoR8vbSmEdqPvIp9w9MQ==
+sc-multiple-games-base@3.0.0:
+  version "3.0.0"
+  resolved "https://npm.lumigame.com/sc-multiple-games-base/-/sc-multiple-games-base-3.0.0.tgz#79887ed6f53f311e97afb974dd051eaaf70a5a17"
+  integrity sha512-Cca7E0IRzOszueOSw4GIuXOx93Snhhqpm/IuQxD9HvDG4iHrFfmC0iKwx3MTyzEvECjLC/X8zE1fa08q8jGSMA==
   dependencies:
-    sc-game-base "5.2.0-beta.1"
+    sc-game-base "5.3.0"
 
 sc-pf-client-seed@^1.0.1-beta.0:
   version "1.0.1"
@@ -7247,12 +7247,12 @@ sc-pf-client-seed@^1.0.1-beta.0:
   dependencies:
     chance "^1.1.11"
 
-sc-rebet-mode@2.0.2-beta.1:
-  version "2.0.2-beta.1"
-  resolved "https://npm.lumigame.com/sc-rebet-mode/-/sc-rebet-mode-2.0.2-beta.1.tgz#39d2240d84ad88aa1e51b8c8f61a0ddfe99dbc3b"
-  integrity sha512-ApJF94hair5v1pTVDwdmR3lYXIYI73ogHID9bz+2IevEdQHjTbAW7RtMc7RwRTglx+yBG+EQE9ShfKDv9U4anA==
+sc-rebet-mode@3.0.0:
+  version "3.0.0"
+  resolved "https://npm.lumigame.com/sc-rebet-mode/-/sc-rebet-mode-3.0.0.tgz#0bfebabf163cbcc816ffb9e32dd23a9148bb28f8"
+  integrity sha512-2+L+tX1icI/ctQlBUbQFEo7OvJRX8y6+7+HkhDTCkZAoeCt1QoInpRvUCDcyYmjo0iFeOjcR7kKAm/yrQns9aw==
   dependencies:
-    sc-game-base "5.2.0-beta.1"
+    sc-game-base "5.3.0"
 
 seedrandom@^3.0.5:
   version "3.0.5"

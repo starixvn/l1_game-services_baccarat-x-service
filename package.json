@@ -22,9 +22,9 @@
     "type": "module",
     "dependencies": {
         "mongoose": "8.4.1",
-        "sc-card-game-base": "1.2.1-beta.8",
-        "sc-multiple-games-base": "1.9.1-beta.6",
-        "sc-rebet-mode": "2.0.2-beta.1"
+        "sc-card-game-base": "2.0.0",
+        "sc-multiple-games-base": "3.0.0",
+        "sc-rebet-mode": "3.0.0"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.24.4",
