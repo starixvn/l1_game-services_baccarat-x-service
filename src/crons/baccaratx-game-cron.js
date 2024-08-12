@@ -167,4 +167,11 @@ export default class BaccaratXGameCron extends GameCron {
         this.gameData.isNewRound = true;
         this.gameData.remainingTime = await this.getWholeRoundByChainStatus();
     }
+
+    async handleGameStatus(previouslyDisabled) {
+        await super.handleGameStatus(previouslyDisabled);
+        if (previouslyDisabled) {
+            await this.initNewRound();
+        }
+    }
 }
