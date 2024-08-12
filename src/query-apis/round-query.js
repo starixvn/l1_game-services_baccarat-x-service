@@ -8,7 +8,7 @@ export default class RoundQuery extends Core.QueryApis.RoundQuery {
 
     async getList(limit, projections) {
         const rounds = await this.roundsRepository
-            .find({ id: { $gte: this.gameData.shoe.firstRoundId } }, projections, { sort: { _id: -1 }, limit: limit })
+            .find({ id: { $gte: this.gameData.shoe?.firstRoundId } }, projections, { sort: { _id: -1 }, limit: limit })
             .lean()
             .exec();
 
