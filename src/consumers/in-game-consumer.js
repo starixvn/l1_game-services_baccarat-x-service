@@ -25,7 +25,7 @@ export default class InGameConsumer extends Table.EventConsumers.TableInGameCons
                     newShoePhase:
                         this.gameData.roundId === firstRoundId &&
                         remainingTime > durations.placingBets + durations.dealCards &&
-                        remainingTime < durations.generatingShoe,
+                        remainingTime <= durations.generatingShoe,
                 },
                 multiplierCards: this.gameData.oddsMultipliers ?? [],
             };
