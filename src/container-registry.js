@@ -15,9 +15,9 @@ import {
 import { BaccaratXBot, BaccaratXGameCron, ProcessBetQueue } from "./crons";
 import RoundResultPublisher from "./publishers/round-result-publisher";
 import UserBetResultPublisher from "./publishers/user-bet-result-publisher";
-import HistoryQuery from "./query-apis/history-query";
-import RoundQuery from "./query-apis/round-query";
 import { HttpRouter, SocketRouter } from "./routers";
+import hourlySummariesRepository from "./models/hourly-summaries";
+import { RTPQuery, HistoryQuery, RoundQuery } from "./query-apis";
 
 export default class ContainerRegistry extends MultipleTableGamesContainerRegistry {
     register(appConfigs, definition, gameData) {
@@ -70,6 +70,7 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
             cutCardPFRepository: asValue(repositories.cutCardPFRepository),
             multipliersRepository: asValue(repositories.multipliersRepository),
             allGamesBetsRepository: asValue(repositories.allGamesBetsRepository),
+            hourlySummariesRepository: asValue(hourlySummariesRepository),
         });
     }
 
@@ -98,6 +99,7 @@ export default class ContainerRegistry extends MultipleTableGamesContainerRegist
         this.container.register({
             roundQuery: asClass(RoundQuery).singleton(),
             historyQuery: asClass(HistoryQuery).singleton(),
+            rtpQuery: asClass(RTPQuery).singleton(),
         });
     }
 }
