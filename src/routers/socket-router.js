@@ -17,6 +17,7 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
         shoeConsumer,
         roundQuery,
         gameResultServiceConsumer,
+        rtpQuery,
     }) {
         super({
             definition,
@@ -36,6 +37,7 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
 
         this.cutCardConsumer = cutCardConsumer;
         this.shoeConsumer = shoeConsumer;
+        this.rtpQuery = rtpQuery;
     }
 
     init(socketClient) {
@@ -43,6 +45,8 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
 
         this.socketClient.on("cutCard", this.handleCutCard.bind(this));
         this.socketClient.on("shoeVerification", this.handleShoeVerification.bind(this));
+        this.socketClient.on("lobbyInfo", this.getLobbyData.bind(this));
+        this.socketClient.on("rtp", this.handleRTP.bind(this));
     }
 
     handleCutCard(payload) {
@@ -71,6 +75,39 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
             this.socketClient.emit(this.definition.name, result);
         } catch (err) {
             this.logService.logError(err);
+        }
+    }
+
+    async handleRTP() {
+        try {
+            if (!this.verify()) {
+                return;
+            }
+
+            const rtp = await this.rtpQuery.getRTP(this.definition.id);
+            this.socketClient.emit(this.definition.name, { rtp });
+        } catch (error) {
+            this.logService.logError(error);
+        }
+    }
+
+    async getLobbyData() {
+        try {
+            if (!this.verify() || this.gameData.disabled) {
+                return;
+            }
+            const roundHistory = await this.roundQuery.getList(this.definition.numberOfRoundHistory);
+            const rtp = await this.rtpQuery.getRTP(this.definition.id);
+            const result = {
+                totalOnlineUsers: Object.keys(this.gameData.players).length,
+                roundHistory,
+                remainingTime: this.gameData.remainingTime,
+                rtp,
+            };
+
+            this.socketClient.emit(this.definition.name, result);
+        } catch (error) {
+            this.logService.logError(error);
         }
     }
 }

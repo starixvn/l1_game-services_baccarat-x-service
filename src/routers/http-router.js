@@ -1,13 +1,7 @@
-import { MultipleTableGamesHttpRouter } from "sc-multiple-games-base";
 import { utils } from "sc-common";
+import { MultipleTableGamesHttpRouter } from "sc-multiple-games-base";
 
 export default class HttpRouter extends MultipleTableGamesHttpRouter {
-    constructor(appConfigs, gameData, historyQuery, metricQuery, logService, definition, rtpQuery) {
-        super(appConfigs, gameData, historyQuery, metricQuery, logService, definition);
-
-        this.rtpQuery = rtpQuery;
-    }
-
     init(app) {
         super.init(app);
 
@@ -19,28 +13,6 @@ export default class HttpRouter extends MultipleTableGamesHttpRouter {
             }),
             (req, res) => this.handleSetResult(req.body, res)
         );
-        //Missing Authorize
-        app.get(`/api/${this.definition.name}/rtp`, (_, res) => this.handleRoundQuery(res));
-
-        //Missing Authorize
-        app.get(`/api/${this.definition.name}/total_online_user`, (_, res) => this.handleTotalOnlineUserQuery(res));
-    }
-
-    handleTotalOnlineUserQuery(res) {
-        const onlineUsers = this.collectOnlineUsers();
-
-        res.send({ result: onlineUsers.totalRealPlayer + onlineUsers.testUsers });
-    }
-
-    async handleRoundQuery(res) {
-        try {
-            const rtp = await this.rtpQuery.getRTP(this.definition.id);
-
-            res.send({ result: rtp });
-        } catch (error) {
-            this.logService.logError(error);
-            res.send(false);
-        }
     }
 
     handleSetResult(params, res) {
