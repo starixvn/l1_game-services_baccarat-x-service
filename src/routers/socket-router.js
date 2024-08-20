@@ -45,7 +45,7 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
 
         this.socketClient.on("cutCard", this.handleCutCard.bind(this));
         this.socketClient.on("shoeVerification", this.handleShoeVerification.bind(this));
-        this.socketClient.on("lobbyInfo", this.getLobbyData.bind(this));
+        this.socketClient.on("getLobbyData", this.getLobbyData.bind(this));
         this.socketClient.on("rtp", this.handleRTP.bind(this));
     }
 
