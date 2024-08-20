@@ -96,18 +96,28 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
             if (!this.verify() || this.gameData.disabled) {
                 return;
             }
-            const roundHistory = await this.roundQuery.getList(this.definition.numberOfRoundHistory);
-            const rtp = await this.rtpQuery.getRTP(this.definition.id);
+
             const result = {
                 totalOnlineUsers: Object.keys(this.gameData.players).length,
-                roundHistory,
+                roundHistory: await this.roundQuery.getList(this.definition.numberOfRoundHistory),
                 remainingTime: this.gameData.remainingTime,
-                rtp,
+                rtp: await this.rtpQuery.getRTP(this.definition.id),
+                betLimit: this.getUserBetLimit(),
             };
 
             this.socketClient.emit(this.definition.name, result);
         } catch (error) {
             this.logService.logError(error);
         }
+    }
+
+    getUserBetLimit() {
+        const player = this.gameData.realPlayers[this.socketClient.id];
+
+        const settings = this.gameData.currencyGroupGames.find((x) => x.groupId.toString() === player.session.currencyGroupId);
+        const minBet = Math.max(player.profile.minBet, settings.minBet);
+        const maxBet = Math.min(player.profile.maxBet, settings.maxBet);
+
+        return { minBet, maxBet };
     }
 }
