@@ -18,6 +18,7 @@ export default class BaccaratGameDefinition extends GameDefinition {
         repositories,
         generateResult,
         settle,
+        defaultRTPPercentage,
     }) {
         super({
             id,
@@ -37,5 +38,6 @@ export default class BaccaratGameDefinition extends GameDefinition {
         this.minCutCardIndex = minCutCardIndex;
         this.maxCutCardIndex = maxCutCardIndex;
         this.commonChoices = commonChoices;
+        this.defaultRTPPercentage = defaultRTPPercentage;
     }
 }

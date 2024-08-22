@@ -1,6 +1,3 @@
-import BaccaratGameDefinition from "../baccarat-game-definition";
-import HourlySummaryRepository from "../models/hourly-summaries";
-
 export default class RTPQuery {
     /**
      * @param {HourlySummaryRepository} hourlySummariesRepository
@@ -11,8 +8,11 @@ export default class RTPQuery {
 
     async getRTP(gameId) {
         const currentTime = new Date();
-        const queryTime = new Date(currentTime.getTime() - 2 * 60 * 60 * 1000);
-        const summaries = await this.hourlySummariesRepository.find({ gameId }).lean().exec();
+
+        const summaries = await this.hourlySummariesRepository
+            .find({ gameId, time: { $gte: new Date(currentTime.getTime() - 7200000) } }, { _id: false, stake: true, payout: true })
+            .lean()
+            .exec();
 
         const [totalStake, totalPayout] = summaries.reduce(
             (res, el) => {

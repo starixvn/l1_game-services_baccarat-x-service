@@ -97,12 +97,21 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
                 return;
             }
 
+            const { firstRoundId } = this.gameData.shoe;
+            const { remainingTime } = this.gameData;
+            const { durations, defaultRTPPercentage } = this.definition;
+            const rtp = await this.rtpQuery.getRTP(this.definition.id);
+
             const result = {
                 totalOnlineUsers: Object.keys(this.gameData.players).length,
                 roundHistory: await this.roundQuery.getList(this.definition.numberOfRoundHistory),
                 remainingTime: this.gameData.remainingTime,
-                rtp: await this.rtpQuery.getRTP(this.definition.id),
+                rtp: rtp < defaultRTPPercentage ? defaultRTPPercentage : rtp,
                 betLimit: this.getUserBetLimit(),
+                newShoePhase:
+                    this.gameData.roundId === firstRoundId &&
+                    remainingTime > durations.placingBets + durations.dealCards &&
+                    remainingTime <= durations.generatingShoe,
             };
 
             this.socketClient.emit(this.definition.name, result);
