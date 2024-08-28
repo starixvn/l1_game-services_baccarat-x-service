@@ -77,19 +77,6 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
         }
     }
 
-    async handleRTP() {
-        try {
-            if (!this.verify()) {
-                return;
-            }
-
-            const rtp = await this.rtpQuery.getRTP(this.definition.id);
-            this.socketClient.emit(this.definition.name, { rtp });
-        } catch (error) {
-            this.logService.logError(error);
-        }
-    }
-
     async getLobbyData() {
         try {
             if (!this.verify() || this.gameData.disabled) {
@@ -105,7 +92,7 @@ export default class SocketRouter extends MultipleGamesSocketRouter {
                 totalOnlineUsers: Object.keys(this.gameData.players).length,
                 roundHistory: await this.roundQuery.getList(this.definition.numberOfRoundHistory),
                 remainingTime: this.gameData.remainingTime,
-                rtp: rtp < defaultRTPPercentage ? defaultRTPPercentage : rtp,
+                rtp: rtp > defaultRTPPercentage ? rtp : defaultRTPPercentage,
                 betLimit: this.getUserBetLimit(),
                 newShoePhase:
                     this.gameData.roundId === firstRoundId &&
