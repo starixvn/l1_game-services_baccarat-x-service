@@ -20,7 +20,7 @@ const allGamesBetsRepository = allGamesHistories("megabigsmall_histories");
 export default [
     {
         id: 81,
-        name: "bac81",
+        name: "Bac81",
         configName: "bac81",
         durations: {
             wholeRound: 47,
