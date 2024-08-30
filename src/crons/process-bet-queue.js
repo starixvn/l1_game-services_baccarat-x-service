@@ -15,7 +15,7 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueueSeparateB
         const { gameConfigs } = this.gameData;
 
         if (gameConfigs.applyMultiplier) {
-            return payload.amount * gameConfigs.oddsMultipliers.extraFeeRatio;
+            return +(payload.amount * gameConfigs.oddsMultipliers.extraFeeRatio).toFixed(2);
         }
 
         return 0;
@@ -53,7 +53,7 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueueSeparateB
         };
         const existingBetFilter = { uid: player.UID, roundId, freeBet: bet.freeBet };
         let existingBetIncrement = {
-            totalAmount: bet.amount + bet.fee,
+            totalAmount: +(bet.amount + bet.fee).toFixed(2),
             fee: bet.fee,
             amount: bet.amount,
         };
@@ -84,7 +84,7 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueueSeparateB
 
     async insertBetLog(player, roundId, bet, rate) {
         const betLogs = [];
-        
+
         if (bet.rebet) {
             const { receivedTime, clientSentTime } = bet;
             for (const [betChoice, amount] of Object.entries(bet.lastBet)) {
