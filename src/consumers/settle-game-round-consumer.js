@@ -224,7 +224,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
 
                 if (winAmount > 0) {
                     result.netWin += winAmount - betAmount;
-                    if (gameConfigs.applyMultiplier) {
+                    if (gameConfigs.applyMultiplier) { 
                         result.multipliers[choice] = appliedCardsPerChoice[choice].map((x) => x.value);
                     }
                 } else {

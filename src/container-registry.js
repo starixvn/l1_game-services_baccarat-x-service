@@ -13,11 +13,11 @@ import {
     UnsettledRoundConsumer,
 } from "./consumers";
 import { BaccaratXBot, BaccaratXGameCron, ProcessBetQueue } from "./crons";
+import hourlySummariesRepository from "./models/hourly-summaries";
 import RoundResultPublisher from "./publishers/round-result-publisher";
 import UserBetResultPublisher from "./publishers/user-bet-result-publisher";
+import { HistoryQuery, RoundQuery, RTPQuery } from "./query-apis";
 import { HttpRouter, SocketRouter } from "./routers";
-import hourlySummariesRepository from "./models/hourly-summaries";
-import { RTPQuery, HistoryQuery, RoundQuery } from "./query-apis";
 
 export default class ContainerRegistry extends MultipleTableGamesContainerRegistry {
     register(appConfigs, definition, gameData) {
