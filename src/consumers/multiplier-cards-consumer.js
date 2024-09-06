@@ -42,10 +42,12 @@ export default class MultiplierCardsConsumer {
     }
 
     async queryCurrentRoundMultiplierResult() {
-        const currentRoundRecord = await this.multipliersRepository.findOne({ roundId: this.gameData.roundId }).lean().exec();
+        if (this.multipliersRepository) {
+            const currentRoundRecord = await this.multipliersRepository.findOne({ roundId: this.gameData.roundId }).lean().exec();
 
-        if (currentRoundRecord) {
-            this.gameData.oddsMultipliers = currentRoundRecord.cards;
+            if (currentRoundRecord) {
+                this.gameData.oddsMultipliers = currentRoundRecord.cards;
+            }
         }
     }
 }
