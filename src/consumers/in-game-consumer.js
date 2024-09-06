@@ -5,8 +5,12 @@ export default class InGameConsumer extends Table.EventConsumers.TableInGameCons
     async buildPayload(realPlayer) {
         const payload = await super.buildPayload(realPlayer);
         payload.betPercentage = Helpers.ResultHelper.calculateBetUserPercentage(this.gameData.betUserCount);
-        payload.gameConfigs.extraFeeRatio = this.gameData.gameConfigs.oddsMultipliers.extraFeeRatio;
         payload.gameConfigs.maxWinPerRound = this.gameData.gameConfigs.maxWinPerRound;
+
+        if (this.gameData.gameConfigs.applyMultiplier) {
+            payload.gameConfigs.extraFeeRatio = this.gameData.gameConfigs.oddsMultipliers.extraFeeRatio;
+        }
+
         delete payload.resultHash;
 
         if (this.gameData.shoe) {
