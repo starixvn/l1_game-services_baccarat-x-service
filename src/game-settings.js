@@ -45,6 +45,7 @@ export default [
             betLogsRepository: getBetLogModel("bac81_betlog"),
             resultsRepository: getResultModel("bac81_result"),
             cutCardPFRepository: getCutCardPfModel("bac81_cut_card_pf"),
+            multipliersRepository: getMultipliersModel("bac81_multipliers"),
             allGamesBetsRepository,
         },
         numberOfRoundHistory: 100,
@@ -81,13 +82,12 @@ export default [
             betLogsRepository: getBetLogModel("baccarat2_betlog"),
             resultsRepository: getResultModel("baccarat2_result"),
             cutCardPFRepository: getCutCardPfModel("baccarat2_cut_card_pf"),
-            multipliersRepository: getMultipliersModel("baccarat2_multipliers"),
         },
         numberOfRoundHistory: 100,
         numberOfDecks: 8,
         maxCardsPerRound: 6,
         minCutCardIndex: 250,
         maxCutCardIndex: 306,
-        defaultRTPPercentage: 98
+        defaultRTPPercentage: 98,
     },
 ];
