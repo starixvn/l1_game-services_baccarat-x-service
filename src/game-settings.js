@@ -45,7 +45,6 @@ export default [
             betLogsRepository: getBetLogModel("bac81_betlog"),
             resultsRepository: getResultModel("bac81_result"),
             cutCardPFRepository: getCutCardPfModel("bac81_cut_card_pf"),
-            multipliersRepository: getMultipliersModel("bac81_multipliers"),
             allGamesBetsRepository,
         },
         numberOfRoundHistory: 100,
