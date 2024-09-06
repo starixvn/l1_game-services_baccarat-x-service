@@ -26,6 +26,7 @@ describe("InGameConsumer", () => {
                 oddsMultipliers: {
                     extraFeeRatio: 0.05,
                 },
+                applyMultiplier: true,
             },
             shoe: {
                 cutCardIndex: 10,
