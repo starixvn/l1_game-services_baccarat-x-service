@@ -219,7 +219,6 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
                 const effectiveOdds = bet.freeBet ? originalOdds - 1 : originalOdds;
                 const winAmount = win ? betAmount * effectiveOdds : 0;
 
-                result.totalBetAmount += betAmount;
                 result.totalWin += winAmount;
                 result.winningByChoices[choice] = winAmount;
 
@@ -235,7 +234,7 @@ export default class SettleGameRoundConsumer extends Consumers.TableSettleGameRo
                 return result;
             },
             {
-                totalBetAmount: bet.fee,
+                totalBetAmount: +bet.totalAmount.toFixed(2),
                 totalWin: 0,
                 netWin: 0,
                 totalLost: 0,
