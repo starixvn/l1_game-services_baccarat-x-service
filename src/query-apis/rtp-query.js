@@ -24,6 +24,6 @@ export default class RTPQuery {
             [0, 0]
         );
 
-        return (totalStake / totalPayout) * 100;
+        return (totalPayout / totalStake) * 100;
     }
 }
