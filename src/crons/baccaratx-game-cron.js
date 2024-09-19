@@ -174,4 +174,8 @@ export default class BaccaratXGameCron extends GameCron {
             await this.initNewRound();
         }
     }
+
+    assignNewGameConfigs(newGameConfigs) {
+        newGameConfigs && super.assignNewGameConfigs(newGameConfigs);
+    }
 }
