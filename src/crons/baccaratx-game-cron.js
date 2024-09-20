@@ -1,9 +1,9 @@
 import { GameData } from "sc-card-game-base";
 import { GameCron } from "sc-card-game-base/src/crons";
+import { getOrDefault } from "sc-game-base/src/core/game-management-api";
 import BaccaratGameDefinition from "../baccarat-game-definition";
 import { CutCardConsumer, RoundResultConsumer, SettleGameRoundConsumer } from "../consumers";
 import { BaccaratXBot } from "./";
-
 export default class BaccaratXGameCron extends GameCron {
     /**
      *
@@ -177,5 +177,20 @@ export default class BaccaratXGameCron extends GameCron {
 
     assignNewGameConfigs(newGameConfigs) {
         newGameConfigs && super.assignNewGameConfigs(newGameConfigs);
+    }
+
+    async handleGameStatus(previouslyDisabled) {
+        const { configName } = this.definition;
+
+        if (this.gameData.disabled) {
+            const notification = await getOrDefault(this.gameManagementApiClient.notification.getUmMessages(configName), {});
+
+            this.gameData.umMessages = notification;
+            this.gameStatusPublisher.publishDisableGameStatus();
+        } else if (previouslyDisabled) {
+            await this.enableGame();
+        } else {
+            this.gameStatusPublisher.publishStartGame();
+        }
     }
 }
