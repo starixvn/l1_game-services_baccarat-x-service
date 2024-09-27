@@ -10,6 +10,7 @@ describe("baccaratXGameCron", () => {
             reset: jest.fn(),
             run: jest.fn(),
             startBotCutCard: jest.fn(),
+            resetInRoomTrackings: jest.fn(),
         },
         settleGameRoundConsumer: { settleRound: jest.fn(), generateResult: jest.fn() },
         gameStatusPublisher: { publishStartPlacingBetStatus: jest.fn(), publishEndPlacingBetStatus: jest.fn() },
