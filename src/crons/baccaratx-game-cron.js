@@ -67,6 +67,7 @@ export default class BaccaratXGameCron extends GameCron {
     }
 
     async start() {
+        await this.bot.resetInRoomTrackings();
         await this.roundIdConsumer.initRoundId();
         await this.queryLastResult();
         await this.getSettingForNewRound();
