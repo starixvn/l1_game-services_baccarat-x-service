@@ -551,7 +551,7 @@ export default [
         maxCardsPerRound: 6,
         minCutCardIndex: 250,
         maxCutCardIndex: 306,
-        defaultRTPPercentage: 100,
+        defaultRTPPercentage: 98,
     },
     {
         id: 101,
@@ -586,6 +586,6 @@ export default [
         maxCardsPerRound: 6,
         minCutCardIndex: 250,
         maxCutCardIndex: 306,
-        defaultRTPPercentage: 101,
+        defaultRTPPercentage: 98,
     },
 ];
