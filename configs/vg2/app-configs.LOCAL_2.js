@@ -2,8 +2,8 @@ export default {
     hostingPort: 5000,
     apiSettings: {
         enabledApi: true,
-        apiUrl: "http://l2_game_api_local_2:5000",
-        authUrl: "http://l2_auth_api_local_2:5000",
+        apiUrl: "http://l2-game-api-local2-service:5000",
+        authUrl: "http://l2-auth-api-local2-service:5000",
         client: {
             id: "game-server",
             secret: "gameserver@20luminet&",
@@ -35,7 +35,7 @@ export default {
         env: "LOCAL_2",
     },
     authenticateSettings: {
-        url: "http://l2_auth_api_local_2:5000",
+        url: "http://l2-auth-api-local2-service:5000",
         id: "game-services",
         secret: "gameservices@20luminet&",
         requestTimeout: 10000,
@@ -43,7 +43,7 @@ export default {
         audiences: ["api", "admin-api"],
     },
     userServiceSettings: {
-        url: "http://l2_user_service_local_2:5000",
+        url: "http://l2-user-service-local2-service:5000",
     },
     adminSecretKey: "asWDEerfOIdgsdqRTFabvmgh",
     metrics: {
@@ -51,7 +51,7 @@ export default {
         secretKey: "6c1f0f28-70f2-46ae-b031-22624a6cd8df",
     },
     gameManagementApiSettings: {
-        BASE: "http://l2_game_management_service_local_2:5000",
+        BASE: "http://l2-game-management-service-local2-service:5000",
     },
     otel: {
         system: "VG2",
@@ -59,7 +59,7 @@ export default {
         endpoint: "http://10.10.50.69:4318/v1/traces",
     },
     gameResultSettings: {
-        baseUrl: "http://l2_game_result_local_2:5000",
+        baseUrl: "http://l2-game-result-local2-service:5000",
         id: "Game Service",
         key: "b396d3e4-c81d-4c5c-8100-94a8b330f12a",
     },
