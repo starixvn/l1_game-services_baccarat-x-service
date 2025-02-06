@@ -84,7 +84,7 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueueSeparateB
 
     async insertBetLog(player, roundId, bet, rate) {
         const betLogs = [];
-        
+
         if (bet.rebet) {
             const { receivedTime, clientSentTime } = bet;
             for (const [betChoice, amount] of Object.entries(bet.lastBet)) {
@@ -170,5 +170,15 @@ export default class ProcessBetQueue extends Crons.TableProcessBetQueueSeparateB
             }
             this.gameData.betUserCount[betChoice].push(player.UID);
         }
+    }
+
+    isCountOnTotalBets(player) {
+        console.log(
+            this.gameData.currencies.filter(
+                (currency) => currency.partnerId === player.session.operatorId && currency.name === player.session.currencyName
+            )
+        );
+
+        return super.isCountOnTotalBets(player);
     }
 }
