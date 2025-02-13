@@ -2,8 +2,8 @@ export default {
     hostingPort: 5000,
     apiSettings: {
         enabledApi: true,
-        apiUrl: "http://l1_game_api_uat:5000",
-        authUrl: "http://l1_auth_api_uat:5000",
+        apiUrl: "http://l1-game-api-uat-service:5000",
+        authUrl: "http://l1-auth-api-uat-service:5000",
         client: {
             id: "game-server",
             secret: "gameserver@20luminet&",
@@ -34,7 +34,7 @@ export default {
         env: "UAT",
     },
     authenticateSettings: {
-        url: "http://l1_auth_api_uat:5000",
+        url: "http://l1-auth-api-uat-service:5000",
         id: "game-services",
         secret: "gameservices@20luminet&",
         requestTimeout: 10000,
@@ -42,7 +42,7 @@ export default {
         audiences: ["api", "admin-api"],
     },
     userServiceSettings: {
-        url: "http://l1_user_service_uat:5000",
+        url: "http://l1-user-service-uat-service:5000",
     },
     adminSecretKey: "asWDEerfOIdgsdqRTFabvmgh",
     enableMsgpackParser: true,
@@ -51,7 +51,7 @@ export default {
         secretKey: "6c1f0f28-70f2-46ae-b031-22624a6cd8df",
     },
     gameManagementApiSettings: {
-        BASE: "http://l1_game_management_service_uat:5000",
+        BASE: "http://l1-game-management-service-uat-service:5000",
     },
     otel: {
         system: "SG",
@@ -59,7 +59,7 @@ export default {
         endpoint: "http://10.2.190.51:4318/v1/traces",
     },
     gameResultSettings: {
-        baseUrl: "http://l1_game_result_uat:5000",
+        baseUrl: "http://l1-game-result-uat-service:5000",
         id: "Game Service",
         key: "906db6ee-b64b-4173-8c82-410f8509764d",
     },

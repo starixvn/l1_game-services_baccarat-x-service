@@ -2,8 +2,8 @@ export default {
     hostingPort: 5000,
     apiSettings: {
         enabledApi: true,
-        apiUrl: "http://l1_game_api_sit:5000",
-        authUrl: "http://l1_auth_api_sit:5000",
+        apiUrl: "http://l1-game-api-sit-service:5000",
+        authUrl: "http://l1-auth-api-sit-service:5000",
         client: {
             id: "game-server",
             secret: "gameserver@20luminet&",
@@ -34,7 +34,7 @@ export default {
         env: "SIT",
     },
     authenticateSettings: {
-        url: "http://l1_auth_api_sit:5000",
+        url: "http://l1-auth-api-sit-service:5000",
         id: "game-services",
         secret: "gameservices@20luminet&",
         requestTimeout: 10000,
@@ -42,7 +42,7 @@ export default {
         audiences: ["api", "admin-api"],
     },
     userServiceSettings: {
-        url: "http://l1_user_service_sit:5000",
+        url: "http://l1-user-service-sit-service:5000",
     },
     adminSecretKey: "asWDEerfOIdgsdqRTFabvmgh",
     metrics: {
@@ -50,7 +50,7 @@ export default {
         secretKey: "6c1f0f28-70f2-46ae-b031-22624a6cd8df",
     },
     gameManagementApiSettings: {
-        BASE: "http://l1_game_management_service_sit:5000",
+        BASE: "http://l1-game-management-service-sit-service:5000",
     },
     otel: {
         system: "SG",
@@ -59,7 +59,7 @@ export default {
     },
     enableMsgpackParser: true,
     gameManagementApiSettings: {
-        BASE: "http://l1_game_management_service_sit:5000",
+        BASE: "http://l1-game-management-service-sit-service:5000",
     },
     otel: {
         system: "SG",
@@ -67,7 +67,7 @@ export default {
         endpoint: "http://10.2.190.51:4318/v1/traces",
     },
     gameResultSettings: {
-        baseUrl: "http://l1_game_result_sit:5000",
+        baseUrl: "http://l1-game-result-sit-service:5000",
         id: "Game Service",
         key: "dded3dfe-261e-47f0-a46e-076b367c5a09",
     },
