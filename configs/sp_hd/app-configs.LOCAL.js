@@ -51,11 +51,19 @@ export default {
         enable: true,
         secretKey: "6c1f0f28-70f2-46ae-b031-22624a6cd8df",
     },
+    gameManagementApiSettings: {
+        BASE: "http://sp-hd-game-management-local-service:5000",
+    },
     enableMsgpackParser: false,
     chips: [20_000_000, 5_000_000, 1_000_000, 500_000, 200_000, 100_000, 50_000, 20_000, 10_000, 2000, 1000, 500, 200, 100, 50, 10, 5, 1],
     otel: {
         system: "HD",
         enabled: false,
         endpoint: "http://10.10.50.69:4318/v1/traces",
+    },
+    gameResultSettings: {
+        baseUrl: "http://sp-hd-game-result-local-service:5000",
+        id: "Game Service",
+        key: "b396d3e4-c81d-4c5c-8100-94a8b330f12a",
     },
 };
