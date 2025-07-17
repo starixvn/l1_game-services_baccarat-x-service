@@ -22,7 +22,7 @@
     "type": "module",
     "dependencies": {
         "mongoose": "8.4.1",
-        "sc-card-game-base": "2.0.0",
+        "sc-card-game-base": "2.0.1-hotdog-beta.0",
         "sc-multiple-games-base": "3.0.0",
         "sc-rebet-mode": "3.0.0"
     },
