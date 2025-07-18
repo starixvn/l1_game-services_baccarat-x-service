@@ -42,7 +42,7 @@
         "jest-micro-auto-stub": "1.0.9",
         "jest-sonar-reporter": "^2.0.0",
         "nodemon": "^3.1.0",
-        "sc-game-service-integration-utils": "2.2.1"
+        "sc-game-service-integration-utils": "2.3.1"
     },
     "resolutions": {
         "mongoose": "8.4.1"
