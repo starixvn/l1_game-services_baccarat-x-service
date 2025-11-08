@@ -36,7 +36,7 @@
         "husky": "^4.2.5",
         "install": "^0.13.0",
         "jest": "^29.7.0",
-        "jest-extended": "^4.0.2",
+        "jest-extended": "^7.0.0",
         "jest-html-reporters": "^3.1.7",
         "jest-junit": "^16.0.0",
         "jest-micro-auto-stub": "1.0.9",
