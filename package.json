@@ -45,7 +45,7 @@
         "sc-game-service-integration-utils": "2.2.1"
     },
     "resolutions": {
-        "mongoose": "8.4.1"
+        "mongoose": "8.20.2"
     },
     "husky": {
         "hooks": {
